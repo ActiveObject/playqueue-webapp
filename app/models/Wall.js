@@ -38,14 +38,19 @@ var Tracks = Backbone.Collection.extend({
 
 		// app.api.resource('audiosearch/audio', params, handleError(onLoad, onError));
 		var params = {
+			uid: localStorage.user_id,
+			access_token: localStorage.access_token,
 			audios: ownerId + '_' + audioId
 		};
 
-		VK.Api.call('audio.getById', params, function (res) {
+		var url = 'https://api.vk.com/method/audio.getById?callback=?';
+
+		$.getJSON(url, params, function (res) {
+			console.log(res);
 			if (res.response && res.response[0]) {
 				onLoad(res.response[0]);
 			} else {
-				onError(res.response);
+				onError(res);
 			}
 		}, this);
 	}

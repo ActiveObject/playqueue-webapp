@@ -6,19 +6,24 @@ module.exports = BaseCollection.extend({
 	model: AudioTrack,
 	path: 'library',
 	parse: function (res) {
-		return res.tracks;
+		return res.response;
 	},
 
 	sync: function (method, model, options) {
-		var path = _.isFunction(this.path) ? this.path() : this.path;
-		app.api.resource(path, function (err, resource, status, xhr) {
-			if (err) {
-				if (options.error) options.error(model, xhr, options);
-				return model.trigger('error', model);
-			}
+		var url = 'https://api.vk.com/method/audio.get?callback=?';
+		var params = {
+			uid: localStorage.user_id,
+			access_token: localStorage.access_token
+		};
 
-			if (options.success) options.success(resource, status, xhr);
-			model.trigger('sync', model, resource, options);
+		$.getJSON(url, params, function (res, status, xhr) {
+			if (res.response) {
+				if (options.success) options.success(res, status, xhr);
+				model.trigger('sync', model, res, options);
+			} else {
+				if (options.error) options.error(model, xhr, options);
+				model.trigger('error', model);
+			}
 		});
 	}
 });

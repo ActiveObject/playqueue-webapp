@@ -23,10 +23,10 @@ var makeQueryString = function (params) {
 	});
 };
 
-// var BASE_URI = 'http://localhost:5003';
 // var APP_ID = 3347123; // localhost
+var BASE_URI = 'http://localhost:5003';
 var APP_ID = 3362486; // heroku
-var BASE_URI = 'http://playq.herokuapp.com';
+// var BASE_URI = 'http://playq.herokuapp.com';
 // var BASE_URI = 'http://playqueue-api.herokuapp.com';
 
 var params = {

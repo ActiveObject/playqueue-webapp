@@ -15,8 +15,8 @@ $(function () {
 
 	var credentials = auth.credentials();
 	app.init({
-		// entryPoint: 'http://localhost:8004/' + credentials.user_id,
-		entryPoint: 'http://playqueue-api.herokuapp.com/' + credentials.user_id,
+		entryPoint: 'http://localhost:8004/' + credentials.user_id,
+		// entryPoint: 'http://playqueue-api.herokuapp.com/' + credentials.user_id,
 		auth: {
 			type: 'oauth',
 			token: credentials.access_token,
@@ -24,12 +24,4 @@ $(function () {
 		}
 	});
 	Backbone.history.start({ pushState: true });
-
-	VK.init({
-		apiId: 3362486
-	});
-
-	VK.Auth.login(function (res) {
-		console.log('[openapi:' + res.status + '] logged as ' + res.session.user.id);
-	}, VK.access.AUDIO);
 });
