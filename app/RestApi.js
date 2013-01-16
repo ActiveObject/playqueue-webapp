@@ -31,7 +31,6 @@ RestApi.prototype.get = function (resource, options, callback) {
 	});
 };
 
-
 var utemplate = function (pattern, params) {
 	return UriTemplate.parse(pattern).expand(params);
 };
