@@ -4,6 +4,8 @@ var auth = require('auth');
 var API_HOST = require('config').API_HOST;
 var NODE_ENV = require('config').NODE_ENV;
 
+if (NODE_ENV === "development") brunch.initAutoReload();
+
 $(function () {
 	if (auth.urlHasCredentials(location)) {
 		var credentials = auth.parseUrl(location);
