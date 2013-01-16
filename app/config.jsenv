@@ -1,0 +1,6 @@
+{
+	"API_HOST": "http://localhost:8004",
+	"APP_ID": 123456,
+	"APP_URI": "http://localhost:5003",
+	"NODE_ENV": "development"
+}

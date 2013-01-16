@@ -1,5 +1,8 @@
-var app = require('app');
+var app  = require('app');
 var auth = require('auth');
+
+var API_HOST = require('config').API_HOST;
+var NODE_ENV = require('config').NODE_ENV;
 
 $(function () {
 	if (auth.urlHasCredentials(location)) {
@@ -15,8 +18,7 @@ $(function () {
 
 	var credentials = auth.credentials();
 	app.init({
-		entryPoint: 'http://localhost:8004/' + credentials.user_id,
-		// entryPoint: 'http://playqueue-api.herokuapp.com/' + credentials.user_id,
+		entryPoint: API_HOST + '/' + credentials.user_id,
 		auth: {
 			type: 'oauth',
 			token: credentials.access_token,

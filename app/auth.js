@@ -1,3 +1,6 @@
+var APP_ID  = require('config').APP_ID;
+var APP_URI = require('config').APP_URI;
+
 var valid = function (expires) { return Date.now() < expires; };
 var setProperty = function (obj, property) {
 	obj[property[0]] = property[1];
@@ -23,16 +26,10 @@ var makeQueryString = function (params) {
 	});
 };
 
-// var APP_ID = 3347123; // localhost
-var BASE_URI = 'http://localhost:5003';
-var APP_ID = 3362486; // heroku
-// var BASE_URI = 'http://playq.herokuapp.com';
-// var BASE_URI = 'http://playqueue-api.herokuapp.com';
-
 var params = {
 	client_id: APP_ID,
 	scope: ['friends', 'audio', 'groups', 'wall', 'offline'].join(','),
-	redirect_uri: BASE_URI,
+	redirect_uri: APP_URI,
 	display: 'popup',
 	response_type: 'token'
 };
