@@ -1,1 +1,1 @@
-web: brunch w -s
+web: node server.js
