@@ -1,0 +1,20 @@
+<div>
+	<header>
+		<img src={{ icon }} alt="{{ title }}">
+		<div><span class="post-header-title">{{ title }}</span></div>
+		<div><span class="post-header-date">{{ date }}</span></div>
+		<div><span class="post-header-text">{{ text }}</span></div>
+	</header>
+	<div class="post-images">
+	{{#each photos}}
+		<img src="{{ src_big }}" alt="{{ text }}">
+	{{/each}}
+	</div>
+	{{#if audios.length}}
+	<div class="audio-items">
+	{{#each audios}}
+		{{> audio}}
+	{{/each}}
+	</div>
+	{{/if}}
+</div>

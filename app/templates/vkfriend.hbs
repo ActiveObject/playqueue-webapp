@@ -1,0 +1,8 @@
+<div class="tile" data-friend-id="{{ screen_name }}">
+	<img
+		{{#if photo_200}} src="{{ photo_200 }}"
+		{{else}} src="{{ photo_200_orig }}" {{/if}}
+		alt="{{ firts_name }}">
+	<div class="overlay"></div>
+	<div class="name"><span>{{ first_name }}</span></div>
+</div>

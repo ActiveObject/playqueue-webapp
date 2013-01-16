@@ -1,0 +1,134 @@
+@import 'nib'
+@import '_config'
+
+margin = 80px
+queue-panel-width = 450px
+
+.queue
+  position: absolute
+  width: queue-panel-width
+  top: 0
+  left: -(@width + margin)
+  bottom: 0
+  // background-color: #F2F2F2
+  background-color: white
+  color: #555
+  z-index: 100
+  transition: left 0.3s ease-in-out
+  border-right: 1px solid #BBB
+  border-left: 1px solid #BBB
+  box-shadow: 0 0 10px #999
+
+  .title
+    font-size: 1.2em
+
+  .artist
+    color: lighten(#555, 20%)
+    padding-top: 0.2em
+    font-size: 1em
+
+  .source
+    visibility: hidden
+
+  .qorder
+    width: 2em
+    height: 2em
+
+    position: absolute
+    left: 0
+    top: 50%
+    margin-top: -1em
+    font-size: 1.2em
+    line-height: 2em
+    color: #AAA
+    text-align: center
+
+.queue.active
+  left: margin
+
+.queue-item
+  position: absolute
+  width: 100%
+  cursor: pointer
+  border-bottom: 1px solid #F5F5F5
+  font-size: 1em
+  transition: top 0.2s ease-out
+  color: #333
+  background-color: white
+  z-index: 100
+
+.queue-item:last-child
+  z-index: 0
+
+.queue-item:hover
+  .square
+    background-color: #555 !important
+  .qorder
+    color: #555 !important
+
+.queue-item.active
+  background-color: accent-color
+
+.audio-item
+  width: 100%
+  padding: 1.5em 40px 1.5em 3em
+  transition: right 0.2s ease-in
+  -webkit-transform: translateY(0%)
+
+.show-menu
+  right: 100px
+
+.queue .drag
+  user-select: none
+  transition: background-color 0.1s linear
+  // background-color: #333
+  background-color: accent-color
+  color: white
+  border-bottom: none
+
+  .qorder
+    color: #FFF
+
+  .artist
+    color: #FFF
+
+  .square
+    background-color: #FFF !important
+
+.queue .dropzone
+  background-color: white
+  // background-color: accent-color
+
+.dropzone > *
+  visibility: hidden
+
+.queue .drag-place
+  position: absolute
+  right: 0
+  top: 0
+  width: 40px
+  height: 100%
+  cursor: move
+
+square-size = 4px
+square-margin = 3px
+.queue .drag-place > div
+  position: absolute
+  top: 50%
+  left: 50%
+  width: square-size
+  height: square-size * 3 + square-margin * 4
+  margin-left: -(@width / 2)
+  margin-top: -(@height / 2)
+
+.queue .drag-place .square
+  width: square-size
+  height: @width
+  margin: square-margin 0
+  background-color: #CCC
+
+@media screen and (max-width: 600px)
+  .queue.active
+    width: 100%
+    right: 0 !important
+    left: 0 !important

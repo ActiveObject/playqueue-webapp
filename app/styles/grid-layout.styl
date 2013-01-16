@@ -1,0 +1,83 @@
+@import 'nib'
+@import '_config'
+
+unit = 20px
+sub-unit = unit / 4
+
+node-size = unit * 12
+node-margin = sub-unit * 2
+node-full-size = node-size + node-margin
+
+node-count = 10
+
+.grid-layout
+  position: absolute
+  width: 100%
+  height: node-full-size
+  top: 50%
+  margin-top: -(node-full-size / 2)
+
+.grid-layout > ul
+  margin: 0
+  list-style: none
+  width: 16 * node-full-size
+  padding: 0 80px
+  box-sizing: content-box
+  height: 100%
+
+.grid-layout > ul > li
+  width: node-size
+  height: @width
+  float: left
+  padding: node-margin node-margin 0 0
+
+.grid-layout
+  .tile
+    position: relative
+    height: 100%
+    width: 100%
+    overflow: hidden
+    cursor: pointer
+    outline-color: white
+    transition: transform 0.1s linear, outline-color 0.1s linear
+
+  .tile:active
+    transform: scale(0.95)
+
+  .tile img
+    position: absolute
+    width: 100%
+
+  .name
+    position: absolute
+    width: 100%
+    bottom: 0
+    color: white
+    padding: 0.5em 1em
+    font-size: 1.1em
+    background-color: accent-color
+
+  .overlay
+    position: absolute
+    width: 100%
+    height: 100%
+    opacity: 0.2
+    background: transparent url('../images/bg_overlay_archive_item.png') center top repeat;
+
+@media screen and (min-height: 640px)
+  .grid-layout
+    height: node-size * 2 + node-margin
+    margin-top: -(@height / 2)
+
+@media screen and (min-height: 880px)
+  .grid-layout
+    height: node-size * 3 + node-margin
+    margin-top: -(@height / 2)
+
+.grid-layout.big > ul
+  width: 3 * node-full-size * 2
+
+.grid-layout.big > ul > li
+  width: node-size * 2
+  height: @width
+  margin: (node-margin * 2) (node-margin * 2) 0 0

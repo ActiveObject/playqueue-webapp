@@ -1,0 +1,88 @@
+@import 'nib'
+@import '_config'
+
+.tracklist
+  position: absolute
+  width: 450px
+  height: 100%
+  right: -(@width)
+  top: 0
+  bottom: 0
+  background-color: white
+  color: #555
+  z-index: 100
+  transition: right 0.2s ease-in
+
+  .title
+    font-size: 1.2em
+
+  .artist
+    color: lighten(#555, 20%)
+    padding-top: 0.2em
+    font-size: 1em
+
+  .source
+    visibility: hidden
+
+  .add-to-queue
+    position: absolute
+    top: 0
+    right: 0
+    width: 40px
+    height: 100%
+    text-align: center
+    font-size: 1.5em
+    visibility: hidden
+
+  .add-to-queue div
+    position: absolute
+    top: 50%
+    left: 50%
+    width: 1em
+    height: 1em
+    margin-left: -(@width / 2)
+    margin-top: -(@height / 2)
+
+.tracklist.active
+  right: 50px
+
+.tracklist ul
+  list-style: none
+  margin: 0
+  padding: 0
+  width: 100%
+  cursor: pointer
+
+.tracklist > ul > li
+  position: relative
+  width: 100%
+  border-bottom: 1px solid #F5F5F5
+
+.tracklist > ul > li > div
+  background-color: white
+  padding: 1.5em 40px 1.5em 1em
+  font-size: 1em
+
+.tracklist > ul > li:hover
+  color: #333
+
+  .add-to-queue
+    visibility: visible
+
+.tracklist .queued
+  border-left: 5px solid accent-color
+
+  .add-to-queue
+    visibility: visible !important
+    color: accent-color
+
+.tracklist > ul > li.active
+  background-color: accent-color
+
+.tracklist .drag-place
+  display: none
+
+@media screen and (max-width: 600px)
+  .tracklist.active
+    width: 100%
+    right: 0 !important

@@ -1,0 +1,15 @@
+<div
+  data-audio-id="{{ aid }}"
+  {{#if queued}}
+    class="audio-item queued"
+  {{else}}
+    class="tracklist-item"
+  {{/if}}
+  draggable="true">
+
+  <div class="title"><span>{{ title }}</span></div>
+  <div class="artist"><span>{{ artist }}</span></div>
+  <div class="add-to-queue">
+    <div class="icon-add-2"></div>
+  </div>
+</div>

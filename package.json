@@ -1,0 +1,37 @@
+{
+  "name": "playqueue-app",
+  "author": "Vasyl Priymachuk <activeobject.ac@gmail.com>",
+  "version": "0.1.0",
+  "description": "Audioplayer for vk.com: browser app",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "engines": {
+    "node": "0.8.x",
+    "npm": "1.1.x"
+  },
+  "scripts": {
+    "start": "forewoman start",
+    "test": "mocha test/*",
+    "postinstall": "brunch build --minify"
+  },
+  "dependencies": {
+    "brunch": ">= 1.0 < 1.5",
+    "javascript-brunch": ">= 1.0 < 1.5",
+    "coffee-script-brunch": ">= 1.0 < 1.5",
+    "css-brunch": ">= 1.0 < 1.5",
+    "stylus-brunch": ">= 1.0 < 1.5",
+    "handlebars-brunch": ">= 1.0 < 1.5",
+    "uglify-js-brunch": ">= 1.0 < 1.5",
+    "clean-css-brunch": ">= 1.0 < 1.5",
+    "auto-reload-brunch": ">= 1.0 < 1.5",
+
+    "express": "~3.0",
+    "chai": "~1.2.0",
+    "sinon": "~1.4.2",
+    "sinon-chai": "~2.1.2",
+    "mocha": "~1.7.4"
+  }
+}

@@ -1,0 +1,81 @@
+@import 'nib'
+@import '_config'
+
+left-offset = 80px
+body > header
+  height: page-header-height
+  width: 100%
+  box-sizing: content-box
+
+  position: relative
+  top: -@height
+  transition: top 0.3s ease-out
+
+  background-color: accent-color
+  border-bottom: 1px solid darken(accent-color, 20%)
+  z-index: 1000
+  color: white
+  line-height: page-header-height
+
+  .btn
+    width: page-header-height
+    height: page-header-height
+    line-height: page-header-height
+
+body > header.active
+  top: 0
+
+.header-menu
+  position: absolute
+  left: left-offset
+  width: 300px
+  font-size: 1.5em
+
+  a
+    text-decoration: none
+    color: inherit
+
+  .title
+    position: relative
+    width: 300%
+    height: page-header-height
+    font-size: 1.6em
+    padding-left: (1.5em / @font-size)
+    cursor: pointer
+    background-color: accent-color
+    z-index: 100
+    border-bottom: 1px solid darken(accent-color, 20%)
+    box-sizing: content-box
+    overflow: hidden
+
+  .title.active
+    background-color: darken(accent-color, 10%)
+
+.header-menu.active ul
+  top: 0
+
+.header-menu ul
+  position: absolute
+  top: -300px
+  width: 100%
+  padding: 0
+  margin: 0
+  color: #555
+  margin-top: page-header-height
+  list-style: none
+  border: 3px solid #CCC
+  border-top: none
+  transition: top 0.1s ease-out
+  background-color: white
+  line-height: 1
+
+.header-menu a
+  display: block
+  padding: 1.2em 1em
+  cursor: pointer
+  border-top: 1px solid #EEE
+  vertical-align: bottom
+
+.header-menu li:hover
+  // color: accent-color
+  background-color: #F6F6F6

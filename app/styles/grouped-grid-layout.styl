@@ -1,0 +1,45 @@
+@import 'nib'
+@import '_config'
+
+unit = 20px
+sub-unit = unit / 4
+
+node-size = unit * 12
+node-margin = sub-unit * 2
+node-full-size = node-size + node-margin
+
+group-margin = unit * 4
+
+.grouped-grid-layout
+  position: absolute
+  width: 100%
+  height: node-full-size
+  top: 50%
+  margin-top: -(node-full-size / 2)
+  overflow: visible !important
+
+.grid-group-wrapper
+  display: inline-block
+
+.grid-group
+  padding: 0
+  margin: 0
+  list-style: none
+  padding-left: group-margin
+  box-sizing: content-box
+
+.grid-group-item
+  width: node-size
+  height: @width
+  float: left
+  padding: node-margin node-margin 0 0
+
+@media screen and (min-height: 640px)
+  .grouped-grid-layout
+    height: node-size * 2 + node-margin
+    margin-top: -(@height / 2)
+
+@media screen and (min-height: 880px)
+  .grouped-grid-layout
+    height: node-size * 3 + node-margin
+    margin-top: -(@height / 2)

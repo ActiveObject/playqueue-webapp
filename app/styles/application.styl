@@ -1,0 +1,132 @@
+@import 'nib'
+@import '_config'
+
+// Apply a natural box layout model to all elements.
+// http://paulirish.com/2012/box-sizing-border-box-ftw/
+*
+  box-sizing: border-box
+
+html
+  width: 100%
+  height: 100%
+
+body
+  margin: 0
+  padding: 0
+
+  width: 100%
+  height: 100%
+
+  font-family: PT Sans, sans-serif
+  font-size: 0.8em
+
+  overflow: hidden
+  user-select: none;
+
+body > footer
+  height: page-footer-height
+  width: 100%
+
+  position: absolute
+  bottom: -@height
+  transition: bottom 0.3s ease-out
+
+  // background-color: #E2E2E2
+  background-color: #333
+  color: #FFF
+  z-index: 100
+
+  .btn:hover
+    // color: accent-color
+    transform: scale(1.2)
+
+body > footer.active
+  bottom: 0
+
+#main-layout
+  position: absolute
+  top: page-header-height
+  bottom: page-footer-height
+  width: 100%
+  overflow: hidden
+
+#visualization
+  display: none
+  position: absolute
+  left: 4em
+  bottom: 4em
+
+#library
+  position: absolute
+  top: 0
+  width: 100%
+  height: 100%
+
+.stack > *
+  // transition: transform 0.3s ease-in-out
+  position: relative
+  transition: opacity 0.2s linear, left 0.3s ease-in, transform 0.1s ease-out
+  // transform: scale(0.8)
+  opacity: 0
+  left: 100px
+
+.stack > *.active
+  transition: opacity 0.3s ease-in, left 0.3s ease-in
+  // transform: scale(1)
+  left: 0
+  opacity: 1
+  z-index: 1000
+
+#content-layout
+  position: absolute
+  top: 0
+  left: 100%
+  height: 100%
+  width: 100%
+
+#content-layout.active
+  left: 0
+
+.content-layout
+  transition: left 0.3s ease-in, -webkit-transform 0.3s ease-out
+  transform: scale(1)
+
+.content-overlay
+  position: absolute
+  left: 0
+  top: 0
+  width: 100%
+  height: 100%
+  z-index: -1
+  background-color: rgba(0,0,0, 0)
+  transition: background-color 0.3s linear
+
+.content-overlay.active
+  z-index: 10
+  background-color: rgba(0,0,0, 0.5)
+
+.content-layout.blind
+  transform: scale(0.8)
+
+#albums, #groups
+  overflow: visible !important
+
+#splash
+  color: accent-color
+
+  .logo
+    position: absolute
+    left: 50%
+    top: 50%
+
+    width: 200px
+    height: 200px
+
+    margin-left: -100px
+    margin-top: -100px
+
+    font-size: 15em
+    transition: color 0.3s linear
+
+#splash.noactive
+  color: transparent
