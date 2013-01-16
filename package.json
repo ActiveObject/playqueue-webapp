@@ -27,7 +27,7 @@
     "uglify-js-brunch": ">= 1.0 < 1.5",
     "clean-css-brunch": ">= 1.0 < 1.5",
     "jsenv-brunch": ">= 1.0 < 1.5",
-    "auto-reload-brunch": "git+ssh://git@github.com:ActiveObject/auto-reload-brunch.git",
+    "auto-reload-brunch": "git://github.com/ActiveObject/auto-reload-brunch.git",
 
     "express": "~3.0",
     "statik": ">= 1.1.0",
