@@ -27,12 +27,17 @@ exports.init = function (options) {
 
 	var Queue   = require('models/Queue');
 	var Router  = require('routers/Router');
-	var RestApi = require('RestApi');
+	var RestApi = require('api/RestApi');
+	var VkApi   = require('api/VkApi');
 
 	this.router = new Router();
 
 	this.api = new RestApi({
 		entryPoint: options.entryPoint,
+		auth: options.auth
+	});
+
+	this.vk = new VkApi({
 		auth: options.auth
 	});
 
@@ -95,7 +100,7 @@ exports.init = function (options) {
 		this.albums.fetch();
 		this.library.fetch();
 		this.friends.fetch();
-	}, this)
+	}, this);
 
 	$(document).on('click', 'a:not([data-bypass])', function (event) {
 		var href = $(this).attr('href');

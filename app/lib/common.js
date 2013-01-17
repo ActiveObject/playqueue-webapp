@@ -61,3 +61,9 @@ exports.preventClick = function (scrollObj) {
 		}
 	};
 };
+
+exports.not = function (predicate, ctx) {
+	return function () {
+		return !predicate.apply(ctx, arguments);
+	};
+};
