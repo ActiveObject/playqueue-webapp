@@ -39,6 +39,11 @@ var setupHelpers = function (apiObj) {
 };
 
 var request = function (url, options, callback) {
+	if (!callback) {
+		callback = options;
+		options = {};
+	}
+
 	$.getJSON(url, options, function (res) {
 		if (res.error) {
 			return callback(res.error);
