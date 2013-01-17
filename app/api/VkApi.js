@@ -44,7 +44,7 @@ var request = function (url, options, callback) {
 		options = {};
 	}
 
-	$.getJSON(url, options, function (res) {
+	$.getJSON(url, options, function (res, status, xhr) {
 		if (res.error) {
 			return callback(res.error);
 		}
@@ -53,7 +53,7 @@ var request = function (url, options, callback) {
 			return callback(new Error('Missing response body'));
 		}
 
-		callback(null, res.response);
+		callback(null, res.response, status, xhr);
 	});
 };
 
