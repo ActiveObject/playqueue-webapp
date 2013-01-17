@@ -24,37 +24,14 @@ var Tracks = Backbone.Collection.extend({
 		};
 
 		var onLoad = function (res) {
-			var track = new this.model(res);
+			var track = new this.model(res[0]);
 			this.add(track);
 			callback(null, track);
 		}.bind(this);
 
-		// var params = {
-		// 	audiosearch: {
-		// 		owner_id: ownerId,
-		// 		audio_id: audioId
-		// 	}
-		// };
-
-		// app.api.resource('audiosearch/audio', params, handleError(onLoad, onError));
-		var params = {
-			uid: localStorage.user_id,
-			access_token: localStorage.access_token,
-			audios: ownerId + '_' + audioId
-		};
-
-		var url = 'https://api.vk.com/method/audio.getById?callback=?';
-
-		$.getJSON(url, params, function (res) {
-			console.log(res);
-			if (res.response && res.response[0]) {
-				onLoad(res.response[0]);
-			} else {
-				onError(res);
-			}
-		}, this);
+		app.vk.audio.getById({ audios: ownerId + '_' + audioId }, handleError(onLoad, onError));
 	}
-})
+});
 
 module.exports = Backbone.Collection.extend({
 	model: Post,
