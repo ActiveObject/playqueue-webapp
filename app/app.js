@@ -23,7 +23,7 @@ exports.init = function (options) {
 	var AudioCollection = require('collections/AudioCollection');
 	var Friends = require('models/Friends');
 
-	var ContentLayout = require('layouts/ContentLayout');
+	var MainLayout = require('layouts/MainLayout');
 
 	var Queue   = require('models/Queue');
 	var Router  = require('routers/Router');
@@ -59,32 +59,28 @@ exports.init = function (options) {
 	Backbone.Mediator.subscribe('queue:show', queueView.show, queueView);
 	Backbone.Mediator.subscribe('queue:hide', queueView.hide, queueView);
 
+	this.view = {};
+	this.view.albums = new AlbumList({
+		collection: this.albums
+	});
+
+	this.view.groups = new GroupList({
+		collection: this.groups
+	});
+
+	this.view.friends = new FriendList({
+		collection: this.friends
+	});
+
 	this.layouts = {};
-	this.layouts.main = new Backbone.Layout({
+	this.layouts.main = new MainLayout({
 		el: '#main-layout',
 
 		views: {
-			'#queue': queueView
-		}
-	});
-
-	this.layouts.content = new ContentLayout({
-		el: '#content-layout',
-
-		views: {
-			'#home': new HomeView({
-				groups: this.groups,
-				albums: this.albums
-			}),
-			'#groups': new GroupList({
-				collection: this.groups
-			}),
-			'#albums': new AlbumList({
-				collection: this.albums
-			}),
-			'#friends': new FriendList({
-				collection: this.friends
-			})
+			'#queue': queueView,
+			'#albums': this.view.albums,
+			'#groups': this.view.groups,
+			'#friends': this.view.friends
 		}
 	});
 
@@ -97,7 +93,7 @@ exports.init = function (options) {
 	var app = this;
 	this.api.on('loaded', function (api) {
 		this.groups.fetch();
-		this.albums.fetch();
+		this.albums.fetch({ query: { uid: app.vk.user }});
 		this.library.fetch();
 		this.friends.fetch();
 	}, this);
@@ -112,12 +108,9 @@ exports.init = function (options) {
 		}
 	});
 
-	this.layouts.main.render();
-	this.layouts.content.render();
-	this.layouts.content.show();
-
 	this.panels.navigation.show();
 	this.panels.player.show();
 
+	this.layouts.main.render();
 	$('#splash').addClass('noactive');
 };

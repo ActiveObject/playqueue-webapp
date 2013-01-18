@@ -10,7 +10,7 @@
   bottom: 0
   background-color: white
   color: #555
-  z-index: 100
+  z-index: 2000
   transition: right 0.2s ease-in
 
   .title
@@ -43,27 +43,37 @@
     margin-left: -(@width / 2)
     margin-top: -(@height / 2)
 
+  .wrapper
+    height: 100%
+
 .tracklist.active
   right: 50px
 
-.tracklist ul
+.tracklist .list
   list-style: none
   margin: 0
   padding: 0
   width: 100%
   cursor: pointer
 
-.tracklist > ul > li
-  position: relative
+.tracklist-item
   width: 100%
+  cursor: pointer
   border-bottom: 1px solid #F5F5F5
+  padding: 1.5em 40px 1.5em 1em;
+  font-size: 1em
+  transition: top 0.2s ease-out
+  color: #333
+  background-color: white
+  z-index: 100
 
-.tracklist > ul > li > div
+/*
+.tracklist-item > div
   background-color: white
   padding: 1.5em 40px 1.5em 1em
-  font-size: 1em
+  font-size: 1em*/
 
-.tracklist > ul > li:hover
+.tracklist-item:hover
   color: #333
 
   .add-to-queue
@@ -75,13 +85,13 @@
   .add-to-queue
     visibility: visible !important
     color: accent-color
-
-.tracklist > ul > li.active
+/*
+.tracklist-item.active
   background-color: accent-color
-
-.tracklist .drag-place
+*/
+/*.tracklist .drag-place
   display: none
-
+*/
 @media screen and (max-width: 600px)
   .tracklist.active
     width: 100%

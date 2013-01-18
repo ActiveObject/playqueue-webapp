@@ -18,17 +18,20 @@ node-count = 10
   margin-top: -(node-full-size / 2)
 
 .grid-layout > ul
+  position: relative
   margin: 0
   list-style: none
-  width: 16 * node-full-size
+  width: 0
   padding: 0 80px
   box-sizing: content-box
   height: 100%
 
 .grid-layout > ul > li
+  display: block
+  position: absolute
   width: node-size
   height: @width
-  float: left
+  // float: left
   padding: node-margin node-margin 0 0
 
 .grid-layout

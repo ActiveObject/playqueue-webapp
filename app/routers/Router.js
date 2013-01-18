@@ -1,10 +1,13 @@
 var app = require('app');
 var GroupView = require('views/GroupView');
-var AlbumDetailsView = require('views/AlbumDetailsView');
 var TrackList = require('views/TrackList');
+var Album = require('models/Album');
+var AlbumList = require('views/AlbumList');
 
 module.exports = Backbone.Router.extend({
 	routes: {
+		'groups/:gid/albums/:aid': 'groupAlbum',
+		'groups/:id/library': 'groupLibrary',
 		'albums/:id': 'album',
 		'groups/:id': 'group',
 		'groups': 'groups',
@@ -18,7 +21,7 @@ module.exports = Backbone.Router.extend({
 	},
 
 	groups: function () {
-		app.layouts.content.activate('groups');
+		app.layouts.main.activate('groups');
 
 		app.panels.navigation.menu.render({
 			title: 'Мої групи',
@@ -33,12 +36,7 @@ module.exports = Backbone.Router.extend({
 	},
 
 	albums: function () {
-		app.layouts.content.activate('albums');
-
-		// TODO: move to a separate method
-		app.layouts.main.$el.children('#tracklist').removeClass('active');
-		app.layouts.main.$el.children('.content-overlay').removeClass('active');
-		app.layouts.content.$el.removeClass('blind');
+		app.layouts.main.activate('albums');
 
 		app.panels.navigation.menu.render({
 			title: 'Мої аудіозаписи',
@@ -52,14 +50,8 @@ module.exports = Backbone.Router.extend({
 		});
 	},
 
-
 	friends: function () {
-		app.layouts.content.activate('friends');
-
-		// TODO: move to a separate method
-		app.layouts.main.$el.children('#tracklist').removeClass('active');
-		app.layouts.main.$el.children('.content-overlay').removeClass('active');
-		app.layouts.content.$el.removeClass('blind');
+		app.layouts.main.activate('friends');
 
 		app.panels.navigation.menu.render({
 			title: 'Мої друзі',
@@ -74,24 +66,22 @@ module.exports = Backbone.Router.extend({
 	},
 
 	group: function (gid) {
-		var prevView = app.layouts.content.getView('#group');
+		var prevView = app.layouts.main.getView('#group');
 		var group = app.groups.get(gid);
-		if (prevView && prevView.model.id === group.id) {
-			app.layouts.content.activate('group');
-		} else {
+		if (!prevView || !(prevView.model.id === group.id)) {
 			var view = new GroupView({ model: group });
-
-			app.layouts.content.setView('#group', view);
-			app.layouts.content.activate('group');
+			app.layouts.main.setView('#group', view);
 			view.render();
 			group.wall.fetch();
 		}
+
+		app.layouts.main.activate('group');
 
 		app.panels.navigation.menu.render({
 			title: group.get('name'),
 			items: [{
 				title: 'Аудіозаписи групи',
-				uri: '/groups/' + group.id + '/albums'
+				uri: '/groups/' + group.id + '/library'
 			}, {
 				title: 'Мої групи',
 				uri: '/groups'
@@ -113,13 +103,10 @@ module.exports = Backbone.Router.extend({
 		});
 
 		app.layouts.main.setView('#tracklist', view);
-		view.reset();
 		view.render();
+		view.reset();
 
-		// TODO: move to a separate method
-		app.layouts.main.$el.children('#tracklist').addClass('active');
-		app.layouts.main.$el.find('.content-overlay').addClass('active');
-		app.layouts.content.$el.addClass('blind');
+		app.layouts.main.showTracklist();
 
 		app.panels.navigation.menu.render({
 			title: album.get('title'),
@@ -133,6 +120,61 @@ module.exports = Backbone.Router.extend({
 				title: 'Мої друзі',
 				uri: '/friends'
 			}]
+		});
+	},
+
+
+	groupLibrary: function (id) {
+		var group = app.groups.get(id);
+		var view = new AlbumList({
+			collection: group.library
+		});
+
+		app.layouts.main.setView('#group-library', view);
+		app.layouts.main.activate('group-library');
+
+		view.render();
+		group.library.fetch({
+			query: {
+				gid: group.id
+			}
+		});
+
+		app.panels.navigation.menu.render({
+			title: group.get('name') + ' - аудіозаписи',
+			items: [{
+				title: 'Новини групи',
+				uri: '/groups/' + group.id
+			}, {
+				title: 'Мої аудіозаписи',
+				uri: '/albums'
+			}, {
+				title: 'Мої групи',
+				uri: '/groups'
+			}, {
+				title: 'Мої друзі',
+				uri: '/friends'
+			}]
+		});
+	},
+
+	groupAlbum: function (gid, aid) {
+		var group = app.groups.get(gid);
+		var album = group.library.get(aid);
+
+		var view = new TrackList({
+			collection: album.tracks
+		});
+
+		app.layouts.main.setView('#tracklist', view);
+		view.render();
+		view.reset();
+
+		app.layouts.main.showTracklist();
+
+		app.panels.navigation.menu.render({
+			title: album.get('title'),
+			items: []
 		});
 	}
 });

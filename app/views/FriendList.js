@@ -1,11 +1,7 @@
-var VkFriendView        = require('views/VkFriendView');
-var ScrollableGridView = require('views/ScrollableGridView');
+var VkFriendView = require('views/VkFriendView');
+var GridView     = require('views/GridView');
 
-module.exports  = ScrollableGridView.extend({
-	initialize: function () {
-		ScrollableGridView.prototype.initialize.apply(this, arguments);
-	},
-
+module.exports = GridView.extend({
 	createItem: function (model) {
 		return new VkFriendView({ model: model });
 	}

@@ -14,32 +14,38 @@ var onScroll = function (el, fn, bottomOffset) {
 
 var curr = 30;
 
-module.exports = Backbone.Layout.extend({
-	tagName: 'ul',
-	scroll: false,
+module.exports = Backbone.View.extend({
+	manage: true,
+	template: 'grid',
+	className: 'wrapper list-layout',
 
-	constructor: function () {
-		Backbone.Layout.apply(this, arguments);
-
+	initialize: function () {
 		this.collection.on('reset', this.reset, this);
 		this.collection.on('add', this.add, this);
 	},
 
 	afterRender: function () {
-		if (!this.scroll) return;
-		if (!this.scroller) {
-			var el = this.$el.parent().get(0);
-			var onMove = _.throttle(onScroll(this.$el, this.next.bind(this), 500), 100);
-			var options = _.extend({
-				onScrollMove: onMove,
-				onScrollEnd: onMove,
-				wheelAction: 'scroll'
-			}, this.scroll);
-			this.scroller = new iScroll(el, options);
-			el.addEventListener('click', preventClick(this.scroller), true);
-		} else {
-			this.scroller.refresh();
-		}
+		this.wrapperEl = this.$el;
+		this.listEl = this.$el.find('.list');
+
+		var onMove = _.throttle(onScroll(this.listEl, this.next.bind(this), 500), 100);
+		var options = _.extend({
+			hideScrollbar: true,
+			vScroll: true,
+			hScroll: false,
+			vScrollbar: false,
+			hScrollbar: false,
+			bounce: true,
+			momentum: true,
+			useTransition: true,
+			zoom: true,
+			onScrollMove: onMove,
+			onScrollEnd: onMove,
+			wheelAction: 'scroll'
+		}, this.scrollOptions);
+
+		this.scroller = new iScroll(this.wrapperEl.get(0), options);
+		this.el.addEventListener('click', preventClick(this.scroller), true);
 	},
 
 	next: function () {
@@ -56,15 +62,14 @@ module.exports = Backbone.Layout.extend({
 	},
 
 	reset: function () {
-		this.$el.empty();
 		this.collection.models.slice(0,30).forEach(this.add, this);
 	},
 
 	add: function (model) {
 		var view = this.createItem(model);
-		this.insertView(view);
+		this.listEl.append(view.el);
 		view.render();
-		if (this.scroller) this.scroller.refresh();
+		this.scroller.refresh();
 	},
 
 	createItem: function (model) {

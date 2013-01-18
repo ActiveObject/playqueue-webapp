@@ -80,8 +80,7 @@ var swap = function (collection, el1, el2) {
 };
 
 var List = ListView.extend({
-	className: 'queue-list',
-	tagName: 'div',
+	template: 'queue',
 	events: {
 		'mouseover .drag-place': 'disableScroll',
 		'mouseout .drag-place': 'enableScroll',
@@ -116,10 +115,6 @@ var List = ListView.extend({
 			$(this).addClass('drag');
 		});
 
-		this.collection.on('reset', function () {
-			this.$el.height(0);
-		}, this);
-
 		this.collection.on('swap', function (track1, track2) {
 			var source = this.$el.find('[data-audio-id=' + track1.id + ']').get(0).parentNode;
 			var target = this.$el.find('[data-audio-id=' + track2.id + ']').get(0).parentNode;
@@ -139,18 +134,6 @@ var List = ListView.extend({
 			position[0].el.style.top = position[0].top + position[1].h + 'px';
 			position[1].el.style.top = position[0].top + 'px';
 		}, this);
-	},
-
-	scroll: {
-		hideScrollbar: true,
-		vScroll: true,
-		hScroll: false,
-		vScrollbar: false,
-		hScrollbar: false,
-		bounce: true,
-		momentum: true,
-		useTransition: true,
-		zoom: true
 	},
 
 	createItem: function (model) {

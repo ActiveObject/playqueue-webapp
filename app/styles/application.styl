@@ -34,7 +34,7 @@ body > footer
   // background-color: #E2E2E2
   background-color: #333
   color: #FFF
-  z-index: 100
+  z-index: 3000
 
   .btn:hover
     // color: accent-color
@@ -62,34 +62,25 @@ body > footer.active
   width: 100%
   height: 100%
 
-.stack > *
+.stack > .item
+  // display: none
   // transition: transform 0.3s ease-in-out
-  position: relative
+  position: absolute
+  height: 100%
+  width: 100%
   transition: opacity 0.2s linear, left 0.3s ease-in, transform 0.1s ease-out
   // transform: scale(0.8)
   opacity: 0
   left: 100px
+  transform: scale(1)
 
-.stack > *.active
+.stack > .item.active
+  // display: block
   transition: opacity 0.3s ease-in, left 0.3s ease-in
   // transform: scale(1)
   left: 0
   opacity: 1
   z-index: 1000
-
-#content-layout
-  position: absolute
-  top: 0
-  left: 100%
-  height: 100%
-  width: 100%
-
-#content-layout.active
-  left: 0
-
-.content-layout
-  transition: left 0.3s ease-in, -webkit-transform 0.3s ease-out
-  transform: scale(1)
 
 .content-overlay
   position: absolute
@@ -102,11 +93,12 @@ body > footer.active
   transition: background-color 0.3s linear
 
 .content-overlay.active
-  z-index: 10
+  z-index: 1001
   background-color: rgba(0,0,0, 0.5)
 
-.content-layout.blind
-  transform: scale(0.8)
+.blind
+  transition: transform 0.3s ease-out !important
+  transform: scale(0.8) !important
 
 #albums, #groups
   overflow: visible !important

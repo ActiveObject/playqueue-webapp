@@ -12,24 +12,13 @@ module.exports = ListView.extend({
 		'click .add-to-queue': 'toQueue'
 	},
 
-	scroll: {
-		hideScrollbar: true,
-		vScroll: true,
-		hScroll: false,
-		vScrollbar: false,
-		hScrollbar: false,
-		bounce: true,
-		momentum: true,
-		useTransition: true
-	},
-
 	createItem: function (model) {
 		return new TrackView({ model: model });
 	},
 
 	toQueue: function (e) {
 		var id = $(e.currentTarget).parent().data('audio-id');
-		var track = app.library.get(id);
+		var track = this.collection.get(id);
 		app.queue.add(track);
 	}
 });
