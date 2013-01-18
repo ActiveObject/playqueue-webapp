@@ -1,7 +1,7 @@
 {
   "name": "playqueue-app",
   "author": "Vasyl Priymachuk <activeobject.ac@gmail.com>",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Audioplayer for vk.com: browser app",
   "private": true,
   "repository": {
