@@ -16,6 +16,7 @@ node-count = 10
   height: node-full-size
   top: 50%
   margin-top: -(node-full-size / 2)
+  overflow: visible !important
 
 .grid-layout > ul
   position: relative
@@ -43,6 +44,9 @@ node-count = 10
     cursor: pointer
     outline-color: white
     transition: transform 0.1s linear, outline-color 0.1s linear
+
+  .tile:hover
+    outline: 3px solid rgba(0,0,0, 0.2)
 
   .tile:active
     transform: scale(0.95)
