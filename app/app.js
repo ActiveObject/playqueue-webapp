@@ -7,6 +7,15 @@ exports.init = function (options) {
 		}
 	});
 
+	soundManager.setup({
+		url: '/lib/',
+		flashVersion: 9,
+		preferFlash: false,
+		onready: function() {
+			console.log('Sound manager ready');
+		}
+	});
+
 	var HomeView   = require('views/HomeView');
 	var QueueView  = require('views/QueueView');
 	var GroupView  = require('views/GroupView');

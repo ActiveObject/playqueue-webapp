@@ -26,19 +26,37 @@ var load = function (queue) {
 			queue.audio.src = '';
 		}
 
-		var audio = new Audio();
-		audio.src = track.get('url');
+		var audio = soundManager.createSound({
+			id: track.id,
+			url: track.get('url'),
+			autoLoad: true,
+			onplay: function () {
+				queue.trigger('play', audio, track);
+			},
+			whileplaying: function () {
+				queue.trigger('timeupdate', audio, track);
+			},
+			whileloading: function () {
+				queue.trigger('loadupdate', audio, track);
+			},
+			onbufferchange: function () {
+				queue.trigger('bufferchange', audio, track);
+			}
+		});
+
+		audio.play({
+			onfinish: next(queue)
+		});
+
+		if (queue.audio) {
+			queue.audio.destruct();
+		}
 
 		delete queue.audio;
 		delete queue.track;
 
 		queue.audio = audio;
 		queue.track = track;
-
-		audio.play();
-		queue.trigger('play', audio, track);
-
-		$(audio).one('ended', next(queue));
 
 		return queue;
 	};
