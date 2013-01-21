@@ -134,6 +134,10 @@ var List = ListView.extend({
 			position[0].el.style.top = position[0].top + position[1].h + 'px';
 			position[1].el.style.top = position[0].top + 'px';
 		}, this);
+
+		this.collection.on('reset', function () {
+			this.listEl.height(0);
+		}, this);
 	},
 
 	createItem: function (model) {
