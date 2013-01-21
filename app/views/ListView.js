@@ -62,6 +62,7 @@ module.exports = Backbone.View.extend({
 	},
 
 	reset: function () {
+		this.listEl.empty();
 		this.collection.models.slice(0,30).forEach(this.add, this);
 	},
 
