@@ -6,25 +6,24 @@
   width: 100%
   overflow: hidden
   background-color: #E2E2E2
+  color: #222
 
   .title
     position: absolute
     width: 100%
     bottom: 0
-    color: #555
     padding: 0.5em 1em
     font-size: 1.3em
 
   .album-audio-count
     position: absolute
     top: 0
+    right: 0
     padding: 0 0.2em
     font-size: 5em
-    color: #555
     cursor: pointer
-
-  .album-audio-count:hover
-    color: accent-color
+    font-family: Open Sans, sans-serif
+    font-weight: 300
 
   .album-btn-show
     visibility: hidden
@@ -33,7 +32,6 @@
     right: 0
     font-size: 2em;
     padding: 0 0.2em;
-    color: #555
     cursor: pointer
 
   .album-btn-show:hover
@@ -42,11 +40,6 @@
   a
     text-decoration: none
     color: inherit
-
-
-.album-tile:hover .album-btn-show
-  visibility: visible
-
 
 #album-details, .album-details
   width: 100%
