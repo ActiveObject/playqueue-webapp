@@ -9,13 +9,16 @@
     window.brunch = window.brunch || {};
     window.brunch['auto-reload'] = {enabled: true};
   </script>
-  
+
   <script src="../javascripts/vendor.js"></script>
   <script src="../javascripts/templates.js"></script>
   <script src="../javascripts/app.js"></script>
   <script src="javascripts/test-vendor.js"></script>
   <script>
-    mocha.setup('bdd');
+    mocha.setup({
+      ui: 'bdd',
+      ignoreLeaks: true
+    });
     window.expect = chai.expect;
   </script>
   <script src="javascripts/test.js"></script>
