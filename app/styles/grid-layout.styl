@@ -23,7 +23,7 @@ node-count = 10
   margin: 0
   list-style: none
   width: 0
-  padding: 0 80px
+  padding: 0 80px 0 0
   box-sizing: content-box
   height: 100%
 
@@ -32,8 +32,10 @@ node-count = 10
   position: absolute
   width: node-size
   height: @width
-  // float: left
   padding: node-margin node-margin 0 0
+  transition-property: left, top
+  transition-duration: 0.3s
+  transition-timing-function: ease-out
 
 .grid-layout
   .tile
@@ -46,7 +48,8 @@ node-count = 10
     transition: transform 0.1s linear, outline-color 0.1s linear
 
   .tile:hover
-    outline: 3px solid rgba(0,0,0, 0.2)
+    // outline: 3px solid rgba(0,0,0, 0.2)
+    outline: 3px solid accent-color
 
   .tile:active
     transform: scale(0.95)
@@ -62,7 +65,8 @@ node-count = 10
     color: white
     padding: 0.5em 1em
     font-size: 1.1em
-    background-color: accent-color
+    background-color: #222
+    // background-color: accent-color
 
   .overlay
     position: absolute
@@ -79,6 +83,16 @@ node-count = 10
 @media screen and (min-height: 880px)
   .grid-layout
     height: node-size * 3 + node-margin
+    margin-top: -(@height / 2)
+
+@media screen and (min-height: 1120px)
+  .grid-layout
+    height: node-size * 4 + node-margin
+    margin-top: -(@height / 2)
+
+@media screen and (min-height: 1360px)
+  .grid-layout
+    height: node-size * 5 + node-margin
     margin-top: -(@height / 2)
 
 .grid-layout.big > ul
