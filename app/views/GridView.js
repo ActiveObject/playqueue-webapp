@@ -1,4 +1,16 @@
 var preventClick = require('lib/common').preventClick;
+var grid = require('lib/grid');
+
+window.requestAnimFrame = (function(){
+	return  window.requestAnimationFrame   ||
+		window.webkitRequestAnimationFrame ||
+		window.mozRequestAnimationFrame    ||
+		window.oRequestAnimationFrame      ||
+		window.msRequestAnimationFrame     ||
+		function(/* function */ callback, /* DOMElement */ element){
+			window.setTimeout(callback, 1000 / 60);
+		};
+})();
 
 module.exports = Backbone.View.extend({
 	manage: true,
@@ -8,6 +20,30 @@ module.exports = Backbone.View.extend({
 	initialize: function () {
 		this.collection.on('reset', this.reset, this);
 		this.collection.on('add', this.add, this);
+		this.items = [[0,80,0,0]];
+		var mql1 = window.matchMedia("(min-height: 640px)");
+		var mql2 = window.matchMedia("(min-height: 880px)");
+		var mql3 = window.matchMedia("(min-height: 1120px)");
+		mql1.addListener(this.resize.bind(this));
+		mql2.addListener(this.resize.bind(this));
+		mql3.addListener(this.resize.bind(this));
+	},
+
+	resize: function () {
+		var gridDim = [this.listEl.outerWidth(), this.listEl.outerHeight()];
+		var items = this.items = grid.layout(this.items, gridDim, [this.items[0]]);
+		var els = this.listEl.children();
+		els.each(function (i, el) {
+			requestAnimFrame(function () {
+				$(el).css({
+					top: items[i][0],
+					left: items[i][1]
+				});
+			})
+		});
+		var last = _.last(items);
+		this.listEl.width(last[1]);
+		this.scroller.refresh();
 	},
 
 	afterRender: function () {
@@ -42,39 +78,21 @@ module.exports = Backbone.View.extend({
 	add: function (model) {
 		var view = this.createItem(model);
 		this.listEl.append(view.el);
+
 		view.render().done(function (view) {
-			var intop  = this.intop;
-			var inleft = this.inleft;
-
-			var w = view.$el.outerWidth();
-			var h = view.$el.outerHeight();
-
-			if (intop === 0) {
-				this.listEl.css('width', '+=' + w);
-			}
-
-			if ((h + intop) < this.height) {
-				var top  = intop;
-				var left = inleft;
-
-				intop = top + h;
-			} else {
-				var top = 0;
-				var left = inleft + w;
-
-				intop = h;
-				inleft = left;
-				this.listEl.css('width', '+=' + w);
-			}
-
-			this.intop  = intop;
-			this.inleft = inleft;
+			var gridDimension = [this.$el.outerWidth(), this.$el.outerHeight()];
+			var elDimension   = [view.$el.outerWidth(), view.$el.outerHeight()];
+			var insertPos     = grid.insert(this.items, gridDimension, elDimension);
 
 			view.$el.css({
-				left: left + 'px',
-				top: top + 'px'
+				top:  insertPos[0] + 'px',
+				left: insertPos[1] + 'px'
 			});
+
+			this.items.push(insertPos.concat(elDimension));
+			this.listEl.width(insertPos[1] + elDimension[0]);
 		}.bind(this));
+
 		this.scroller.refresh();
 		this.trigger('add', model, this);
 	},
