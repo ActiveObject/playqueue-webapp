@@ -19,11 +19,31 @@ var updateBuffered = function (el) {
 	};
 };
 
-var onPlay = function (trackEl, playBtnEl) {
+var render = function (trackEl, playBtnEl, seekEl) {
 	return function (audio, track) {
 		var tmpl = renderCurrentTrack(track.toJSON());
 		trackEl.html(tmpl);
 		playBtnEl.addClass('icon-pause');
+	};
+};
+
+var initSeeking = function (el) {
+	el.off('mousedown');
+
+	return function (audio, track) {
+		var seek = function (event) {
+			var percent  = event.offsetX / el.width();
+			var position = audio.durationEstimate * percent;
+			audio.setPosition(position);
+		};
+
+		el.on('mousedown', function () {
+			el.on('mousemove', seek);
+			el.one('mouseup', function (event) {
+				el.off('mousemove', seek);
+				seek(event);
+			});
+		});
 	};
 };
 
@@ -38,7 +58,12 @@ module.exports = SimpleLayout.extend({
 	initialize: function () {
 		var progressLineEl = this.$el.find('.progress-line');
 		var loadingLineEl  = this.$el.find('.back-line');
-		app.queue.on('play', onPlay(this.$el.find('#played-track'), this.$el.find('#btn-play')));
+		var trackEl   = this.$el.find('#played-track');
+		var playBtnEl = this.$el.find('#btn-play');
+		var seekEl    = this.$el.find('.progress');
+
+		app.queue.on('play', initSeeking(seekEl));
+		app.queue.on('play', render(trackEl, playBtnEl, seekEl));
 		app.queue.on('timeupdate', updateProgress(progressLineEl));
 		app.queue.on('loadupdate', updateBuffered(loadingLineEl));
 	},
