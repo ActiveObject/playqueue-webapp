@@ -1,14 +1,37 @@
 var PostView = require('views/PostView');
 
-var onScroll = function (el, fn, offset) {
+var LazyLoad = function (el, offset, fn) {
 	fn = fn || function () {};
 	var parentWidth = el.parent().width();
+	var prevOffset  = parentWidth;
 
-	return function (event) {
-		if ((el.width() + el.position().left) < (parentWidth + offset)) {
-			fn();
+	var paused = false;
+
+	return {
+		handler: function (event) {
+			if (paused) return;
+
+			var currOffset = el.width() - Math.abs(el.position().left) - parentWidth;
+			var diff = prevOffset - currOffset;
+			prevOffset = currOffset;
+
+			console.log(currOffset, diff);
+
+			if (currOffset < offset) {
+				console.log('next');
+				paused = true;
+				fn();
+			}
+		},
+
+		pause: function () {
+			paused = true;
+		},
+
+		resume: function () {
+			paused = false;
 		}
-	};
+	}
 };
 
 module.exports = Backbone.Layout.extend({
@@ -35,8 +58,15 @@ module.exports = Backbone.Layout.extend({
 	},
 
 	afterRender: function () {
-		var next = this.collection.next.bind(this.collection);
-		var onMove = _.throttle(onScroll(this.$el, next, 500), 1000);
+		var next   = this.collection.next.bind(this.collection);
+		var loader = new LazyLoad(this.$el, 2000, next);
+
+		this.collection.on('load', function () {
+			console.log('load');
+			loader.resume();
+		});
+
+		var onMove = _.throttle(loader.handler, 200);
 		this.scroller = new iScroll('wall-layout', {
 			vScroll: false,
 			hScroll: true,
@@ -44,8 +74,8 @@ module.exports = Backbone.Layout.extend({
 			vScrollbar: false,
 			hScrollbar: false,
 			handleClick: false,
-			// onScrollMove: onMove,
-			// onScrollEnd: onMove,
+			onScrollMove: onMove,
+			onScrollEnd: onMove,
 			wheelAction: 'scroll'
 		});
 	}

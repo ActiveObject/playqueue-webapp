@@ -36,12 +36,11 @@ var Tracks = Backbone.Collection.extend({
 module.exports = Backbone.Collection.extend({
 	model: Post,
 
-	initialize: function () {
+	initialize: function (group) {
+		this.group  = group;
 		this.tracks = new Tracks();
-	},
-
-	path: function () {
-		return this.group.path() + '/wall';
+		this.path   = group.path() + '/wall';
+		this.nextPath = this.path + '/next';
 	},
 
 	parse: function (res) {
@@ -52,12 +51,15 @@ module.exports = Backbone.Collection.extend({
 		var path = _.isFunction(this.path) ? this.path() : this.path;
 		var model = this;
 		var options = {};
-		app.api.resource(path + '/next', function (err, resource, status, xhr) {
+		app.api.resource(this.nextPath, function (err, resource, status, xhr) {
 			if (err) {
 				if (options.error) options.error(model, xhr, options);
 			}
 
+			model.nextPath = model.nextPath + '/next';
+
 			model.update(resource.items);
+			model.trigger('load');
 		});
 	},
 
