@@ -4,7 +4,7 @@ var renderCurrentTrack = require('templates/current-track');
 
 var updateProgress = function (el) {
 	return function (audio, track) {
-		var progress = audio.position * 100 / audio.durationEstimate;
+		var progress = audio.position / 1000 * 100 / track.get('duration');
 		el.width(progress + '%');
 	};
 };
@@ -14,7 +14,7 @@ var updateBuffered = function (el) {
 		var buffered = audio.buffered.reduce(function (duration, interval) {
 			return duration + interval.end - interval.start;
 		}, 0);
-		var progress = buffered * 100 / audio.durationEstimate;
+		var progress = buffered / 1000 * 100 / track.get('duration');
 		el.width(progress + '%');
 	};
 };
@@ -33,7 +33,7 @@ var initSeeking = function (el) {
 	return function (audio, track) {
 		var seek = function (event) {
 			var percent  = event.offsetX / el.width();
-			var position = audio.durationEstimate * percent;
+			var position = track.get('duration') * percent * 1000;
 			audio.setPosition(position);
 		};
 
@@ -50,7 +50,7 @@ var initSeeking = function (el) {
 module.exports = SimpleLayout.extend({
 	events: {
 		'click #btn-queue': 'toggleQueue',
-		'click #btn-play': 'play',
+		'click #btn-play': 'togglePlay',
 		'click #btn-next': 'next',
 		'click #btn-prev': 'prev'
 	},
@@ -62,23 +62,24 @@ module.exports = SimpleLayout.extend({
 		var playBtnEl = this.$el.find('#btn-play');
 		var seekEl    = this.$el.find('.progress');
 
-		app.queue.on('play', initSeeking(seekEl));
-		app.queue.on('play', render(trackEl, playBtnEl, seekEl));
-		app.queue.on('timeupdate', updateProgress(progressLineEl));
-		app.queue.on('loadupdate', updateBuffered(loadingLineEl));
+		app.queue.on('track:play', initSeeking(seekEl));
+		app.queue.on('track:play', render(trackEl, playBtnEl, seekEl));
+		app.queue.on('track:timeupdate', updateProgress(progressLineEl));
+		app.queue.on('track:loadupdate', updateBuffered(loadingLineEl));
+
+		app.queue.on('track:play track:resume', function () {
+			playBtnEl.addClass('icon-pause');
+			playBtnEl.removeClass('icon-play');
+		});
+
+		app.queue.on('track:pause queue:end', function () {
+			playBtnEl.addClass('icon-play');
+			playBtnEl.removeClass('icon-pause');
+		});
 	},
 
-	play: function (e) {
-		var btn = $(e.srcElement);
-		if (btn.hasClass('icon-pause')) {
-			app.queue.pause();
-			btn.addClass('icon-play');
-			btn.removeClass('icon-pause');
-		} else {
-			app.queue.play();
-			btn.addClass('icon-pause');
-			btn.removeClass('icon-play');
-		}
+	togglePlay: function (e) {
+		app.queue.togglePlay();
 	},
 
 	next: function () {

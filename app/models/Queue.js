@@ -22,25 +22,30 @@ var isFirst = function (tracks, track) {
 
 var load = function (queue) {
 	return function (track) {
-		if (queue.audio && !queue.audio.paused) {
-			queue.audio.src = '';
-		}
-
 		var audio = soundManager.createSound({
-			id: track.id,
+			id: 't' + track.id,
 			url: track.get('url'),
 			autoLoad: true,
 			onplay: function () {
-				queue.trigger('play', audio, track);
+				queue.trigger('track:play', audio, track);
+			},
+			onpause: function () {
+				queue.trigger('track:pause', audio, track);
+			},
+			onresume: function () {
+				queue.trigger('track:resume', audio, track);
+			},
+			onfinish: function () {
+				queue.trigger('track:finish', audio, track);
 			},
 			whileplaying: function () {
-				queue.trigger('timeupdate', audio, track);
+				queue.trigger('track:timeupdate', audio, track);
 			},
 			whileloading: function () {
-				queue.trigger('loadupdate', audio, track);
+				queue.trigger('track:loadupdate', audio, track);
 			},
 			onbufferchange: function () {
-				queue.trigger('bufferchange', audio, track);
+				queue.trigger('track:bufferchange', audio, track);
 			}
 		});
 
@@ -69,7 +74,8 @@ var next = function (queue) {
 				load(queue)(queue.tracks.first());
 			} else {
 				queue.audio.pause();
-				queue.trigger('end');
+				queue.trigger('queue:end');
+				console.log('[queue:end]');
 			}
 		} else {
 			load(queue)(nextTrack(queue.tracks, queue.track));
@@ -151,7 +157,7 @@ var Queue = Backbone.Model.extend({
 		this.tracks.on('add', function (model, collection) {
 			model.set('qorder', collection.size());
 			model.set('queued', true);
-			console.log('[add to queue] id:%s, qorder:%d', model.id, model.get('qorder'));
+			console.log('[queue:add] id:%s, qorder:%d', model.id, model.get('qorder'));
 		});
 
 		/*this.tracks.on('reset', function (collection, options) {
@@ -179,6 +185,16 @@ var Queue = Backbone.Model.extend({
 			load(this)(this.tracks.first());
 		} else {
 			this.audio.play();
+		}
+	},
+
+	togglePlay: function () {
+		if (this.tracks.isEmpty()) {
+			this.tracks.clean();
+			this.tracks.reset(orderify(app.library.models));
+			load(this)(this.tracks.first());
+		} else {
+			this.audio.togglePause();
 		}
 	},
 
