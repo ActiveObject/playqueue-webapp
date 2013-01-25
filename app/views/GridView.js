@@ -31,7 +31,8 @@ module.exports = Backbone.View.extend({
 
 	resize: function () {
 		var gridDim = [this.listEl.outerWidth(), this.listEl.outerHeight()];
-		var items = this.items = grid.layout(this.items, gridDim, [this.items[0]]);
+		this.items = grid.layout(this.items, gridDim, [this.items[0]]);
+		var items = this.items.slice(1);
 		var els = this.listEl.children();
 		els.each(function (i, el) {
 			requestAnimFrame(function () {
@@ -42,7 +43,7 @@ module.exports = Backbone.View.extend({
 			})
 		});
 		var last = _.last(items);
-		this.listEl.width(last[1]);
+		this.listEl.width(last[1] + last[2]);
 		this.scroller.refresh();
 	},
 
