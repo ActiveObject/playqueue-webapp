@@ -105,6 +105,11 @@ exports.init = function (options) {
 		this.albums.fetch({ query: { uid: app.vk.user }});
 		this.library.fetch();
 		this.friends.fetch();
+
+		this.panels.navigation.show();
+		this.panels.player.show();
+		this.layouts.main.render();
+		$('#splash').addClass('noactive');
 	}, this);
 
 	$(document).on('click', 'a:not([data-bypass])', function (event) {
@@ -116,10 +121,4 @@ exports.init = function (options) {
 			app.router.navigate(href, true);
 		}
 	});
-
-	this.panels.navigation.show();
-	this.panels.player.show();
-
-	this.layouts.main.render();
-	$('#splash').addClass('noactive');
 };
