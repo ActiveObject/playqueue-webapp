@@ -31,14 +31,13 @@ body > footer
   bottom: -@height
   transition: bottom 0.3s ease-out
 
-  // background-color: #E2E2E2
-  background-color: #333
-  color: #FFF
   z-index: 3000
 
   .btn:hover
-    // color: accent-color
     transform: scale(1.2)
+
+body > footer:hover #player
+  bottom: 0
 
 body > footer.active
   bottom: 0
@@ -46,7 +45,7 @@ body > footer.active
 #main-layout
   position: absolute
   top: page-header-height
-  bottom: page-footer-height
+  bottom: 0
   width: 100%
   overflow: hidden
 
@@ -63,21 +62,16 @@ body > footer.active
   height: 100%
 
 .stack > .item
-  // display: none
-  // transition: transform 0.3s ease-in-out
   position: absolute
   height: 100%
   width: 100%
   transition: opacity 0.2s linear, left 0.3s ease-in, transform 0.1s ease-out
-  // transform: scale(0.8)
   opacity: 0
   left: 100px
   transform: scale(1)
 
 .stack > .item.active
-  // display: block
   transition: opacity 0.3s ease-in, left 0.3s ease-in
-  // transform: scale(1)
   left: 0
   opacity: 1
   z-index: 1000
