@@ -4,6 +4,17 @@ var TrackList = require('views/TrackList');
 var Album = require('models/Album');
 var AlbumList = require('views/AlbumList');
 
+var menuItems = [{
+	title: 'Мої аудіозаписи',
+	uri: '/albums'
+}, {
+	title: 'Мої групи',
+	uri: '/groups'
+}, {
+	title: 'Мої друзі',
+	uri: '/friends'
+}];
+
 module.exports = Backbone.Router.extend({
 	routes: {
 		'groups/:gid/albums/:aid': 'groupAlbum',
@@ -25,13 +36,7 @@ module.exports = Backbone.Router.extend({
 
 		app.panels.navigation.menu.render({
 			title: 'Мої групи',
-			items: [{
-				title: 'Мої аудіозаписи',
-				uri: '/albums'
-			}, {
-				title: 'Мої друзі',
-				uri: '/friends'
-			}]
+			items: menuItems
 		});
 	},
 
@@ -40,13 +45,7 @@ module.exports = Backbone.Router.extend({
 
 		app.panels.navigation.menu.render({
 			title: 'Мої аудіозаписи',
-			items: [{
-				title: 'Мої групи',
-				uri: '/groups'
-			}, {
-				title: 'Мої друзі',
-				uri: '/friends'
-			}]
+			items: menuItems
 		});
 	},
 
@@ -55,13 +54,7 @@ module.exports = Backbone.Router.extend({
 
 		app.panels.navigation.menu.render({
 			title: 'Мої друзі',
-			items: [{
-				title: 'Мої групи',
-				uri: '/groups'
-			}, {
-				title: 'Мої аудіозаписи',
-				uri: '/albums'
-			}]
+			items: menuItems
 		});
 	},
 
@@ -82,16 +75,7 @@ module.exports = Backbone.Router.extend({
 			items: [{
 				title: 'Аудіозаписи групи',
 				uri: '/groups/' + group.id + '/library'
-			}, {
-				title: 'Мої групи',
-				uri: '/groups'
-			}, {
-				title: 'Мої аудіозаписи',
-				uri: '/albums'
-			}, {
-				title: 'Мої друзі',
-				uri: '/friends'
-			}]
+			}].concat(menuItems)
 		});
 	},
 
@@ -110,16 +94,7 @@ module.exports = Backbone.Router.extend({
 
 		app.panels.navigation.menu.render({
 			title: album.get('title'),
-			items: [{
-				title: 'Мої групи',
-				uri: '/groups'
-			}, {
-				title: 'Мої аудіозаписи',
-				uri: '/albums'
-			}, {
-				title: 'Мої друзі',
-				uri: '/friends'
-			}]
+			items: menuItems
 		});
 	},
 
@@ -145,16 +120,7 @@ module.exports = Backbone.Router.extend({
 			items: [{
 				title: 'Новини групи',
 				uri: '/groups/' + group.id
-			}, {
-				title: 'Мої аудіозаписи',
-				uri: '/albums'
-			}, {
-				title: 'Мої групи',
-				uri: '/groups'
-			}, {
-				title: 'Мої друзі',
-				uri: '/friends'
-			}]
+			}].concat(menuItems)
 		});
 	},
 
