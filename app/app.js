@@ -47,7 +47,8 @@ exports.init = function (options) {
 	});
 
 	this.vk = new VkApi({
-		auth: options.auth
+		auth: options.auth,
+		rateLimit: 2
 	});
 
 	this.groups  = new GroupCollection();
