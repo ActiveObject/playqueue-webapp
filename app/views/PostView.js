@@ -11,7 +11,7 @@ module.exports = Backbone.Layout.extend({
 	className: 'post',
 	template: 'post',
 	events: {
-		'click .add-to-queue': 'toQueue'
+		'click .audio': 'toQueue'
 	},
 
 	data: function () {
@@ -47,12 +47,15 @@ module.exports = Backbone.Layout.extend({
 		this.wall.tracks.on('change:queued', function (model) {
 			if (!model.get('queued')) {
 				this.$el.find('[data-audio-id=' + model.id + ']').removeClass('queued');
+				this.$el.find('[data-audio-id=' + model.id + ']').find('.qorder').text('');
+			} else {
+				this.$el.find('[data-audio-id=' + model.id + ']').find('.qorder').text(model.get('qorder'));
 			}
 		}, this);
 	},
 
 	toQueue: function (event) {
-		var trackEl = $(event.target).parent().parent();
+		var trackEl = $(event.currentTarget);
 		trackEl.addClass('queued');
 		var aid = trackEl.data('audio-id');
 		var oid = trackEl.data('owner-id');

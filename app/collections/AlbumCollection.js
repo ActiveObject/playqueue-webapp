@@ -27,11 +27,10 @@ module.exports = Backbone.Collection.extend({
 		// }));
 
 		this.on('reset', function (collection) {
-			async.forEachSeries(collection.models, function (album, callback) {
+			async.forEach(collection.models, function (album) {
 				album.fetch();
-				_.delay(callback, 500);
 			});
-		})
+		});
 	},
 
 	sync: function (method, model, options) {

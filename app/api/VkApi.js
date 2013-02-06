@@ -66,17 +66,61 @@ var VkApi  = function (options) {
 	this.user  = options.auth.user;
 
 	this.entryPoint = 'https://api.vk.com/method/';
+	this.lastRequestTime = Date.now();
+	this.rateLimit = options.rateLimit || 3;
+	this.requestLimit = options.requestLimit || 3;
 
 	setupHelpers(this);
 };
 
-VkApi.prototype.request = function (method, options, callback) {
+VkApi.prototype.request = function (method, options, attempt, callback) {
+	if (!callback) {
+		callback = attempt;
+		attempt = 1;
+	}
+
+	if (attempt > this.requestLimit) {
+		return callback(new Error('Exceeded request limit'));
+	}
+
 	var url = this.entryPoint + method + '?callback=?';
 	options = _.extend(options, {
 		access_token: this.token
 	});
 
-	return request(url, options, callback);
+	var now = Date.now();
+	var reqInterval = Math.floor(1000 / this.rateLimit);
+
+	var interval = now - this.lastRequestTime;
+
+	if (interval > reqInterval) {
+		var delay = 0;
+	} else if (interval > 0) {
+		var delay = reqInterval;
+	} else {
+		var delay = this.lastRequestTime + reqInterval - now;
+	}
+
+	console.log('[vk.api] request api with delay ' + delay + 'ms');
+
+	this.lastRequestTime = now + delay;
+
+	var api = this;
+	setTimeout(function () {
+		request(url, options, function (err, body, status, xhr) {
+			if (err) {
+				// too many request - repeat request
+				if (err.error_code === 6) {
+					console.warn('[vk.api] %s, rateLimit = %d', err.error_msg, api.rateLimit);
+					return api.request(method, options, attempt + 1, callback);
+				}
+
+				return callback(err);
+			}
+
+			callback(null, body, status, xhr);
+		});
+	}, delay);
 };
 
 module.exports = VkApi;
