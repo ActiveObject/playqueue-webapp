@@ -8,13 +8,12 @@ queue-panel-width = 450px
   position: absolute
   width: queue-panel-width
   top: 0
-  left: -(@width + margin)
+  right: -(@width + margin)
   bottom: 0
-  // background-color: #F2F2F2
   background-color: white
   color: #555
   z-index: 2000
-  transition: left 0.3s ease-in-out
+  transition: right 0.3s ease-in-out
   border-right: 1px solid #BBB
   border-left: 1px solid #BBB
   box-shadow: 0 0 10px #999
@@ -47,7 +46,7 @@ queue-panel-width = 450px
     height: 100%
 
 .queue.active
-  left: margin
+  right: margin
 
 .queue-item
   position: absolute
@@ -100,7 +99,6 @@ queue-panel-width = 450px
 
 .queue .dropzone
   background-color: white
-  // background-color: accent-color
 
 .dropzone > *
   visibility: hidden

@@ -95,7 +95,7 @@ exports.init = function (options) {
 	});
 
 	this.panels = {};
-	this.panels.player = new PlayerPanel({ el: 'body > footer' });
+	this.panels.player = new PlayerPanel({ el: '#player' });
 	this.panels.navigation = new NavigationPanel({
 		el: 'body > header'
 	});

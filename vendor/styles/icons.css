@@ -20,16 +20,18 @@
 }
 
 /* Use the following CSS code if you want to have a class per icon */
-[class^="icon-"]:before, [class*=" icon-"]:before {
+/*
+Instead of a list of all class selectors,
+you can use the generic selector below, but it's slower:
+[class*="icon-"]:before {
+*/
+.icon-plus:before, .icon-minus:before, .icon-headphones:before, .icon-mute:before, .icon-first:before, .icon-last:before, .icon-shuffle:before, .icon-loop:before, .icon-repeat:before, .icon-add:before, .icon-add-2:before, .icon-arrow-left:before, .icon-appbarbase:before, .icon-appbarcontrolplay:before, .icon-appbarcontrolfastforward:before, .icon-appbarcontrolpause:before, .icon-appbarcontrolresume:before, .icon-appbarcontrolrewind:before, .icon-appbarcontrolstop:before, .icon-appbararrowleft:before, .icon-appbarlist:before, .icon-appbarbasehover:before, .icon-appbarmagnify:before, .icon-appbarchevrondown:before {
 	font-family: 'icomoon';
-	font-style: normal;
 	speak: none;
+	font-style: normal;
 	font-weight: normal;
 	line-height: 1;
 	-webkit-font-smoothing: antialiased;
-}
-.icon-play:before {
-	content: "\21";
 }
 .icon-plus:before {
 	content: "\e004";
@@ -37,26 +39,8 @@
 .icon-minus:before {
 	content: "\e047";
 }
-.icon-stop:before {
-	content: "\e000";
-}
-.icon-pause:before {
-	content: "\e001";
-}
-.icon-trashcan:before {
-	content: "\e02d";
-}
-.icon-stop-2:before {
-	content: "\e002";
-}
-.icon-search:before {
-	content: "\e003";
-}
 .icon-headphones:before {
 	content: "\e006";
-}
-.icon-list:before {
-	content: "\e007";
 }
 .icon-mute:before {
 	content: "\e043";
@@ -84,4 +68,40 @@
 }
 .icon-arrow-left:before {
 	content: "\e00b";
+}
+.icon-appbarbase:before {
+	content: "\e00c";
+}
+.icon-appbarcontrolplay:before {
+	content: "\e00d";
+}
+.icon-appbarcontrolfastforward:before {
+	content: "\e00e";
+}
+.icon-appbarcontrolpause:before {
+	content: "\e00f";
+}
+.icon-appbarcontrolresume:before {
+	content: "\e010";
+}
+.icon-appbarcontrolrewind:before {
+	content: "\e011";
+}
+.icon-appbarcontrolstop:before {
+	content: "\e012";
+}
+.icon-appbararrowleft:before {
+	content: "\e013";
+}
+.icon-appbarlist:before {
+	content: "\e014";
+}
+.icon-appbarbasehover:before {
+	content: "\e015";
+}
+.icon-appbarmagnify:before {
+	content: "\e016";
+}
+.icon-appbarchevrondown:before {
+	content: "\e000";
 }

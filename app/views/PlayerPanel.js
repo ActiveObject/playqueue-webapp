@@ -19,11 +19,10 @@ var updateBuffered = function (el) {
 	};
 };
 
-var render = function (trackEl, playBtnEl, seekEl) {
+var render = function (trackEl) {
 	return function (audio, track) {
 		var tmpl = renderCurrentTrack(track.toJSON());
 		trackEl.html(tmpl);
-		playBtnEl.addClass('icon-pause');
 	};
 };
 
@@ -48,52 +47,15 @@ var initSeeking = function (el) {
 };
 
 module.exports = SimpleLayout.extend({
-	events: {
-		'click #btn-queue': 'toggleQueue',
-		'click #btn-play': 'togglePlay',
-		'click #btn-next': 'next',
-		'click #btn-prev': 'prev'
-	},
-
 	initialize: function () {
 		var progressLineEl = this.$el.find('.progress-line');
 		var loadingLineEl  = this.$el.find('.back-line');
 		var trackEl   = this.$el.find('#played-track');
-		var playBtnEl = this.$el.find('#btn-play');
-		var seekEl    = this.$el.find('.progress');
+		var seekEl    = this.$el.find('.seek');
 
 		app.queue.on('track:play', initSeeking(seekEl));
-		app.queue.on('track:play', render(trackEl, playBtnEl, seekEl));
+		app.queue.on('track:play', render(trackEl));
 		app.queue.on('track:timeupdate', updateProgress(progressLineEl));
 		app.queue.on('track:loadupdate', updateBuffered(loadingLineEl));
-
-		app.queue.on('track:play track:resume', function () {
-			playBtnEl.addClass('icon-pause');
-			playBtnEl.removeClass('icon-play');
-		});
-
-		app.queue.on('track:pause queue:end', function () {
-			playBtnEl.addClass('icon-play');
-			playBtnEl.removeClass('icon-pause');
-		});
-	},
-
-	togglePlay: function (e) {
-		app.queue.togglePlay();
-	},
-
-	next: function () {
-		app.queue.next();
-	},
-
-	prev: function () {
-		app.queue.prev();
-	},
-
-	toggleQueue: function (e) {
-		var btn = $(e.target);
-		btn.toggleClass('active');
-		var event = btn.hasClass('active') ? 'queue:show' : 'queue:hide';
-		Backbone.Mediator.pub(event);
 	}
 });
