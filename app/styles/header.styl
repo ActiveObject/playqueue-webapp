@@ -12,6 +12,7 @@ body > header
   transition: top 0.3s ease-out
 
   background-color: accent-color
+  box-shadow: 0 2px 1px 0px rgba(50, 50, 50, 0.23)
   border-bottom: 1px solid darken(accent-color, 20%)
   z-index: 1000
   color: white
@@ -23,31 +24,35 @@ body > header.active
   top: player-height
 
 .header-menu
-  position: absolute
-  top: 0
-  left: left-offset
   font-size: 1.5em
   font-weight: 300
   font-family: Open Sans, sans-serif
+  overflow: hidden
 
   a
     text-decoration: none
     color: inherit
 
   .title
+    display: inline-block
     position: relative
     height: page-header-height
+    width: 100%
     font-size: 1.6em
     cursor: pointer
     z-index: 100
     box-sizing: content-box
     overflow: hidden
+    white-space: nowrap
+    text-overflow: ellipsis
 
     .arrow
-      margin: 0
-      float: right
-      font-size: 1em
-      padding-top: 0.15em
+      font-family: 'icomoon'
+      speak: none
+      font-style: normal
+      font-weight: normal
+      line-height: 1
+      -webkit-font-smoothing: antialiased
 
   .title.active
     background-color: darken(accent-color, 10%)

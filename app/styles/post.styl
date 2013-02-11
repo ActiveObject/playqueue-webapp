@@ -110,25 +110,30 @@
     margin-top: -(@height / 2)
 
   .qorder
-    display: none
     position: absolute
-    width: 30px
-    height: 30px
-    right: 1em
     top: 50%
-    margin-top: - (@width / 2)
-    border-radius: 15px
+    right: 1em
+    margin-top: -0.8em
+    padding: 0 0.5em
+
     text-align: center
-    font-size: 1.3em
-    font-weight: bold
+    font-size: 1.2em
+
+    border: 2px solid white
+    border-radius: 1em
+
+    background-color: white
+    color: accent-color
+
+    transition: opacity 0.5s ease
+    opacity: 0
 
 .post .queued
   background-color: accent-color
   color: white
 
 .post .queued .qorder
-  display: block
-  border: 2px solid white
+  opacity: 1
 
 .post .title
   font-weight: bold

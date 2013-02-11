@@ -23,37 +23,12 @@ body
   overflow: hidden
   user-select: none;
 
-body > footer
-  height: page-footer-height
-  width: 100%
-
-  position: absolute
-  bottom: -@height
-  transition: bottom 0.3s ease-out
-
-  z-index: 3000
-
-  .btn:hover
-    transform: scale(1.2)
-
-body > footer:hover #player
-  bottom: 0
-
-body > footer.active
-  bottom: 0
-
 #main-layout
   position: absolute
   top: page-header-height + player-height
   bottom: 0
   width: 100%
   overflow: hidden
-
-#visualization
-  display: none
-  position: absolute
-  left: 4em
-  bottom: 4em
 
 #library
   position: absolute
@@ -88,7 +63,7 @@ body > footer.active
 
 .content-overlay.active
   z-index: 1001
-  background-color: rgba(255,255,255, 0.9)
+  background-color: rgba(238,238,238, 0.9)
 
 .blind
   transition: transform 0.3s ease-out !important
