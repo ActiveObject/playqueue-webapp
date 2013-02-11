@@ -135,7 +135,7 @@ var List = ListView.extend({
 			position[1].el.style.top = position[0].top + 'px';
 		}, this);
 
-		this.collection.on('reset', function () {
+		this.collection.on('beforereset', function () {
 			this.listEl.height(0);
 		}, this);
 	},

@@ -94,6 +94,7 @@ var prev = function (queue) {
 };
 
 var reset = function (queue) {
+	queue.tracks.trigger('beforereset');
 	queue.tracks.clean();
 	queue.tracks.reset();
 };
