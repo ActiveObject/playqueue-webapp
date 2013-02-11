@@ -9,6 +9,14 @@ var updateProgress = function (el) {
 	};
 };
 
+var updateDuration = function (el) {
+	return function (audio, track) {
+		var format = audio.position < 1000 * 60 * 60 ? 'mm:ss' : 'HH:mm:ss';
+		var duration = moment.utc(0).millisecond(audio.position).format(format);
+		el.text(duration);
+	};
+};
+
 var updateBuffered = function (el) {
 	return function (audio, track) {
 		var buffered = audio.buffered.reduce(function (duration, interval) {
@@ -50,12 +58,14 @@ module.exports = SimpleLayout.extend({
 	initialize: function () {
 		var progressLineEl = this.$el.find('.progress-line');
 		var loadingLineEl  = this.$el.find('.back-line');
+		var durationEl     = this.$el.find('.duration');
 		var trackEl   = this.$el.find('#played-track');
 		var seekEl    = this.$el.find('.seek');
 
 		app.queue.on('track:play', initSeeking(seekEl));
 		app.queue.on('track:play', render(trackEl));
 		app.queue.on('track:timeupdate', updateProgress(progressLineEl));
+		app.queue.on('track:timeupdate', updateDuration(durationEl));
 		app.queue.on('track:loadupdate', updateBuffered(loadingLineEl));
 	}
 });
