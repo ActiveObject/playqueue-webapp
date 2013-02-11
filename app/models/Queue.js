@@ -121,7 +121,7 @@ var bind = function (fn) {
 
 var orderify = function (collection) {
 	return collection.map(function (track, i) {
-		track.set('qorder', i);
+		track.set('qorder', i + 1);
 		track.set('queued', true);
 		return track;
 	});
@@ -159,15 +159,6 @@ var Queue = Backbone.Model.extend({
 			model.set('queued', true);
 			console.log('[queue:add] id:%s, qorder:%d', model.id, model.get('qorder'));
 		});
-
-		/*this.tracks.on('reset', function (collection, options) {
-			collection.forEach(function (model, i) {
-				console.log(model.get('title'));
-				model.set('qorder', i);
-				model.set('queued', true);
-				// console.log('[add to queue] id:%s, qorder:%d', model.id, model.get('qorder'));
-			});
-		});*/
 	},
 
 	add   : bind(add),
