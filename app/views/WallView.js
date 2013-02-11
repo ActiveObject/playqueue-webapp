@@ -76,7 +76,10 @@ module.exports = Backbone.Layout.extend({
 			handleClick: false,
 			onScrollMove: onMove,
 			onScrollEnd: onMove,
-			wheelAction: 'scroll'
+			wheelAction: 'scroll',
+			useTransition: true,
+			wheelHorizontal: true,
+			wheelScale: 1/2
 		});
 	}
 })

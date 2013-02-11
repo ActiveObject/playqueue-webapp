@@ -54,7 +54,9 @@ module.exports = Backbone.View.extend({
 			momentum: true,
 			zoom: true,
 			handleClick: false,
-			useTransition: false
+			useTransition: true,
+			wheelHorizontal: true,
+			wheelScale: 1/2
 		}, this.scrollOptions);
 
 		this.scroller = new iScroll(this.wrapperEl.get(0), options);
