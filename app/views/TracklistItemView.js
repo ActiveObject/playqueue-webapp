@@ -8,5 +8,6 @@ module.exports = Backbone.Layout.extend({
 	initialize: function () {
 		Backbone.View.prototype.initialize.apply(this, arguments);
 		this.model.on('change:queued', this.render.bind(this));
+		this.model.on('change:qorder', this.render.bind(this));
 	}
 });
