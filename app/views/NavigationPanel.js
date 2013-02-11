@@ -30,6 +30,7 @@ module.exports = SimpleLayout.extend({
 		this.menu = new Menu({ el: '#header-menu' });
 
 		var playBtnEl = this.$el.find('#btn-play > div');
+		var queueCountEl = this.$el.find('#btn-queue .count');
 
 		app.queue.on('track:play track:resume', function () {
 			playBtnEl.addClass('icon-appbarcontrolpause');
@@ -39,6 +40,16 @@ module.exports = SimpleLayout.extend({
 		app.queue.on('track:pause queue:end', function () {
 			playBtnEl.addClass('icon-appbarcontrolplay');
 			playBtnEl.removeClass('icon-appbarcontrolpause');
+		});
+
+		app.queue.tracks.on('add', function () {
+			queueCountEl.addClass('active');
+			queueCountEl.text(app.queue.tracks.size());
+		});
+
+		app.queue.tracks.on('reset', function () {
+			queueCountEl.addClass('active');
+			queueCountEl.text(app.queue.tracks.size());
 		});
 	},
 
