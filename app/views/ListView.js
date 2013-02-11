@@ -12,7 +12,24 @@ var onScroll = function (el, fn, bottomOffset) {
 	};
 };
 
-var curr = 30;
+var lazyRender = function (view, collection, options) {
+	var options = options || {};
+	var last = options.start || 30;
+	var next = options.next || 10;
+
+	return function () {
+		console.log('render items: %d..%d', last, last + next);
+
+		var size = collection.size();
+		var interval = [last, last < size ? last + next : size];
+
+		collection.models
+			.slice(interval[0], interval[1])
+			.forEach(view.add, view);
+
+		last = interval[1];
+	};
+};
 
 module.exports = Backbone.View.extend({
 	manage: true,
@@ -28,7 +45,8 @@ module.exports = Backbone.View.extend({
 		this.wrapperEl = this.$el;
 		this.listEl = this.$el.find('.list');
 
-		var onMove = _.throttle(onScroll(this.listEl, this.next.bind(this), 500), 100);
+		var onMove = onScroll(this.listEl, lazyRender(this, this.collection), 1000);
+
 		var options = _.extend({
 			hideScrollbar: true,
 			vScroll: true,
@@ -39,26 +57,13 @@ module.exports = Backbone.View.extend({
 			momentum: true,
 			useTransition: true,
 			zoom: true,
-			onScrollMove: onMove,
+			onScrollMove: _.throttle(onMove, 100),
 			onScrollEnd: onMove,
 			wheelAction: 'scroll'
 		}, this.scrollOptions);
 
 		this.scroller = new iScroll(this.wrapperEl.get(0), options);
 		this.el.addEventListener('click', preventClick(this.scroller), true);
-	},
-
-	next: function () {
-		console.log('render items: %d..%d', curr, curr + 10);
-
-		var size = this.collection.size();
-		var interval = [curr, curr < size ? curr + 10 : size];
-
-		this.collection.models
-			.slice(interval[0], interval[1])
-			.forEach(this.add, this);
-
-		curr = interval[1];
 	},
 
 	reset: function () {
@@ -68,9 +73,12 @@ module.exports = Backbone.View.extend({
 
 	add: function (model) {
 		var view = this.createItem(model);
-		this.listEl.append(view.el);
-		view.render();
-		this.scroller.refresh();
+
+		requestAnimFrame(function () {
+			this.listEl.append(view.el);
+			view.render();
+			this.scroller.refresh();
+		}.bind(this), view.el);
 	},
 
 	createItem: function (model) {
