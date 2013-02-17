@@ -10,6 +10,8 @@ window.requestAnimFrame = (function(){
 		};
 })();
 
+window.iScroll = require('lib/iscroll').iScroll;
+
 exports.init = function (options) {
 	console.log('[app:starting]');
 
