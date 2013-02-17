@@ -62,11 +62,9 @@ module.exports = Backbone.Layout.extend({
 		var loader = new LazyLoad(this.$el, 2000, next);
 
 		this.collection.on('load', function () {
-			console.log('load');
 			loader.resume();
 		});
 
-		var onMove = _.throttle(loader.handler, 200);
 		this.scroller = new iScroll('wall-layout', {
 			vScroll: false,
 			hScroll: true,
@@ -74,8 +72,8 @@ module.exports = Backbone.Layout.extend({
 			vScrollbar: false,
 			hScrollbar: false,
 			handleClick: false,
-			onScrollMove: onMove,
-			onScrollEnd: onMove,
+			onScrollMove: _.throttle(loader.handler, 200),
+			onScrollEnd: loader.handler,
 			wheelAction: 'scroll',
 			useTransition: true,
 			wheelHorizontal: true,

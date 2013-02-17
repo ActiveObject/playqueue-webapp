@@ -79,7 +79,8 @@ module.exports = Backbone.Layout.extend({
 			hScroll: false,
 			hideScrollbar: true,
 			vScrollbar: false,
-			hScrollbar: false
+			hScrollbar: false,
+			wheelAction: 'none'
 		});
 	}
 });
