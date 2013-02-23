@@ -1,1 +1,1 @@
-web: brunch build --minify && node server.js
+web: node server.js
