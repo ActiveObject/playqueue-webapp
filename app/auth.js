@@ -30,7 +30,7 @@ var params = {
 	client_id: APP_ID,
 	scope: ['friends', 'audio', 'groups', 'wall', 'offline'].join(','),
 	redirect_uri: APP_URI,
-	display: 'popup',
+	display: 'page',
 	response_type: 'token'
 };
 
