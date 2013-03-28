@@ -72,6 +72,7 @@ exports.init = function (options) {
 	this.queue   = new Queue();
 
 	this.library.on('reset', function (collection) {
+		this.albums.get('all').tracks.reset(collection.models);
 		Backbone.Mediator.pub('library:update', collection);
 	});
 
