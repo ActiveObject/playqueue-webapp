@@ -23,7 +23,7 @@ var Tracks = Backbone.Collection.extend({
 });
 
 var isGroup = function (id) {
-	return parseInt(id) < 0;
+	return parseInt(id, 10) < 0;
 };
 
 module.exports = Backbone.Model.extend({
@@ -31,7 +31,7 @@ module.exports = Backbone.Model.extend({
 	initialize: function () {
 		this.tracks = new Tracks();
 		if (isGroup(this.get('owner_id'))) {
-			var gid = Math.abs(parseInt(this.get('owner_id')));
+			var gid = Math.abs(parseInt(this.get('owner_id'), 10));
 			this.url = '/groups/' + gid + '/albums/' + this.id;
 		} else {
 			this.url = 'albums/' + this.id;
@@ -40,10 +40,10 @@ module.exports = Backbone.Model.extend({
 
 	fetch: function () {
 		var options = {
-			album_id: this.get('album_id'),
+			album_id: this.get('album_id')
 		};
 
-		var owner = parseInt(this.get('owner_id'));
+		var owner = parseInt(this.get('owner_id'), 10);
 
 		if (owner < 0) {
 			options.gid = Math.abs(owner);
