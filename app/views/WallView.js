@@ -51,9 +51,12 @@ module.exports = Backbone.Layout.extend({
 		this.insertView(view);
 		view.render();
 
-		var contW = this.$el.width();
+		var contW = this.$el.width(),
+			elMarginL = parseInt(view.$el.css('margin-right'), 10),
+			elMarginR = parseInt(view.$el.css('margin-right'), 10);
+
 		view.$el.css({ left: contW + 'px' });
-		this.$el.width(this.$el.width() + view.$el.width());
+		this.$el.width(this.$el.width() + view.$el.width() + elMarginR + elMarginL);
 		this.scroller.refresh();
 	},
 
