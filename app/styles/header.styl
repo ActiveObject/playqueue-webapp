@@ -8,17 +8,20 @@ body > header
   box-sizing: content-box
 
   position: relative
-  top: -@height
   transition: top 0.3s ease-out
 
   background-color: accent-color
   box-shadow: 0 2px 1px 0px rgba(50, 50, 50, 0.23)
-  border-bottom: 1px solid darken(accent-color, 20%)
+  border-style: solid
+  border-color: darken(accent-color, 20%)
+  border-width: 0
+  border-bottom-width: 1px
   z-index: 1000
   color: white
   line-height: page-header-height + 0.0625 * page-header-height
 
   z-index: 10000
+  top: -@height - @border-bottom-width
 
 body > header.active
   top: player-height
@@ -47,12 +50,9 @@ body > header.active
     text-overflow: ellipsis
 
     .arrow
-      font-family: 'icomoon'
-      speak: none
-      font-style: normal
-      font-weight: normal
-      line-height: 1
-      -webkit-font-smoothing: antialiased
+      border-bottom: 12px solid white
+      border-left: 12px solid transparent
+      font-size: 0.1em
 
   .title.active
     background-color: darken(accent-color, 10%)
@@ -64,6 +64,7 @@ body > header.active
   display: none
   position: absolute
   top: 0
+  left: left-offset - 20px
   width: 300px
   padding: 0
   margin: 0
@@ -72,11 +73,10 @@ body > header.active
   font-weight: 400
   margin-top: page-header-height + 1px
   list-style: none
-  border: 3px solid #CCC
-  border-top: none
   transition: top 0.1s ease-out
   background-color: white
   line-height: 1
+  box-shadow: 0 1px 3px 2px rgba(0,0,0,0.2);
 
 .header-menu a
   display: block
