@@ -66,10 +66,7 @@ module.exports = SimpleLayout.extend({
 	},
 
 	toggleQueue: function (e) {
-		var btn = $(e.target);
-		btn.toggleClass('active');
-		var event = btn.hasClass('active') ? 'queue:show' : 'queue:hide';
-		Backbone.Mediator.pub(event);
+		app.router.navigate('queue', { trigger: true });
 	},
 
 	back: history.back.bind(history)

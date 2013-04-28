@@ -1,26 +1,38 @@
 module.exports = Backbone.Layout.extend({
-	tracklistVisible: false,
+	initialize: function () {
+		this.$el.find('.content-overlay').on('click', function () {
+			history.back();
+		});
+	},
+
 	activate: function (layout) {
-		if (this.tracklistVisible) {
-			this.hideTracklist();
+		switch (layout) {
+			case 'queue':
+				this.blind();
+				this.$el.children('#queue').addClass('active');
+				break;
+			case 'tracklist':
+				this.blind();
+				this.$el.children('#tracklist').addClass('active');
+				break;
+			default:
+				this.unblind();
+				this.$el.children('#tracklist').removeClass('active');
+				this.$el.children('#queue').removeClass('active');
+				this.$el.children('.item').removeClass('active');
+				this.$el.children("#" + layout).addClass('active');
 		}
 
-		this.$el.children('.item').removeClass('active');
-		this.$el.children("#" + layout).addClass('active');
 		this.trigger('activate', layout);
 		return this;
 	},
 
-	showTracklist: function () {
-		this.tracklistVisible = true;
-		this.$el.children('#tracklist').addClass('active');
+	blind: function () {
 		this.$el.children('.content-overlay').addClass('active');
 		this.$el.find('.item.active').addClass('blind');
 	},
 
-	hideTracklist: function () {
-		this.tracklistVisible = false;
-		this.$el.children('#tracklist').removeClass('active');
+	unblind: function () {
 		this.$el.children('.content-overlay').removeClass('active');
 		this.$el.find('.item.active').removeClass('blind');
 	}

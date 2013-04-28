@@ -74,15 +74,7 @@ exports.init = function (options) {
 	this.library.on('reset', function (collection) {
 		this.albums.get('all').tracks.reset(collection.models);
 		Backbone.Mediator.pub('library:update', collection);
-	});
-
-	var queueView = new QueueView({
-		el: '#queue',
-		model: this.queue
-	});
-
-	Backbone.Mediator.subscribe('queue:show', queueView.show, queueView);
-	Backbone.Mediator.subscribe('queue:hide', queueView.hide, queueView);
+	}.bind(this));
 
 	this.view = {};
 	this.view.albums = new AlbumList({
@@ -97,17 +89,25 @@ exports.init = function (options) {
 		collection: this.friends
 	});
 
+	this.view.queue = new QueueView({
+		el: '#queue',
+		model: this.queue
+	});
+
 	this.layouts = {};
 	this.layouts.main = new MainLayout({
 		el: '#main-layout',
 
 		views: {
-			'#queue': queueView,
+			'#queue': this.view.queue,
 			'#albums': this.view.albums,
 			'#groups': this.view.groups,
 			'#friends': this.view.friends
 		}
 	});
+
+	Backbone.Mediator.subscribe('queue:show', this.layouts.main.showQueue, this.layouts.main);
+	Backbone.Mediator.subscribe('queue:hide', this.layouts.main.hideQueue, this.layouts.main);
 
 	this.panels = {};
 	this.panels.player = new PlayerPanel({ el: '#player' });

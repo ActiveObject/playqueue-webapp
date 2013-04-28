@@ -24,11 +24,16 @@ module.exports = Backbone.Router.extend({
 		'groups': 'groups',
 		'albums': 'albums',
 		'friends': 'friends',
+		'queue': 'queue',
 		'': 'index'
 	},
 
 	index: function () {
 		this.navigate('/albums', { trigger: true });
+	},
+
+	queue: function () {
+		app.layouts.main.activate('queue');
 	},
 
 	groups: function () {
@@ -61,7 +66,7 @@ module.exports = Backbone.Router.extend({
 	group: function (gid) {
 		var prevView = app.layouts.main.getView('#group');
 		var group = app.groups.get(gid);
-		if (!prevView || !(prevView.model.id === group.id)) {
+		if (!prevView || prevView.model.id !== group.id) {
 			var view = new GroupView({ model: group });
 			app.layouts.main.setView('#group', view);
 			view.render();
@@ -90,7 +95,7 @@ module.exports = Backbone.Router.extend({
 		view.render();
 		view.reset();
 
-		app.layouts.main.showTracklist();
+		app.layouts.main.activate('tracklist');
 
 		app.panels.navigation.menu.render({
 			title: album.get('title'),
