@@ -16,9 +16,11 @@
 
 .post
   position: absolute
-  width: 500px
+  width: 550px
   overflow: visible !important
   height: 100%
+  transition: background-color 0.1s linear
+  background-color: white
 
   .post-images
     width: 100%
@@ -29,11 +31,10 @@
       width: 100%
 
   header
-    padding: 1em
-    background-color: #333
-    color: white
-    border-bottom: 1px solid #555
+    padding: 1.5em
+    color: #777
     box-sizing: content-box
+    background-color: rgba(0,0,0,0.05)
 
     img
       float: left
@@ -45,6 +46,9 @@
       overflow: hidden
       white-space: nowrap
       text-overflow: ellipsis
+
+.post:nth-child(odd)
+  background-color: #F5F5F7
 
 @media screen and (min-height: 440px)
   .post-images
@@ -67,17 +71,10 @@
 
 .post-header-date
   font-size: 0.9em
-  color: #999
+  color: #777
 
 .post-header-text
   font-size: 0.9em
-
-.post > div
-  padding: 1em 1em
-  padding-bottom: 1em
-
-.post .audio-items
-  border-top: 1px solid #DFDFDF
 
 .post .audio
   position: relative
@@ -86,7 +83,6 @@
   transition: right 0.2s ease-in
   transform: translateY(0%)
   transition: background-color 0.1s
-  background-color: #F2F2F2
   cursor: pointer
 
   .add-to-queue
