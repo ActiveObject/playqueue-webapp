@@ -88,7 +88,11 @@ var prev = function (queue) {
 		if (isFirst(queue.tracks, queue.track)) {
 			queue.audio.pause();
 		} else {
-			load(queue)(prevTrack(queue.tracks, queue.track));
+			if (queue.audio.position < queue.prevActionDelay) {
+				load(queue)(prevTrack(queue.tracks, queue.track));
+			} else {
+				queue.audio.setPosition(0);
+			}
 		}
 	};
 };
@@ -148,10 +152,11 @@ var Tracks = Backbone.Collection.extend({
 			track.set('queued', false);
 		});
 	}
-})
+});
 
 var Queue = Backbone.Model.extend({
 	repeat: false,
+	prevActionDelay: 5000,
 
 	initialize: function () {
 		this.tracks = new Tracks();
