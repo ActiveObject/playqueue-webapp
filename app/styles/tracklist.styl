@@ -30,20 +30,29 @@
     position: absolute
     top: 0
     right: 0
-    width: 3em
+    width: 6em
     height: 100%
     text-align: center
-    font-size: 1.5em
     visibility: hidden
 
   .add-to-queue div
     position: absolute
     top: 50%
     left: 50%
-    width: 1em
-    height: 1em
+    width: 2.5em
+    height: 1.5em
+    padding: 0.2em 0.7em
     margin-left: -(@width / 2)
     margin-top: -(@height / 2)
+    background-color: #333
+    color: white
+    font-size: 1.5em
+
+  .add-to-queue div:hover
+    background-color: accent-color
+
+  .add-to-queue div:active
+    background-color: darken(accent-color, 20%)
 
   .wrapper
     height: 100%
@@ -60,8 +69,7 @@
 
 .tracklist-item
   width: 100%
-  cursor: pointer
-  padding: 1.7em 40px 1.7em 1em;
+  padding: 1.7em 6em 1.7em 1em
   font-size: 1em
   transition: top 0.2s ease-out, background-color 0.1s
   color: #333
@@ -73,7 +81,7 @@
     top: 50%
     right: 1em
     margin-top: -0.8em
-    padding: 0 0.5em
+    padding: 0 0.7em
 
     text-align: center
     font-size: 1.2em
