@@ -85,14 +85,14 @@ var next = function (queue) {
 
 var prev = function (queue) {
 	return function () {
-		if (isFirst(queue.tracks, queue.track)) {
-			queue.audio.pause();
-		} else {
-			if (queue.audio.position < queue.prevActionDelay) {
-				load(queue)(prevTrack(queue.tracks, queue.track));
+		if (queue.audio.position < queue.prevActionDelay) {
+			if (isFirst(queue.tracks, queue.track)) {
+				queue.audio.pause();
 			} else {
-				queue.audio.setPosition(0);
+				load(queue)(prevTrack(queue.tracks, queue.track));
 			}
+		} else {
+			queue.audio.setPosition(0);
 		}
 	};
 };
