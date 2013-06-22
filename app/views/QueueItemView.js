@@ -8,7 +8,7 @@ module.exports = Backbone.Layout.extend({
 	initialize: function () {
 		this.model.on('change:qorder', function (model) {
 			this.el.setAttribute('data-qorder', model.get('qorder'));
-			this.el.querySelector('.qorder span').innerHTML = model.get('qorder');
+			this.el.querySelector('.qorder').innerHTML = model.get('qorder');
 		}, this);
 	},
 
