@@ -3,6 +3,7 @@
 
 margin = 80px
 queue-panel-width = 450px
+audio-control-size = 50px
 
 .queue
   position: absolute
@@ -29,21 +30,85 @@ queue-panel-width = 450px
   .source
     visibility: hidden
 
-  .qorder
-    width: 2em
-    height: 2em
-
-    position: absolute
-    left: 0
-    top: 50%
-    margin-top: -1em
-    font-size: 1.2em
-    line-height: 2em
-    color: #AAA
-    text-align: center
+  .audio-state:hover div
+    display: block
 
   .wrapper
     height: 100%
+
+  .qorder
+    width: 100%
+
+    position: absolute
+    left: 0
+    top: 1.8em
+    font-size: 1em
+    color: #CCC
+    text-align: center
+    background-color: white
+
+.audio-state
+  opacity: 0
+  position: absolute
+  top: 0
+  right: 0
+  width: audio-control-size
+  height: audio-control-size
+  top: 50%
+  margin-top: - (@height / 2)
+  text-align: center
+  color: #DDD
+  transition: opacity 0.1s linear
+  cursor: pointer
+  margin-right: 5px
+
+.audio-state:after
+  position: absolute
+  top: 0
+  left: 0
+  width: audio-control-size
+  height: audio-control-size
+  line-height: audio-control-size
+  font-size: 3em
+  content: "\e00c"
+  font-family: 'icomoon'
+  speak: none
+  font-style: normal
+  font-weight: normal
+  -webkit-font-smoothing: antialiased
+
+.audio-state:hover
+  color: #555
+
+.audio-state > div
+  position: absolute
+  top: 0
+  width: 100%
+  line-height: audio-control-size
+  text-align: center
+  font-size: 3em
+
+.audio-state > div:before
+  line-height: audio-control-size
+
+.qorder-separator-wrapper
+  position: absolute
+  left: 0
+  top: 0
+  width: 30px
+  height: 100%
+  padding: 0 5px
+  cursor: pointer
+
+.qorder-separator-line
+  position: absolute
+  top: 0
+  width: 4px
+  height: 100%
+  left: 50%
+  margin-left: - (@width / 2)
+  background-color: #E7E7E7
+  transition: background-color 0.1s linear
 
 .queue.active
   right: margin
@@ -52,30 +117,36 @@ queue-panel-width = 450px
   position: absolute
   top: 100%
   width: 100%
-  cursor: pointer
   font-size: 1em
   transition: top 0.2s ease-out, background-color 0.1s
   color: #333
-  background-color: white
   z-index: 100
 
 .queue-item:last-child
   z-index: 0
 
 .queue-item:hover
-  background-color: rgba(238,238,238, 0.6)
+  background-color: #F6F6F6
 
   .square
     background-color: #555 !important
+
+  .audio-state
+    opacity: 1
+
   .qorder
     color: #555 !important
+    background-color: #F6F6F6
+
+  .qorder-separator-line
+    background-color: #555
 
 .queue-item.active
   background-color: accent-color
 
 .audio-item
   width: 100%
-  padding: 1.7em 40px 1.7em 3em
+  padding: 1.7em (audio-control-size * 1.3) 1.7em 3em
   transition: right 0.2s ease-in
   -webkit-transform: translateY(0%)
 
@@ -89,7 +160,11 @@ queue-panel-width = 450px
   color: white
   border-bottom: none
 
+  .qorder-separator-line
+    display: none
+
   .qorder
+    display: none
     color: #FFF
 
   .artist
@@ -103,31 +178,6 @@ queue-panel-width = 450px
 
 .dropzone > *
   visibility: hidden
-
-.queue .drag-place
-  position: absolute
-  right: 0
-  top: 0
-  width: 40px
-  height: 100%
-  cursor: move
-
-square-size = 4px
-square-margin = 3px
-.queue .drag-place > div
-  position: absolute
-  top: 50%
-  left: 50%
-  width: square-size
-  height: square-size * 3 + square-margin * 4
-  margin-left: -(@width / 2)
-  margin-top: -(@height / 2)
-
-.queue .drag-place .square
-  width: square-size
-  height: @width
-  margin: square-margin 0
-  background-color: #CCC
 
 @media screen and (max-width: 600px)
   .queue.active

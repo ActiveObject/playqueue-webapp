@@ -147,7 +147,7 @@ var List = ListView.extend({
 
 module.exports = Backbone.Layout.extend({
 	events: {
-		'click .audio-item': 'play'
+		'click .audio-state': 'play'
 	},
 
 	initialize: function () {
@@ -156,7 +156,8 @@ module.exports = Backbone.Layout.extend({
 	},
 
 	play: function (event) {
-		var id = $(event.currentTarget).data('audio-id');
+		var audioEl = $(event.currentTarget).parent('.audio-item');
+		var id = audioEl.data('audio-id');
 		var track = this.model.find(id);
 		this.model.load(track);
 	},
