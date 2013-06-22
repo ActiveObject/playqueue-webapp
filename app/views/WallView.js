@@ -82,5 +82,23 @@ module.exports = Backbone.Layout.extend({
 			wheelHorizontal: true,
 			wheelScale: 1/2
 		});
+	},
+
+	scrollToPrev: function () {
+		if (typeof this.scroller !== "undefined" && this.scroller !== null) {
+			this.scroller.scrollTo(-550, 0, 200, true);
+		}
+	},
+
+	scrollToNext: function () {
+		if (typeof this.scroller !== "undefined" && this.scroller !== null) {
+			this.scroller.scrollTo(550, 0, 200, true);
+		}
+	},
+
+	scrollToFirst: function () {
+		if (typeof this.scroller !== "undefined" && this.scroller !== null) {
+			this.scroller.scrollTo(0, 0, 500);
+		}
 	}
-})
+});
