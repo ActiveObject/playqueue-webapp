@@ -8,13 +8,5 @@ module.exports = Backbone.Model.extend({
 	initialize: function () {
 		this.wall = new Wall(this, 10);
 		this.library = new AlbumCollection();
-	},
-
-	path: function () {
-		var path = _.isFunction(this.collection.path)
-			? this.collection.path()
-			: this.collection.path;
-
-		return path + '/' + this.get('screen_name');
 	}
 });
