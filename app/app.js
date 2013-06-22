@@ -44,7 +44,7 @@ exports.init = function (options) {
 	var GroupCollection = require('collections/GroupCollection');
 	var AlbumCollection = require('collections/AlbumCollection');
 	var AudioCollection = require('collections/AudioCollection');
-	var Friends = require('models/Friends');
+	var Friends = require('collections/FriendCollection');
 
 	var MainLayout = require('layouts/MainLayout');
 
