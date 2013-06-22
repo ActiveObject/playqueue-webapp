@@ -11,7 +11,7 @@ module.exports = Backbone.Layout.extend({
 	className: 'post',
 	template: 'post',
 	events: {
-		'click .audio': 'toQueue'
+		'click .add-to-queue': 'toQueue'
 	},
 
 	data: function () {
@@ -55,7 +55,7 @@ module.exports = Backbone.Layout.extend({
 	},
 
 	toQueue: function (event) {
-		var trackEl = $(event.currentTarget);
+		var trackEl = $(event.currentTarget).parent('.audio');
 		trackEl.addClass('queued');
 		var aid = trackEl.data('audio-id');
 		var oid = trackEl.data('owner-id');

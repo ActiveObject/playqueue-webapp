@@ -83,27 +83,6 @@
   transition: right 0.2s ease-in
   transform: translateY(0%)
   transition: background-color 0.1s
-  cursor: pointer
-
-  .add-to-queue
-    position: absolute
-    cursor: pointer
-    top: 0
-    right: 0
-    width: 40px
-    height: 100%
-    text-align: center
-    font-size: 1.5em
-    visibility: hidden
-
-  .add-to-queue div
-    position: absolute
-    top: 50%
-    left: 50%
-    width: 1em
-    height: 1em
-    margin-left: -(@width / 2)
-    margin-top: -(@height / 2)
 
   .qorder
     position: absolute
@@ -124,9 +103,18 @@
     transition: opacity 0.5s ease
     opacity: 0
 
+.post .audio:hover
+  background-color: rgba(0, 0, 0, 0.05)
+
+  .add-to-queue
+    visibility: visible
+
 .post .queued
   background-color: accent-color
   color: white
+
+  .add-to-queue
+    visibility: hidden !important
 
 .post .queued:hover
   background-color: darken(accent-color, 10%) !important
