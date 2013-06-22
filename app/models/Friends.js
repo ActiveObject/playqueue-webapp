@@ -1,26 +1,30 @@
 var Friend = require('models/Friend');
 var app = require('app');
+var handleError = require('lib/common').handleError;
 
-var embedded = function (resource) {
-	return resource._embedded;
-};
+var fields = ['uid', 'first_name', 'last_name',
+	'photo_200', 'photo_200_orig', 'screen_name'].join(',');
 
 module.exports = Backbone.Collection.extend({
 	model: Friend,
-	path: 'friends',
-	parse: function (res) {
-		return _.values(embedded(res));
-	},
 	sync: function (method, model, options) {
-		var path = _.isFunction(this.path) ? this.path() : this.path;
-		app.api.resource(path, function (err, resource, status, xhr) {
-			if (err) {
-				if (options.error) options.error(model, xhr, options);
-				return model.trigger('error', model);
-			}
+		var onError = function (err) {
+			if (options.error) options.error(model, err, options);
+			model.trigger('error', model);
+		};
 
-			if (options.success) options.success(resource, status, xhr);
-			model.trigger('sync', model, resource, options);
-		});
+		var onLoad = function (res, status, xhr) {
+			if (options.success) options.success(res, status, xhr);
+			model.trigger('sync', model, res, options);
+		};
+
+		// TODO: handle case where user has more than 100 friends
+		app.vk.friends.get({
+			user_id: app.vk.user,
+			order: 'hints',
+			fields: fields,
+			offset: 0,
+			count: 100
+		}, handleError(onLoad, onError));
 	}
 });
