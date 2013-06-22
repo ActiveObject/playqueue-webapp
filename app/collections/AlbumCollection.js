@@ -11,13 +11,11 @@ var modelProp = function (prop) {
 
 module.exports = Backbone.Collection.extend({
 	model: Album,
-	path: 'albums',
 	parse: function (res) {
 		return [{
 			title: 'Всі аудіозаписи',
 			album_id: 'all'
 		}].concat(res.slice(1));
-		// return res.slice(1);
 	},
 
 	initialize: function () {
