@@ -5,7 +5,6 @@ var handleError = require('lib/common').handleError;
 
 module.exports = Backbone.Collection.extend({
 	model: Group,
-	path: 'groups',
 	parse: function (res) {
 		var count = res[0];
 		return res.slice(1);
