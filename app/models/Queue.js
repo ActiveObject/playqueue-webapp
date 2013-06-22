@@ -22,39 +22,15 @@ var isFirst = function (tracks, track) {
 
 var load = function (queue) {
 	return function (track) {
-		var audio = soundManager.createSound({
-			id: 't' + track.id,
-			url: track.get('url'),
-			autoLoad: true,
-			onplay: function () {
-				queue.trigger('track:play', audio, track);
-			},
-			onpause: function () {
-				queue.trigger('track:pause', audio, track);
-			},
-			onresume: function () {
-				queue.trigger('track:resume', audio, track);
-			},
-			onfinish: function () {
-				queue.trigger('track:finish', audio, track);
-			},
-			whileplaying: function () {
-				queue.trigger('track:timeupdate', audio, track);
-			},
-			whileloading: function () {
-				queue.trigger('track:loadupdate', audio, track);
-			},
-			onbufferchange: function () {
-				queue.trigger('track:bufferchange', audio, track);
-			}
-		});
+		var audio = track.createAudio(queue);
 
-		audio.play({
-			onfinish: next(queue)
-		});
-
-		if (queue.audio) {
-			queue.audio.destruct();
+		if (queue.track) {
+			queue.track.pause(function () {
+				queue.track.audio.destruct();
+				track.play();
+			});
+		} else {
+			track.play();
 		}
 
 		delete queue.audio;
@@ -73,7 +49,7 @@ var next = function (queue) {
 			if (queue.repeat) {
 				load(queue)(queue.tracks.first());
 			} else {
-				queue.audio.pause();
+				queue.track.pause();
 				queue.trigger('queue:end');
 				console.log('[queue:end]');
 			}
@@ -87,7 +63,7 @@ var prev = function (queue) {
 	return function () {
 		if (queue.audio.position < queue.prevActionDelay) {
 			if (isFirst(queue.tracks, queue.track)) {
-				queue.audio.pause();
+				queue.track.pause();
 			} else {
 				load(queue)(prevTrack(queue.tracks, queue.track));
 			}
@@ -165,6 +141,8 @@ var Queue = Backbone.Model.extend({
 			model.set('queued', true);
 			console.log('[queue:add] id:%s, qorder:%d', model.id, model.get('qorder'));
 		});
+
+		this.on('track:finish', this.next, this);
 	},
 
 	add   : bind(add),
@@ -172,7 +150,7 @@ var Queue = Backbone.Model.extend({
 	next  : bind(next),
 	prev  : bind(prev),
 
-	pause : function ()   { return this.audio.pause();  },
+	pause : function ()   { return this.track.pause();  },
 	find  : function (id) { return this.tracks.get(id); },
 
 	play: function () {
@@ -181,7 +159,7 @@ var Queue = Backbone.Model.extend({
 			this.tracks.reset(orderify(app.library.models));
 			load(this)(this.tracks.first());
 		} else {
-			this.audio.play();
+			this.track.play();
 		}
 	},
 
@@ -191,7 +169,7 @@ var Queue = Backbone.Model.extend({
 			this.tracks.reset(orderify(app.library.models));
 			load(this)(this.tracks.first());
 		} else {
-			this.audio.togglePause();
+			this.track.togglePause();
 		}
 	},
 
