@@ -1,12 +1,12 @@
 {
   "name": "playqueue-app",
   "author": "Vasyl Priymachuk <activeobject.ac@gmail.com>",
-  "version": "0.1.9",
+  "version": "0.2.0",
   "description": "Audioplayer for vk.com: browser app",
   "private": true,
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://bitbucket.org/ActiveObject/playqueue-webapp"
   },
   "engines": {
     "node": "0.8.x",
