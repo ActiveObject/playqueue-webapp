@@ -22,7 +22,6 @@ module.exports = Backbone.Model.extend({
 			},
 			onfinish: function () {
 				queue.trigger('track:finish', audio, track);
-				audio.destruct();
 			},
 			whileplaying: function () {
 				queue.trigger('track:timeupdate', audio, track);
@@ -65,6 +64,8 @@ module.exports = Backbone.Model.extend({
 		if (typeof this.audio !== "undefined" && this.audio !== null) {
 			this.audio.play();
 		}
+
+		return this;
 	},
 
 	pause: function (callback) {
@@ -75,6 +76,8 @@ module.exports = Backbone.Model.extend({
 				callback(audio);
 			});
 		}
+
+		return this;
 	},
 
 	togglePause: function () {
@@ -89,5 +92,7 @@ module.exports = Backbone.Model.extend({
 				this.pause();
 			}
 		}
+
+		return this;
 	}
 });

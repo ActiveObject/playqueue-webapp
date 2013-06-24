@@ -1,74 +1,31 @@
-# Javascript App Skeleton for use with [Brunch](http://brunch.io/)
+# PlayQueue
+Audio player for [vk.com](http://vk.com) social network with play queue and news aggregator.
 
-Main languages are JavaScript,
-[Stylus for CSS pre-processing](http://learnboost.github.com/stylus/) and
-[Handlebars for templating](http://handlebarsjs.com/).  Also included is [Backbone.Mediator](https://github.com/chalbert/Backbone-Mediator) for implementing Pub/Sub patterns.
-Live-reload for automatic page-refreshes during development.  
+This app is not production-ready at current time. It is just an attempt to make the world's best single page application.
 
-## Installation
+In the wild (only for users who have vk.com account): <http://app.playqueue.com>. App has been deployed to Heroku platform with free account so first page access might be slow.
 
-First install Brunch: `sudo npm install -g brunch` and then run `brunch new <app> -s https://github.com/damassi/Javascript-App-Skeleton` & then `npm install` and finally `brunch build`.  To continually watch for changes, use `brunch watch`.
-See more info on the [official site](http://brunch.io)
+## Wall
+![PlayQueue Wall](https://dl.dropboxusercontent.com/u/15376071/PlayQueue%3Adev_049.png)
 
-## Unit Testing
+## Groups
+![PlayQueue Groups](https://dl.dropboxusercontent.com/u/15376071/PlayQueue%3Adev_050.png)
 
-The [Mocha](http://visionmedia.github.com/mocha/) test-suite is included by default.  Files located in `tests` that end with `_test.coffee` (or .js) are automatically packaged.  
+## Play queue
+![PlayQueue Queue](https://dl.dropboxusercontent.com/u/15376071/PlayQueue%3Adev_051.png)
 
-To run tests independent of the browser, execute `brunch test`; to run them in the browser, navigate to `public/test/index.html`.  Test-related code is automatically recompiled during `brunch build` and `brunch watch`, and will automatically refresh the test page.
+## License
+Copyright (C) 2013  Vasyl Priymachuk
 
-## Overview
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
 
-    config.coffee
-    README.md
-    /app/
-      /assets/
-        index.html
-        images/
-      styles/
-      helpers/
-      config/
-      events/
-      utils/
-      routers/
-      models/
-      /views/
-        templates/
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
 
-      Application.js
-      initialize.js
-    /test/
-    /vendor/
-      scripts/
-        backbone.js
-        jquery.js
-        console-helper.js
-        underscore.js
-      styles/
-        normalize.css
-        helpers.css
-
-* `config.coffee`  contains configuration of your app. You can set plugins /
-languages that would be used here.
-* `app/assets` contains images / static files. Contents of the directory would
-be copied to `build/` without change.
-Other `app/` directories could contain files that would be compiled. Languages,
-that compile to JS (coffeescript, roy etc.) or js files and located in app are 
-automatically wrapped in module closure so they can be loaded by 
-`require('module/location')`.
-* `app/models` & `app/views` contain base classes your app should inherit from.
-* `test/` contains feature & unit tests.
-* `vendor/` contains all third-party code. The code wouldn’t be wrapped in
-modules, it would be loaded instantly instead.
-
-This all will generate `public/` (by default) directory when `brunch build` or `brunch watch` is executed.
-
-## Other
-Versions of software the skeleton uses:
-
-* jQuery 1.7.2
-* Backbone 0.9.1
-* Underscore 1.3.3
-* HTML5Boilerplate 3.0.3
-
-The license is [public domain](http://creativecommons.org/publicdomain/zero/1.0/).
-Use it however you want.
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.

@@ -24,7 +24,7 @@ exports.init = function (options) {
 	soundManager.setup({
 		url: '/lib/',
 		flashVersion: 9,
-		preferFlash: false,
+		preferFlash: true,
 		onready: function() {
 			console.log('Sound manager ready');
 		}

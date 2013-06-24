@@ -7,9 +7,33 @@ Handlebars.registerPartial('audio', audio);
 var GroupView = Backbone.Layout.extend({
 	className: 'group-layout',
 	template: 'group-layout',
+	events: {
+		'click [data-action=prev]': 'prevPost',
+		'click [data-action=next]': 'nextPost',
+		'click [data-action=first]': 'firstPost'
+	},
 	initialize: function () {
-		var wallView = new WallView({ collection: this.model.wall });
-		this.setView('#wall-layout', wallView);
+		this.wallView = new WallView({ collection: this.model.wall });
+		this.setView('#wall-layout', this.wallView);
+	},
+
+	data: function () {
+		return {
+			name: this.model.get('name'),
+			photo: this.model.get('photo_big')
+		};
+	},
+
+	nextPost: function () {
+		this.wallView.scrollToNext();
+	},
+
+	prevPost: function () {
+		this.wallView.scrollToPrev();
+	},
+
+	firstPost: function () {
+		this.wallView.scrollToFirst();
 	}
 });
 
