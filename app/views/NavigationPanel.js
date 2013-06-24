@@ -37,7 +37,7 @@ module.exports = SimpleLayout.extend({
 			playBtnEl.removeClass('icon-appbarcontrolplay');
 		});
 
-		app.queue.on('track:pause queue:end', function () {
+		app.queue.on('track:beforepause queue:end', function () {
 			playBtnEl.addClass('icon-appbarcontrolplay');
 			playBtnEl.removeClass('icon-appbarcontrolpause');
 		});

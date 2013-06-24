@@ -79,7 +79,7 @@ var Queue = Backbone.Model.extend({
 	},
 
 	load: function (track) {
-		var audio = track.createAudio(this);
+		var audio = track.createAudio();
 
 		if (this.track) {
 			this.track.pause(function (prevAudio) {

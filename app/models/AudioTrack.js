@@ -1,8 +1,10 @@
+var app = require('app');
+
 module.exports = Backbone.Model.extend({
 	idAttribute: 'aid',
 	volumeTransitionDuration: 500,
 
-	createAudio: function (queue) {
+	createAudio: function () {
 		var track = this;
 		var audio = soundManager.createSound({
 			id: 't' + this.id,
@@ -11,26 +13,26 @@ module.exports = Backbone.Model.extend({
 			volume: 0,
 			onplay: function () {
 				track.changeVolume(0, 100);
-				queue.trigger('track:play', audio, track);
+				app.queue.trigger('track:play', audio, track);
 			},
 			onpause: function () {
-				queue.trigger('track:pause', audio, track);
+				app.queue.trigger('track:pause', audio, track);
 			},
 			onresume: function () {
 				track.changeVolume(0, 100);
-				queue.trigger('track:resume', audio, track);
+				app.queue.trigger('track:resume', audio, track);
 			},
 			onfinish: function () {
-				queue.trigger('track:finish', audio, track);
+				app.queue.trigger('track:finish', audio, track);
 			},
 			whileplaying: function () {
-				queue.trigger('track:timeupdate', audio, track);
+				app.queue.trigger('track:timeupdate', audio, track);
 			},
 			whileloading: function () {
-				queue.trigger('track:loadupdate', audio, track);
+				app.queue.trigger('track:loadupdate', audio, track);
 			},
 			onbufferchange: function () {
-				queue.trigger('track:bufferchange', audio, track);
+				app.queue.trigger('track:bufferchange', audio, track);
 			}
 		});
 
@@ -71,6 +73,7 @@ module.exports = Backbone.Model.extend({
 	pause: function (callback) {
 		callback = callback || function () {};
 		if (typeof this.audio !== "undefined" && this.audio !== null) {
+			app.queue.trigger('track:beforepause', this.audio, this);
 			this.changeVolume(100, 0, function (audio) {
 				audio.pause();
 				callback(audio);
