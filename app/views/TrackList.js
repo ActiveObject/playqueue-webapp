@@ -17,7 +17,7 @@ module.exports = ListView.extend({
 	},
 
 	toQueue: function (e) {
-		var id = $(e.currentTarget).parent().data('audio-id');
+		var id = $(e.currentTarget).parent().parent().data('audio-id');
 		var track = this.collection.get(id);
 		app.queue.add(track);
 	}

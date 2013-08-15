@@ -39,6 +39,10 @@ module.exports = Backbone.Layout.extend({
 	initialize: function () {
 		this.collection.on('add', this.add, this);
 		this.collection.on('reset', this.reset, this);
+
+		jwerty.key('arrow-left', this.scrollToPrev, this);
+		jwerty.key('arrow-up', this.scrollToFirst, this);
+		jwerty.key('arrow-right', this.scrollToNext, this);
 	},
 
 	reset: function () {
