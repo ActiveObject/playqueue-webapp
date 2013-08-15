@@ -1,32 +1,28 @@
 @import 'nib'
 @import '_config'
 
-.add-to-queue
+btn-height = 20px
+.actions
+  height: btn-height
+  margin: auto
   position: absolute
   top: 0
+  bottom: 0
   right: 0
-  width: 6em
-  height: 100%
-  text-align: center
-  visibility: hidden
-  cursor: pointer
+  padding: 0 1em
+  font-size: 1.3em
 
-.add-to-queue div
-  position: absolute
-  top: 50%
-  left: 50%
-  width: 2.5em
-  height: 1.5em
-  padding: 0.2em 0.7em
-  margin-left: -(@width / 2)
-  margin-top: -(@height / 2)
+.actions div
+  display: inline-block
+  padding: 0 0.7em
   background-color: #333
   color: white
-  font-size: 1.5em
-  line-height: 1.3
+  line-height: btn-height
+  cursor: pointer
+  visibility: hidden
 
-.add-to-queue div:hover
+.actions div:hover
   background-color: accent-color
 
-.add-to-queue div:active
+.actions div:active
   background-color: darken(accent-color, 30%)
