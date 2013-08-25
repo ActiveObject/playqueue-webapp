@@ -152,7 +152,7 @@ module.exports = Backbone.Layout.extend({
 
 	initialize: function () {
 		this.list = new List({ collection: this.model.tracks });
-		this.insertView('.queue-list', this.list);
+		this.insertView('#queue-list', this.list);
 	},
 
 	play: function (event) {
