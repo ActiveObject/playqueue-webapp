@@ -1,7 +1,7 @@
 @import 'nib'
 @import '_config'
 
-margin = 80px
+margin = 0
 queue-panel-width = 450px
 audio-control-size = 50px
 
@@ -11,19 +11,16 @@ audio-control-size = 50px
   top: 0
   right: -(@width + margin)
   bottom: 0
-  background-color: white
-  color: #555
-  z-index: 2000
+  background-color: #333
+  z-index: 10000
   transition: right 0.3s ease-in-out
-  border-color: #DDD
-  border-style: solid
-  border-width: 0 1px
 
   .title
     font-size: 1.2em
+    color: white
 
   .artist
-    color: lighten(#555, 20%)
+    color: darken(white, 20%)
     padding-top: 0.2em
     font-size: 1em
 
@@ -99,6 +96,7 @@ audio-control-size = 50px
   height: 100%
   padding: 0 5px
   cursor: pointer
+  display: none
 
 .qorder-separator-line
   position: absolute
@@ -119,14 +117,13 @@ audio-control-size = 50px
   width: 100%
   font-size: 1em
   transition: top 0.2s ease-out, background-color 0.1s
-  color: #333
   z-index: 100
 
 .queue-item:last-child
   z-index: 0
 
 .queue-item:hover
-  background-color: #F6F6F6
+  background-color: #555
 
   .square
     background-color: #555 !important

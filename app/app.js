@@ -99,7 +99,6 @@ exports.init = function (options) {
 		el: '#main-layout',
 
 		views: {
-			'#queue': this.view.queue,
 			'#albums': this.view.albums,
 			'#groups': this.view.groups,
 			'#friends': this.view.friends
@@ -125,6 +124,7 @@ exports.init = function (options) {
 		this.panels.navigation.show();
 		this.panels.player.show();
 		this.layouts.main.render();
+		this.view.queue.render();
 		$('#splash').addClass('noactive');
 	}, this);
 

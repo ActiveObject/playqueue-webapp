@@ -33,7 +33,7 @@ module.exports = Backbone.Router.extend({
 	},
 
 	queue: function () {
-		app.layouts.main.activate('queue');
+		app.view.queue.show();
 	},
 
 	groups: function () {

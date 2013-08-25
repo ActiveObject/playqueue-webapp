@@ -66,7 +66,8 @@ module.exports = SimpleLayout.extend({
 	},
 
 	toggleQueue: function (e) {
-		app.router.navigate('queue', { trigger: true });
+		e.stopPropagation();
+		app.view.queue.toggle();
 	},
 
 	back: history.back.bind(history)
