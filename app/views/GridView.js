@@ -61,6 +61,8 @@ module.exports = Backbone.View.extend({
 
 		this.scroller = new iScroll(this.wrapperEl.get(0), options);
 		this.el.addEventListener('click', preventClick(this.scroller), true);
+
+		this.collection.forEach(this.add, this);
 	},
 
 	reset: function () {
