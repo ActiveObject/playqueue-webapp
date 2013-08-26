@@ -37,3 +37,5 @@ exports.config =
     port: 5003
     base: '/'
     run: no
+
+  sourceMaps: true
