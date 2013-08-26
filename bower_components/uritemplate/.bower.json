@@ -1,0 +1,19 @@
+{
+  "name": "uritemplate",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "components"
+  ],
+  "homepage": "https://github.com/jbpros/uritemplate-js",
+  "_release": "8b8ab18f42",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "8b8ab18f429fc4da2e63d86298335b3e1803abbd"
+  },
+  "_source": "git://github.com/jbpros/uritemplate-js.git",
+  "_target": "*",
+  "_originalSource": "uritemplate",
+  "_direct": true
+}

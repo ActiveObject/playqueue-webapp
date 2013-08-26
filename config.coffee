@@ -6,16 +6,12 @@ exports.config =
       defaultExtension: 'js'
       joinTo:
         'javascripts/app.js': /^app/
-        'javascripts/vendor.js': /^vendor/
+        'javascripts/vendor.js': /^(bower_components|vendor)/
         'test/javascripts/test.js': /^test(\/|\\)(?!vendor)/
         'test/javascripts/test-vendor.js': /^test(\/|\\)(?=vendor)/
       order:
         before: [
-          'vendor/scripts/console-helper.js',
-          'vendor/scripts/jquery-1.7.2.js',
-          'vendor/scripts/underscore-1.3.3.js',
-          'vendor/scripts/backbone-min.js',
-          'vendor/scripts/dancer.js'
+          'vendor/scripts/console-helper.js'
         ]
 
     stylesheets:
