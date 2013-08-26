@@ -88,6 +88,7 @@ var Queue = Backbone.Model.extend({
 				this.trigger('audio:change', track, this);
 			}.bind(this));
 		} else {
+			this.trigger('audio:change', track, this);
 			track.play();
 		}
 

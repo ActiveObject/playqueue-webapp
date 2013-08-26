@@ -93,7 +93,7 @@ module.exports = Backbone.Router.extend({
 
 		app.layouts.main.setView('#tracklist', view);
 		view.render();
-		view.reset();
+		view.list.reset();
 
 		app.layouts.main.activate('tracklist');
 
