@@ -35,7 +35,8 @@ var LazyLoad = function (el, offset, fn) {
 };
 
 module.exports = Backbone.Layout.extend({
-	className: 'wall',
+	el: false,
+	template: 'wall-layout',
 	initialize: function () {
 		this.collection.on('add', this.add, this);
 		this.collection.on('reset', this.reset, this);
@@ -52,8 +53,8 @@ module.exports = Backbone.Layout.extend({
 
 	add: function (post) {
 		var view = new PostView({ model: post });
-		this.insertView(view);
 		view.render();
+		this.$el.find('ul').append(view.$el);
 
 		var contW = this.$el.width(),
 			elMarginL = parseInt(view.$el.css('margin-right'), 10),

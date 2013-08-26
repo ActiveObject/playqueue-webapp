@@ -1,4 +1,4 @@
-var ListItem = Backbone.View.extend({
+var GridItem = Backbone.View.extend({
 	manage: true,
 	tagName: 'li',
 	serialize: function () {
@@ -6,4 +6,4 @@ var ListItem = Backbone.View.extend({
 	}
 });
 
-module.exports = ListItem;
+module.exports = GridItem;

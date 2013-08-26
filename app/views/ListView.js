@@ -31,19 +31,13 @@ var lazyRender = function (view, collection, options) {
 	};
 };
 
-module.exports = Backbone.View.extend({
-	manage: true,
-	template: 'grid',
-	className: 'wrapper list-layout',
-
-	initialize: function () {
-		this.collection.on('reset', this.reset, this);
-		this.collection.on('add', this.add, this);
-	},
+module.exports = Backbone.Layout.extend({
+	el: false,
+	template: 'list-layout',
 
 	afterRender: function () {
 		this.wrapperEl = this.$el;
-		this.listEl = this.$el.find('.list');
+		this.listEl = this.$el.find('ul');
 
 		var onMove = onScroll(this.listEl, lazyRender(this, this.collection), 1000);
 
@@ -64,6 +58,9 @@ module.exports = Backbone.View.extend({
 
 		this.scroller = new iScroll(this.wrapperEl.get(0), options);
 		this.el.addEventListener('click', preventClick(this.scroller), true);
+		this.collection.on('reset', this.reset, this);
+		this.collection.on('add', this.add, this);
+		this.collection.forEach(this.add, this);
 	},
 
 	reset: function () {

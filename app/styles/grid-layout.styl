@@ -10,7 +10,7 @@ node-full-size = node-size + node-margin
 
 node-count = 10
 
-.grid-layout
+.grid
   position: absolute
   width: 100%
   height: node-full-size
@@ -18,7 +18,7 @@ node-count = 10
   margin-top: -(node-full-size / 2)
   overflow: visible !important
 
-.grid-layout > ul
+.grid > ul
   position: relative
   margin: 0
   list-style: none
@@ -28,7 +28,7 @@ node-count = 10
   height: 100%
   transform-style: preserve-3d
 
-.grid-layout > ul > li
+.grid > ul > li
   display: block
   position: absolute
   width: node-size
@@ -39,10 +39,10 @@ node-count = 10
   transition-duration: 0.3s
   transition-timing-function: ease-out
 
-.grid-layout > ul > li.visible
+.grid > ul > li.visible
   opacity: 1
 
-.grid-layout
+.grid
   .tile
     position: relative
     height: 100%
@@ -84,29 +84,29 @@ node-count = 10
     background: transparent url('../images/bg_overlay_archive_item.png') center top repeat;
 
 @media screen and (min-height: 640px)
-  .grid-layout
+  .grid
     height: node-size * 2 + node-margin
     margin-top: -(@height / 2)
 
 @media screen and (min-height: 880px)
-  .grid-layout
+  .grid
     height: node-size * 3 + node-margin
     margin-top: -(@height / 2)
 
 @media screen and (min-height: 1120px)
-  .grid-layout
+  .grid
     height: node-size * 4 + node-margin
     margin-top: -(@height / 2)
 
 @media screen and (min-height: 1360px)
-  .grid-layout
+  .grid
     height: node-size * 5 + node-margin
     margin-top: -(@height / 2)
 
-.grid-layout.big > ul
+.grid.big > ul
   width: 3 * node-full-size * 2
 
-.grid-layout.big > ul > li
+.grid.big > ul > li
   width: node-size * 2
   height: @width
   margin: (node-margin * 2) (node-margin * 2) 0 0

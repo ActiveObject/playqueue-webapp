@@ -1,14 +1,11 @@
 var preventClick = require('lib/common').preventClick;
 var grid = require('lib/grid');
 
-module.exports = Backbone.View.extend({
-	manage: true,
-	template: 'grid',
-	className: 'wrapper grid-layout',
+module.exports = Backbone.Layout.extend({
+	el: false,
+	template: 'grid-layout',
 
 	initialize: function () {
-		this.collection.on('reset', this.reset, this);
-		this.collection.on('add', this.add, this);
 		this.items = [[0,80,0,0]];
 		var mql1 = window.matchMedia("(min-height: 640px)");
 		var mql2 = window.matchMedia("(min-height: 880px)");
@@ -38,7 +35,7 @@ module.exports = Backbone.View.extend({
 
 	afterRender: function () {
 		this.wrapperEl = this.$el;
-		this.listEl = this.$el.find('.list');
+		this.listEl = this.$el.find('ul');
 
 		this.height = this.listEl.height();
 		this.inleft = parseInt(this.listEl.css('padding-left'), 10);
@@ -62,6 +59,8 @@ module.exports = Backbone.View.extend({
 		this.scroller = new iScroll(this.wrapperEl.get(0), options);
 		this.el.addEventListener('click', preventClick(this.scroller), true);
 
+		this.collection.on('reset', this.reset, this);
+		this.collection.on('add', this.add, this);
 		this.collection.forEach(this.add, this);
 	},
 
@@ -71,26 +70,27 @@ module.exports = Backbone.View.extend({
 
 	add: function (model) {
 		var view = this.createItem(model);
+		view.render();
 		this.listEl.append(view.el);
-
-		view.render().done(function (view) {
-			var gridDimension = [this.$el.outerWidth(), this.$el.outerHeight()];
-			var elDimension   = [view.$el.outerWidth(), view.$el.outerHeight()];
-			var insertPos     = grid.insert(this.items, gridDimension, elDimension);
-
-			view.$el.css({
-				top:  insertPos[0] + 'px',
-				left: insertPos[1] + 'px'
-			});
-
-			view.$el.addClass('visible');
-
-			this.items.push(insertPos.concat(elDimension));
-			this.listEl.width(insertPos[1] + elDimension[0]);
-		}.bind(this));
-
+		this.doLayout(view);
 		this.scroller.refresh();
 		this.trigger('add', model, this);
+	},
+
+	doLayout: function (view) {
+		var gridDimension = [this.$el.outerWidth(), this.$el.outerHeight()];
+		var elDimension   = [view.$el.outerWidth(), view.$el.outerHeight()];
+		var insertPos     = grid.insert(this.items, gridDimension, elDimension);
+
+		view.$el.css({
+			top:  insertPos[0] + 'px',
+			left: insertPos[1] + 'px'
+		});
+
+		view.$el.addClass('visible');
+
+		this.items.push(insertPos.concat(elDimension));
+		this.listEl.width(insertPos[1] + elDimension[0]);
 	},
 
 	createItem: function (model) {

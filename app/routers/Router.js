@@ -37,8 +37,7 @@ module.exports = Backbone.Router.extend({
 	},
 
 	groups: function () {
-		app.layouts.main.activate('groups');
-
+		app.layouts.main.activate(app.view.groups);
 		app.panels.navigation.menu.render({
 			title: 'Мої групи',
 			items: menuItems
@@ -46,8 +45,7 @@ module.exports = Backbone.Router.extend({
 	},
 
 	albums: function () {
-		app.layouts.main.activate('albums');
-
+		app.layouts.main.activate(app.view.albums);
 		app.panels.navigation.menu.render({
 			title: 'Мої аудіозаписи',
 			items: menuItems
@@ -55,8 +53,7 @@ module.exports = Backbone.Router.extend({
 	},
 
 	friends: function () {
-		app.layouts.main.activate('friends');
-
+		app.layouts.main.activate(app.view.friends);
 		app.panels.navigation.menu.render({
 			title: 'Мої друзі',
 			items: menuItems
@@ -69,11 +66,11 @@ module.exports = Backbone.Router.extend({
 		if (!prevView || prevView.model.id !== group.id) {
 			var view = new GroupView({ model: group });
 			app.layouts.main.setView('#group', view);
-			view.render();
 			group.wall.fetch();
+			app.layouts.main.activate(view);
+		} else {
+			app.layouts.main.activate(prevView);
 		}
-
-		app.layouts.main.activate('group');
 
 		app.panels.navigation.menu.render({
 			title: group.get('name'),
@@ -92,10 +89,7 @@ module.exports = Backbone.Router.extend({
 		});
 
 		app.layouts.main.setView('#tracklist', view);
-		view.render();
-		view.list.reset();
-
-		app.layouts.main.activate('tracklist');
+		app.layouts.main.activate(view);
 
 		app.panels.navigation.menu.render({
 			title: album.get('title'),

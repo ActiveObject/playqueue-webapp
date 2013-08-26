@@ -8,14 +8,14 @@ var typeIs = function (type) {
 };
 
 module.exports = Backbone.Layout.extend({
-	className: 'post',
+	el: false,
 	template: 'post',
 	events: {
 		'click .add-to-queue': 'onAddToQueue',
 		'click .play-all': 'queueAll'
 	},
 
-	data: function () {
+	serialize: function () {
 		var attachments = _(this.model.get('attachments')).chain();
 
 		var photos = attachments.filter(typeIs('photo')).pluck('photo').value();

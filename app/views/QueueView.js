@@ -80,7 +80,6 @@ var swap = function (collection, el1, el2) {
 };
 
 var List = ListView.extend({
-	template: 'queue',
 	events: {
 		'mouseover .drag-place': 'disableScroll',
 		'mouseout .drag-place': 'enableScroll',
@@ -109,8 +108,6 @@ var List = ListView.extend({
 	},
 
 	initialize: function () {
-		ListView.prototype.initialize.apply(this, arguments);
-
 		this.$el.on('dragstart', '.audio-item', function () {
 			$(this).addClass('drag');
 		});
@@ -157,7 +154,7 @@ module.exports = Backbone.Layout.extend({
 
 	initialize: function () {
 		this.list = new List({ collection: this.model.tracks });
-		this.insertView('#queue-list', this.list);
+		this.insertView(this.list);
 		this.model.on('audio:change', this.list.setCurrentTrack, this.list);
 	},
 

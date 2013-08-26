@@ -15,8 +15,8 @@ window.iScroll = require('lib/iscroll').iScroll;
 exports.init = function (options) {
 	console.log('[app:starting]');
 
-	Backbone.LayoutManager.configure({
-		fetch: function (path) {
+	Backbone.Layout.configure({
+		fetchTemplate: function (path) {
 			return require('templates/' + path);
 		}
 	});
@@ -109,7 +109,6 @@ exports.init = function (options) {
 
 	this.panels.navigation.show();
 	this.panels.player.show();
-	this.layouts.main.render();
 	this.view.queue.render();
 
 	var app = this;
