@@ -1,7 +1,7 @@
 module.exports = Backbone.Layout.extend({
+	el: false,
 	template: 'queue-item',
-	className: 'queue-item',
-	data: function () {
+	serialize: function () {
 		return this.model.toJSON();
 	},
 

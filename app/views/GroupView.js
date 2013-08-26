@@ -5,8 +5,8 @@ var WallView = require('views/WallView');
 Handlebars.registerPartial('audio', audio);
 
 var GroupView = Backbone.Layout.extend({
-	el: false,
 	template: 'group-layout',
+	el: false,
 	events: {
 		'click [data-action=prev]': 'prevPost',
 		'click [data-action=next]': 'nextPost',
@@ -16,6 +16,10 @@ var GroupView = Backbone.Layout.extend({
 	initialize: function () {
 		this.wallView = new WallView({ collection: this.model.wall });
 		this.setView('#wall-layout', this.wallView);
+
+		this.on('activate', function () {
+			this.model.wall.fetch();
+		}, this);
 	},
 
 	serialize: function () {

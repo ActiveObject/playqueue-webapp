@@ -88,16 +88,19 @@ exports.init = function (options) {
 		model: this.queue
 	});
 
-	this.layouts = {};
-	this.layouts.main = new MainLayout({
-		el: '#main-layout',
+	this.mainLayout = new MainLayout({ el: '#main-layout '})
+		.add(this.view.albums)
+		.add(this.view.friends)
+		.add(this.view.groups);
+	// this.layouts.main = new MainLayout({
+	// 	el: '#main-layout',
 
-		views: {
-			'#albums': this.view.albums,
-			'#groups': this.view.groups,
-			'#friends': this.view.friends
-		}
-	});
+	// 	views: {
+	// 		'#albums': this.view.albums,
+	// 		'#groups': this.view.groups,
+	// 		'#friends': this.view.friends
+	// 	}
+	// });
 
 	this.panels = {};
 	this.panels.player = new PlayerPanel({ el: '#player' });

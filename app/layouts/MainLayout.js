@@ -1,25 +1,45 @@
-module.exports = Backbone.Layout.extend({
+module.exports = Backbone.View.extend({
 	initialize: function () {
+		this.views = [];
+
 		this.$el.find('.content-overlay').on('click', function () {
 			history.back();
 		});
 	},
 
-	activate: function (layout) {
-		if (!layout.hasRendered) {
-			layout.render();
+	activate: function (view, append) {
+		if (!view.hasRendered) {
+			view.render();
+			if (append) {
+				this.$el.append(view.el);
+			}
 		}
 
-		this.getView(function (nestedView) {
-			if (nestedView.$el.parent().is('.active')) {
+		this.views.forEach(function (nestedView) {
+			if (nestedView.$el.is('.active')) {
 				nestedView.trigger('deactivate');
-				nestedView.$el.parent().removeClass('active');
+				nestedView.$el.removeClass('active');
 			}
 		});
 
-		layout.$el.parent().addClass('active');
-		layout.trigger('activate');
-		this.trigger('activate', layout);
+		view.$el.addClass('active');
+		view.trigger('activate');
+		this.trigger('activate', view);
 		return this;
-	}
+	},
+
+	add: function (view) {
+		this.views.push(view);
+		return this;
+	},
+
+	remove: function (view) {
+		return this;
+	},
+
+	// render: function () {
+	// 	this.views.forEach(function (view) {
+	// 		if (view.)
+	// 	})
+	// }
 });

@@ -148,6 +148,7 @@ var List = ListView.extend({
 });
 
 module.exports = Backbone.Layout.extend({
+	el: '#queue',
 	events: {
 		'click .audio-state': 'play'
 	},

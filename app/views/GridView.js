@@ -34,8 +34,9 @@ module.exports = Backbone.Layout.extend({
 	},
 
 	afterRender: function () {
-		this.wrapperEl = this.$el;
+		this.wrapperEl = this.$el.children('.wrapper');
 		this.listEl = this.$el.find('ul');
+		this.items = [[0,80,0,0]];
 
 		this.height = this.listEl.height();
 		this.inleft = parseInt(this.listEl.css('padding-left'), 10);

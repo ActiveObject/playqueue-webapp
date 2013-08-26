@@ -19,6 +19,8 @@ var List = ListView.extend({
 });
 
 var Layout = Backbone.Layout.extend({
+	template: 'tracklist',
+	el: false,
 	events: {
 		'click .queue-all': 'queueAll',
 		'click .shuffle': 'shuffle'
@@ -30,12 +32,12 @@ var Layout = Backbone.Layout.extend({
 
 		this.on('activate', function () {
 			$('.content-overlay').addClass('active');
-			this.$el.addClass('blind');
+			this.$el.parent().addClass('active');
 		});
 
 		this.on('deactivate', function () {
 			$('.content-overlay').removeClass('active');
-			this.$el.removeClass('blind');
+			this.$el.parent().removeClass('active');
 		});
 	},
 

@@ -54,14 +54,15 @@ module.exports = Backbone.Layout.extend({
 	add: function (post) {
 		var view = new PostView({ model: post });
 		view.render();
-		this.$el.find('ul').append(view.$el);
+		var listEl = this.$el.find('ul');
+		listEl.append(view.$el);
 
-		var contW = this.$el.width(),
+		var contW = listEl.width(),
 			elMarginL = parseInt(view.$el.css('margin-right'), 10),
 			elMarginR = parseInt(view.$el.css('margin-right'), 10);
 
 		view.$el.css({ left: contW + 'px' });
-		this.$el.width(this.$el.width() + view.$el.width() + elMarginR + elMarginL);
+		listEl.width(listEl.width() + view.$el.width() + elMarginR + elMarginL);
 		this.scroller.refresh();
 	},
 
@@ -73,7 +74,7 @@ module.exports = Backbone.Layout.extend({
 			loader.resume();
 		});
 
-		this.scroller = new iScroll('wall-layout', {
+		this.scroller = new iScroll(this.el, {
 			vScroll: false,
 			hScroll: true,
 			hideScrollbar: true,
