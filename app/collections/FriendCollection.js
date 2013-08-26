@@ -20,7 +20,7 @@ module.exports = Backbone.Collection.extend({
 
 		// TODO: handle case where user has more than 100 friends
 		app.vk.friends.get({
-			user_id: app.vk.user,
+			user_id: options.user,
 			order: 'hints',
 			fields: fields,
 			offset: 0,

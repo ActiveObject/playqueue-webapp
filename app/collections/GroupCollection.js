@@ -22,7 +22,7 @@ module.exports = Backbone.Collection.extend({
 
 		// TODO: handle case where user has more than 100 groups
 		app.vk.groups.get({
-			user_id: app.vk.user,
+			user_id: options.user,
 			extended: 1,
 			offset: 0,
 			count: 100
