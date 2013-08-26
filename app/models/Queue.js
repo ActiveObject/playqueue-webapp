@@ -139,7 +139,7 @@ var Queue = Backbone.Model.extend({
 	play: function () {
 		if (this.tracks.isEmpty()) {
 			this.tracks.clean();
-			this.tracks.reset(orderify(app.library.models));
+			this.tracks.reset(orderify(app.user.library.models));
 			this.load(this.tracks.first());
 		} else {
 			this.track.play();
