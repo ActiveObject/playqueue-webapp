@@ -10,8 +10,8 @@
 .header-controls .btn
   background-color: accent-color
   width: page-header-height
+  height: @width
   font-size: 5em
-  line-height: page-header-height + 10px
   margin: 0
   border-right: 1px solid lighten(accent-color, 20%)
 
@@ -32,6 +32,7 @@
   float: left
   cursor: pointer
   transition(0.1s, -webkit-transform, linear)
+  line-height: page-header-height - 0.0625 * page-header-height
 
 .appbar-btn:after
   content: "\e00c"
@@ -41,6 +42,7 @@
   font-weight: normal
   line-height: 1
   -webkit-font-smoothing: antialiased
+  vertical-align: middle
 
 .appbar-btn:active:after
   content: "\e015"
@@ -51,7 +53,6 @@
 .appbar-btn > *
   position: absolute
   top: 0
-  line-height: page-header-height + 0.0625 * page-header-height - 1px
 
 #btn-play
   font-size: 4.5em
