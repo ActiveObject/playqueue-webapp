@@ -171,7 +171,7 @@ module.exports = Backbone.Layout.extend({
 
 	show: function () {
 		this.$el.addClass('active');
-		$(document.body).one('click', ':not(.queue)', this.hide.bind(this));
+		$(document.body).one('click', ':not(.queue, .queue *)', this.hide.bind(this));
 		return this;
 	},
 
