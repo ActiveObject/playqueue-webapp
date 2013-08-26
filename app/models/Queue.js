@@ -1,9 +1,9 @@
 var AudioTrack = require('models/AudioTrack');
 var app = require('app');
 
-var orderify = function (collection) {
+var orderify = function (collection, offset) {
 	return collection.map(function (track, i) {
-		track.set('qorder', i + 1);
+		track.set('qorder', offset + i + 1);
 		track.set('queued', true);
 		return track;
 	});
@@ -57,7 +57,9 @@ var Queue = Backbone.Model.extend({
 	initialize: function () {
 		this.tracks = new Tracks();
 		this.tracks.on('add', function (model, collection) {
-			model.set('qorder', collection.size());
+			if (!model.has('qorder')) {
+				model.set('qorder', collection.size());
+			}
 			model.set('queued', true);
 			console.log('[queue:add] id:%s, qorder:%d', model.id, model.get('qorder'));
 		});
@@ -67,7 +69,7 @@ var Queue = Backbone.Model.extend({
 
 	add: function (tracks) {
 		if (this.audio && this.audio.paused) this.reset();
-
+		tracks = _.isArray(tracks) ? orderify(tracks, this.tracks.size()) : tracks;
 		if (this.tracks.isEmpty()) {
 			this.tracks.add(tracks);
 			this.load(this.tracks.first());
@@ -88,8 +90,8 @@ var Queue = Backbone.Model.extend({
 				this.trigger('audio:change', track, this);
 			}.bind(this));
 		} else {
-			this.trigger('audio:change', track, this);
 			track.play();
+			this.trigger('audio:change', track, this);
 		}
 
 		this.track = track;
@@ -139,7 +141,7 @@ var Queue = Backbone.Model.extend({
 	play: function () {
 		if (this.tracks.isEmpty()) {
 			this.tracks.clean();
-			this.tracks.reset(orderify(app.user.library.models));
+			this.tracks.reset(orderify(app.user.library.models), 0);
 			this.load(this.tracks.first());
 		} else {
 			this.track.play();
@@ -151,7 +153,7 @@ var Queue = Backbone.Model.extend({
 	togglePlay: function () {
 		if (this.tracks.isEmpty()) {
 			this.tracks.clean();
-			this.tracks.reset(orderify(app.library.models));
+			this.tracks.reset(orderify(app.user.library.models), 0);
 			this.load(this.tracks.first());
 		} else {
 			this.track.togglePause();

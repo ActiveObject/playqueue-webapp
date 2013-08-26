@@ -26,7 +26,8 @@ var List = ListView.extend({
 var Layout = Backbone.Layout.extend({
 	template: 'tracklist',
 	events: {
-		'click .queue-all': 'queueAll'
+		'click .queue-all': 'queueAll',
+		'click .shuffle': 'shuffle'
 	},
 
 	initialize: function () {
@@ -37,9 +38,11 @@ var Layout = Backbone.Layout.extend({
 	},
 
 	queueAll: function () {
-		this.collection.forEach(function (track) {
-			app.queue.add(track);
-		});
+		app.queue.add(this.collection.models);
+	},
+
+	shuffle: function () {
+		app.queue.add(this.collection.shuffle());
 	}
 });
 
