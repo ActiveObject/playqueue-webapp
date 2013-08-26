@@ -34,9 +34,13 @@ node-count = 10
   width: node-size
   height: @width
   padding: node-margin node-margin 0 0
-  transition-property: left, top
+  opacity: 0
+  transition-property: opacity
   transition-duration: 0.3s
   transition-timing-function: ease-out
+
+.grid-layout > ul > li.visible
+  opacity: 1
 
 .grid-layout
   .tile

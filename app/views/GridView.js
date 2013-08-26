@@ -81,6 +81,8 @@ module.exports = Backbone.View.extend({
 				left: insertPos[1] + 'px'
 			});
 
+			view.$el.addClass('visible');
+
 			this.items.push(insertPos.concat(elDimension));
 			this.listEl.width(insertPos[1] + elDimension[0]);
 		}.bind(this));
