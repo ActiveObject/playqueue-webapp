@@ -137,4 +137,8 @@ exports.init = function (options) {
 			app.router.navigate(href, true);
 		}
 	});
+
+	// run this on load
+	$('#splash').remove();
+	document.body.classList.remove('preload');
 };
