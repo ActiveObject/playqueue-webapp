@@ -39,7 +39,8 @@ module.exports = Backbone.Layout.extend({
 			icon: icon,
 			title: title,
 			date: moment(date).startOf('minute').fromNow(),
-			text: this.model.get('text')
+			text: this.model.get('text'),
+			likes: this.model.get('likes')
 		};
 	},
 

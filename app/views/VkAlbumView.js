@@ -1,4 +1,4 @@
-var ListItem   = require('views/ListItem');
+var ListItem = require('views/ListItem');
 
 module.exports = ListItem.extend({
 	template: 'vkalbum',
@@ -7,7 +7,10 @@ module.exports = ListItem.extend({
 	},
 
 	initialize: function () {
-		this.model.on('reset', this.render, this);
+		this.model.tracks.on('add remove', function (model) {
+			this.$el.find('.album-audio-count').text(model.collection.length);
+		}, this);
+
 		this.model.tracks.on('reset', function (collection) {
 			this.$el.find('.album-audio-count').text(collection.length);
 		}, this);

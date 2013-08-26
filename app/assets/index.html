@@ -15,7 +15,7 @@
   <link rel="stylesheet" href="/stylesheets/app.css">
 </head>
 
-<body>
+<body class="preload">
   <div id="splash">
     <div class="logo icon-headphones"></div>
   </div>
@@ -29,15 +29,15 @@
   </div>
 
   <header>
-    <div id="back-btn" class="btn appbar-btn"><div class="icon-appbararrowleft"></div></div>
+    <div id="back-btn" class="btn appbar-btn"><div data-icon="&#xe013"></div></div>
     <div class="play-controls">
-      <div id="btn-prev" class="btn appbar-btn"><div class="icon-appbarcontrolrewind"></div></div>
-      <div id="btn-play" class="btn appbar-btn"><div class="icon-appbarcontrolplay"></div></div>
-      <div id="btn-next" class="btn appbar-btn"><div class="icon-appbarcontrolfastforward"></div></div>
+      <div id="btn-prev" class="btn appbar-btn"><div data-icon="&#xe011"></div></div>
+      <div id="btn-play" class="btn appbar-btn"><div data-icon="&#xe00d"></div></div>
+      <div id="btn-next" class="btn appbar-btn"><div data-icon="&#xe00e"></div></div>
     </div>
     <div class="header-controls">
-      <div id="btn-search" class="btn icon-appbarmagnify"></div>
-      <div id="btn-queue" class="btn icon-appbarlist"><div class="count"></div></div>
+      <div id="btn-search" class="btn" data-icon="&#xe016"></div>
+      <div id="btn-queue" class="btn" data-icon="&#xe014"><div class="count"></div></div>
     </div>
     <div id="header-menu" class="header-menu"></div>
   </header>
@@ -45,17 +45,19 @@
   <div id="main-layout" class="stack">
     <div class="content-overlay"></div>
     <div id="tracklist" class="tracklist"></div>
-    <div id="queue" class="queue">
-      <div class="qorder-separator-wrapper">
-        <div class="qorder-separator-line"></div>
-      </div>
-    </div>
 
     <div id="groups" class="item"></div>
     <div id="albums" class="item"></div>
     <div id="friends" class="item"></div>
     <div id="group" class="item"></div>
     <div id="group-library" class="item"></div>
+  </div>
+
+  <div id="queue" class="queue">
+    <div class="qorder-separator-wrapper">
+      <div class="qorder-separator-line"></div>
+    </div>
+    <div id="queue-list"></div>
   </div>
 
   <script src="/javascripts/vendor.js"></script>

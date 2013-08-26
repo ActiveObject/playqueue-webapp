@@ -44,6 +44,7 @@ exports.init = function (options) {
 	var GroupCollection = require('collections/GroupCollection');
 	var AlbumCollection = require('collections/AlbumCollection');
 	var AudioCollection = require('collections/AudioCollection');
+	var AudioLibrary    = require('collections/AudioLibrary');
 	var Friends = require('collections/FriendCollection');
 
 	var MainLayout = require('layouts/MainLayout');
@@ -52,6 +53,7 @@ exports.init = function (options) {
 	var Router  = require('routers/Router');
 	var RestApi = require('api/RestApi');
 	var VkApi   = require('api/VkApi');
+	var User    = require('models/User');
 
 	this.router = new Router();
 
@@ -65,28 +67,20 @@ exports.init = function (options) {
 		rateLimit: 2
 	});
 
-	this.groups  = new GroupCollection();
-	this.albums  = new AlbumCollection();
-	this.library = new AudioCollection();
-	this.friends = new Friends();
-	this.queue   = new Queue();
-
-	this.library.on('reset', function (collection) {
-		this.albums.get('all').tracks.reset(collection.models);
-		Backbone.Mediator.pub('library:update', collection);
-	}.bind(this));
+	this.user = new User(options.auth.user_id);
+	this.queue = new Queue();
 
 	this.view = {};
 	this.view.albums = new AlbumList({
-		collection: this.albums
+		collection: this.user.albums
 	});
 
 	this.view.groups = new GroupList({
-		collection: this.groups
+		collection: this.user.groups
 	});
 
 	this.view.friends = new FriendList({
-		collection: this.friends
+		collection: this.user.friends
 	});
 
 	this.view.queue = new QueueView({
@@ -99,15 +93,11 @@ exports.init = function (options) {
 		el: '#main-layout',
 
 		views: {
-			'#queue': this.view.queue,
 			'#albums': this.view.albums,
 			'#groups': this.view.groups,
 			'#friends': this.view.friends
 		}
 	});
-
-	Backbone.Mediator.subscribe('queue:show', this.layouts.main.showQueue, this.layouts.main);
-	Backbone.Mediator.subscribe('queue:hide', this.layouts.main.hideQueue, this.layouts.main);
 
 	this.panels = {};
 	this.panels.player = new PlayerPanel({ el: '#player' });
@@ -115,19 +105,14 @@ exports.init = function (options) {
 		el: 'body > header'
 	});
 
+	this.user.fetch();
+
+	this.panels.navigation.show();
+	this.panels.player.show();
+	this.layouts.main.render();
+	this.view.queue.render();
+
 	var app = this;
-	this.api.on('loaded', function (api) {
-		this.groups.fetch();
-		this.albums.fetch({ query: { uid: app.vk.user }});
-		this.library.fetch();
-		this.friends.fetch();
-
-		this.panels.navigation.show();
-		this.panels.player.show();
-		this.layouts.main.render();
-		$('#splash').addClass('noactive');
-	}, this);
-
 	$(document).on('click', 'a:not([data-bypass])', function (event) {
 		var href = $(this).attr('href');
 		var protocol = this.protocol + '//';
@@ -137,4 +122,8 @@ exports.init = function (options) {
 			app.router.navigate(href, true);
 		}
 	});
+
+	// run this on load
+	$('#splash').remove();
+	document.body.classList.remove('preload');
 };

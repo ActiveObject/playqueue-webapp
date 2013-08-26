@@ -1,47 +1,24 @@
-var BaseCollection = require('models/supers/base').Collection;
 var Album = require('models/Album');
 var app = require('app');
 var handleError = require('lib/common').handleError;
 
-var modelProp = function (prop) {
-	return function (obj) {
-		return obj.get(prop);
-	};
-};
-
 module.exports = Backbone.Collection.extend({
-	model: Album,
-	parse: function (res) {
-		return [{
-			title: 'Всі аудіозаписи',
-			album_id: 'all'
-		}].concat(res.slice(1));
-	},
-
-	initialize: function () {
-		// this.add(new Album({
-		// 	title: 'Всі аудіозаписи',
-		// 	album_id: 'all'
-		// }));
-
-		this.on('reset', function (collection) {
-			async.forEach(collection.models, function (album) {
-				album.fetch();
+	fetch: function (user) {
+		var collection = this;
+		app.vk.audio.getAlbums({ owner_id: user }, function (err, res, status, xhr) {
+			if (err) return collection.trigger('error', err);
+			var albums = res.slice(1).map(function (attrs) { return new Album(attrs); });
+			async.forEach(albums, function (album, callback) {
+				album.fetch({
+					success: function () {
+						collection.add(album);
+						callback(null);
+					},
+					error: function (err) { callback(err); }
+				})
+			}, function (err) {
+				if (err) return collection.trigger('error', err);
 			});
 		});
-	},
-
-	sync: function (method, model, options) {
-		var onError = function (err) {
-			if (options.error) options.error(model, err, options);
-			model.trigger('error', model);
-		};
-
-		var onLoad = function (res, status, xhr) {
-			if (options.success) options.success(res, status, xhr);
-			model.trigger('sync', model, res, options);
-		};
-
-		app.vk.audio.getAlbums(options.query, handleError(onLoad, onError));
 	}
 });

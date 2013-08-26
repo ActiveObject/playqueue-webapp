@@ -33,13 +33,11 @@ module.exports = SimpleLayout.extend({
 		var queueCountEl = this.$el.find('#btn-queue .count');
 
 		app.queue.on('track:play track:resume', function () {
-			playBtnEl.addClass('icon-appbarcontrolpause');
-			playBtnEl.removeClass('icon-appbarcontrolplay');
+			playBtnEl.attr('data-icon', '\ue00f');
 		});
 
 		app.queue.on('track:beforepause queue:end', function () {
-			playBtnEl.addClass('icon-appbarcontrolplay');
-			playBtnEl.removeClass('icon-appbarcontrolpause');
+			playBtnEl.attr('data-icon', '\ue00d');
 		});
 
 		app.queue.tracks.on('add', function () {
@@ -66,7 +64,8 @@ module.exports = SimpleLayout.extend({
 	},
 
 	toggleQueue: function (e) {
-		app.router.navigate('queue', { trigger: true });
+		e.stopPropagation();
+		app.view.queue.toggle();
 	},
 
 	back: history.back.bind(history)

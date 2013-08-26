@@ -140,6 +140,11 @@ var List = ListView.extend({
 		}, this);
 	},
 
+	setCurrentTrack: function (track) {
+		this.$el.find('.queue-item').removeClass('current');
+		this.$el.find('[data-audio-id=' + track.id + ']').parent('.queue-item').addClass('current');
+	},
+
 	createItem: function (model) {
 		return new QueueItemView({ model: model });
 	}
@@ -152,7 +157,8 @@ module.exports = Backbone.Layout.extend({
 
 	initialize: function () {
 		this.list = new List({ collection: this.model.tracks });
-		this.insertView(this.list);
+		this.insertView('#queue-list', this.list);
+		this.model.on('audio:change', this.list.setCurrentTrack, this.list);
 	},
 
 	play: function (event) {
@@ -160,13 +166,21 @@ module.exports = Backbone.Layout.extend({
 		var id = audioEl.data('audio-id');
 		var track = this.model.find(id);
 		this.model.load(track);
+		audioEl.parent('.queue-item').addClass('current');
 	},
 
 	show: function () {
 		this.$el.addClass('active');
+		$(document.body).one('click', ':not(.queue)', this.hide.bind(this));
+		return this;
 	},
 
 	hide: function () {
 		this.$el.removeClass('active');
+		return this;
+	},
+
+	toggle: function () {
+		return this.$el.hasClass('active') ? this.hide() : this.show();
 	}
 });

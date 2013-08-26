@@ -7,7 +7,7 @@ var app = require('app');
 var TrackView = require('views/TracklistItemView');
 var ListView  = require('views/ListView');
 
-module.exports = ListView.extend({
+var List = ListView.extend({
 	events: {
 		'click .add-to-queue': 'toQueue'
 	},
@@ -22,3 +22,25 @@ module.exports = ListView.extend({
 		app.queue.add(track);
 	}
 });
+
+var Layout = Backbone.Layout.extend({
+	template: 'tracklist',
+	events: {
+		'click .queue-all': 'queueAll'
+	},
+
+	initialize: function () {
+		this.list = new List({
+			collection: this.collection
+		});
+		this.setView('.tracklist-list', this.list);
+	},
+
+	queueAll: function () {
+		this.collection.forEach(function (track) {
+			app.queue.add(track);
+		});
+	}
+});
+
+module.exports = Layout;

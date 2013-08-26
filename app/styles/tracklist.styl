@@ -86,6 +86,27 @@
 .tracklist .queued:hover
   background-color: darken(accent-color, 10%) !important
 
+.tracklist .audio-actions
+  position: relative
+  width: 100%
+  height: 40px
+  background-color: rgba(0,0,0,0.1)
+
+.tracklist-list
+  position: absolute
+  top: 40px
+  bottom: 0
+  width: 100%
+
+.tracklist .audio-actions .actions div
+  visibility: visible
+  background-color: white
+  color: #999
+
+.tracklist .audio-actions .actions div:hover
+  background-color: accent-color
+  color: white
+
 @media screen and (max-width: 600px)
   .tracklist.active
     width: 100%

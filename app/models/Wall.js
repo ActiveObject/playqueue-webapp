@@ -47,15 +47,15 @@ module.exports = Backbone.Collection.extend({
 
 	next: function () {
 		this.offset += this.count;
-		var model = this;
+		var collection = this;
 
 		var onError = function (err) {
-			model.trigger('error', model, err);
+			collection.trigger('error', collection, err);
 		};
 
 		var onLoad = function (res, status, xhr) {
-			model.update(model.parse(res));
-			model.trigger('load');
+			collection.set(collection.parse(res));
+			collection.trigger('load');
 		};
 
 		app.vk.wall.get({

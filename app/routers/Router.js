@@ -33,7 +33,7 @@ module.exports = Backbone.Router.extend({
 	},
 
 	queue: function () {
-		app.layouts.main.activate('queue');
+		app.view.queue.show();
 	},
 
 	groups: function () {
@@ -65,7 +65,7 @@ module.exports = Backbone.Router.extend({
 
 	group: function (gid) {
 		var prevView = app.layouts.main.getView('#group');
-		var group = app.groups.get(gid);
+		var group = app.user.groups.get(gid);
 		if (!prevView || prevView.model.id !== group.id) {
 			var view = new GroupView({ model: group });
 			app.layouts.main.setView('#group', view);
@@ -85,7 +85,7 @@ module.exports = Backbone.Router.extend({
 	},
 
 	album: function (id) {
-		var album = app.albums.get(id);
+		var album = app.user.albums.get(id);
 
 		var view = new TrackList({
 			collection: album.tracks
@@ -93,7 +93,7 @@ module.exports = Backbone.Router.extend({
 
 		app.layouts.main.setView('#tracklist', view);
 		view.render();
-		view.reset();
+		view.list.reset();
 
 		app.layouts.main.activate('tracklist');
 
@@ -105,7 +105,7 @@ module.exports = Backbone.Router.extend({
 
 
 	groupLibrary: function (id) {
-		var group = app.groups.get(id);
+		var group = app.user.groups.get(id);
 		var view = new AlbumList({
 			collection: group.library
 		});
@@ -130,7 +130,7 @@ module.exports = Backbone.Router.extend({
 	},
 
 	groupAlbum: function (gid, aid) {
-		var group = app.groups.get(gid);
+		var group = app.user.groups.get(gid);
 		var album = group.library.get(aid);
 
 		var view = new TrackList({

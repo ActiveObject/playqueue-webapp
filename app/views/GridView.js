@@ -61,6 +61,8 @@ module.exports = Backbone.View.extend({
 
 		this.scroller = new iScroll(this.wrapperEl.get(0), options);
 		this.el.addEventListener('click', preventClick(this.scroller), true);
+
+		this.collection.forEach(this.add, this);
 	},
 
 	reset: function () {
@@ -80,6 +82,8 @@ module.exports = Backbone.View.extend({
 				top:  insertPos[0] + 'px',
 				left: insertPos[1] + 'px'
 			});
+
+			view.$el.addClass('visible');
 
 			this.items.push(insertPos.concat(elDimension));
 			this.listEl.width(insertPos[1] + elDimension[0]);

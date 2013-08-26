@@ -5,7 +5,7 @@ var AudioTrack = require('models/AudioTrack');
 var Tracks = Backbone.Collection.extend({
 	model: AudioTrack,
 	sync: function (method, model, options) {
-		if (method === 'read') {
+		if (method === 'read' && !model.nosync) {
 			var onError = function (err) {
 				if (options.error) options.error(model, err, options);
 				model.trigger('error', model);
@@ -16,41 +16,30 @@ var Tracks = Backbone.Collection.extend({
 				model.trigger('sync', model, res, options);
 			};
 
-			var opts = _.extend(options, { uid: app.vk.user });
-			app.vk.audio.get(opts, handleError(onLoad, onError));
+			app.vk.audio.get({
+				album_id: options.album,
+				owner_id: options.user
+			}, handleError(onLoad, onError));
 		}
 	}
 });
 
-var isGroup = function (id) {
-	return parseInt(id, 10) < 0;
-};
-
-module.exports = Backbone.Model.extend({
+var Album = Backbone.Model.extend({
 	idAttribute: 'album_id',
-	initialize: function () {
-		this.tracks = new Tracks();
-		if (isGroup(this.get('owner_id'))) {
-			var gid = Math.abs(parseInt(this.get('owner_id'), 10));
-			this.url = '/groups/' + gid + '/albums/' + this.id;
-		} else {
-			this.url = 'albums/' + this.id;
-		}
+	initialize: function (options) {
+		this.tracks = options.tracks || new Tracks();
+		this.url = 'albums/' + this.id;
+		this.tracks.on('add remove', function (model, collection) {
+			this.set('length', collection.length);
+		}, this);
+		this.tracks.on('reset', function (collection) {
+			this.set('length', collection.length);
+		}, this);
 	},
 
-	fetch: function () {
-		var options = {
-			album_id: this.get('album_id')
-		};
-
-		var owner = parseInt(this.get('owner_id'), 10);
-
-		if (owner < 0) {
-			options.gid = Math.abs(owner);
-		} else {
-			options.uid = owner;
-		}
-
-		this.tracks.fetch(options);
+	fetch: function (options) {
+		this.tracks.fetch(_.extend(options, { album: this.id }));
 	}
 });
+
+module.exports = Album;

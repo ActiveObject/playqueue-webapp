@@ -19,6 +19,7 @@
 	text-transform: none;
 	line-height: 1;
 	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 }
 
 /* Use the following CSS code if you want to have a class per icon */
@@ -27,7 +28,7 @@ Instead of a list of all class selectors,
 you can use the generic selector below, but it's slower:
 [class*="icon-"] {
 */
-.icon-plus, .icon-minus, .icon-mute, .icon-first, .icon-last, .icon-shuffle, .icon-loop, .icon-repeat, .icon-add, .icon-add-2, .icon-arrow-left, .icon-appbarbase, .icon-appbarcontrolplay, .icon-appbarcontrolfastforward, .icon-appbarcontrolpause, .icon-appbarcontrolresume, .icon-appbarcontrolrewind, .icon-appbarcontrolstop, .icon-appbararrowleft, .icon-appbarlist, .icon-appbarbasehover, .icon-appbarmagnify, .icon-appbarchevrondown, .icon-arrow-left-2, .icon-arrow-right, .icon-arrow-top {
+.icon-plus, .icon-minus, .icon-mute, .icon-first, .icon-last, .icon-shuffle, .icon-loop, .icon-repeat, .icon-add, .icon-add-2, .icon-arrow-left, .icon-appbarbase, .icon-appbarcontrolplay, .icon-appbarcontrolfastforward, .icon-appbarcontrolpause, .icon-appbarcontrolresume, .icon-appbarcontrolrewind, .icon-appbarcontrolstop, .icon-appbararrowleft, .icon-appbarlist, .icon-appbarbasehover, .icon-appbarmagnify, .icon-appbarchevrondown, .icon-arrow-left-2, .icon-arrow-right, .icon-arrow-top, .icon-heart {
 	font-family: 'icomoon';
 	speak: none;
 	font-style: normal;
@@ -114,4 +115,7 @@ you can use the generic selector below, but it's slower:
 }
 .icon-arrow-top:before {
 	content: "\e006";
+}
+.icon-heart:before {
+	content: "\e002";
 }
