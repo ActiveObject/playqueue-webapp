@@ -60,7 +60,7 @@ module.exports = Backbone.Layout.extend({
 		this.el.addEventListener('click', preventClick(this.scroller), true);
 		this.collection.on('reset', this.reset, this);
 		this.collection.on('add', this.add, this);
-		this.collection.forEach(this.add, this);
+		this.collection.slice(0,30).forEach(this.add, this);
 	},
 
 	reset: function () {
