@@ -31,48 +31,37 @@ var LazyLoad = function (el, offset, fn) {
 		resume: function () {
 			paused = false;
 		}
-	}
+	};
 };
 
 module.exports = Backbone.Layout.extend({
 	el: false,
 	template: 'wall-layout',
+	rendered: 0,
+	batchSize: 10,
 	initialize: function () {
 		this.collection.on('add', this.add, this);
-		this.collection.on('reset', this.reset, this);
-
-		jwerty.key('arrow-left', this.scrollToPrev, this);
-		jwerty.key('arrow-up', this.scrollToFirst, this);
-		jwerty.key('arrow-right', this.scrollToNext, this);
-	},
-
-	reset: function () {
-		this.$el.empty();
-		this.collection.forEach(this.add, this);
 	},
 
 	add: function (post) {
+		var contW = this.listEl.width();
 		var view = new PostView({ model: post });
 		view.render();
 		this.listEl.append(view.$el);
-
-		var contW = this.listEl.width(),
-			elMarginL = parseInt(view.$el.css('margin-right'), 10),
-			elMarginR = parseInt(view.$el.css('margin-right'), 10);
-
 		view.$el.css({ left: contW + 'px' });
-		this.listEl.width(this.listEl.width() + view.$el.width() + elMarginR + elMarginL);
+		this.listEl.width(contW + view.$el.outerWidth());
+		view.scroller.refresh();
 		this.scroller.refresh();
+		this.rendered += 1;
 	},
 
 	afterRender: function () {
 		this.listEl = this.$el.find('ul');
-		var next   = this.collection.next.bind(this.collection);
-		var loader = new LazyLoad(this.listEl, 2000, next);
+		this.loader = new LazyLoad(this.listEl, 2000, this.renderItems.bind(this));
 
-		this.collection.on('load', function () {
-			loader.resume();
-		});
+		this.collection.on('sync', function () {
+			this.loader.resume();
+		}, this);
 
 		this.scroller = new iScroll(this.el, {
 			vScroll: false,
@@ -81,18 +70,27 @@ module.exports = Backbone.Layout.extend({
 			vScrollbar: false,
 			hScrollbar: false,
 			handleClick: false,
-			onScrollMove: _.throttle(loader.handler, 200),
-			onScrollEnd: loader.handler,
+			onScrollMove: _.throttle(this.loader.handler, 200),
+			onScrollEnd: this.loader.handler,
 			wheelAction: 'scroll',
 			useTransition: true,
 			wheelHorizontal: true,
 			wheelScale: 1/2
 		});
+	},
 
-		async.eachSeries(this.collection.models, function (post, callback) {
-			this.add(post);
-			callback(null);
-		}.bind(this))
+	renderItems: function () {
+		if (this.rendered < this.collection.length) {
+			async.eachSeries(this.collection.slice(this.rendered, this.rendered + this.batchSize), function (post, callback) {
+				this.add(post);
+				callback(null);
+			}.bind(this), function (err) {
+				if (err) console.log(err);
+				this.loader.resume();
+			}.bind(this));
+		} else {
+			this.collection.fetch({ remove: false });
+		}
 	},
 
 	scrollToPrev: function () {

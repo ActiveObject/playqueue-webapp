@@ -31,38 +31,20 @@ var Tracks = Backbone.Collection.extend({
 
 module.exports = Backbone.Collection.extend({
 	model: Post,
+	comparator: function (a, b) {
+		return b.get('date') - a.get('date');
+	},
 	count: 20,
 
-	initialize: function (group, count) {
+	initialize: function (models, options) {
 		this.tracks = new Tracks();
-		this.group = group;
-		this.count = count;
-		this.offset = 0;
+		this.group = options.group;
+		this.count = options.count;
 	},
 
 	parse: function (res) {
 		var count = res[0];
 		return res.slice(1);
-	},
-
-	next: function () {
-		this.offset += this.count;
-		var collection = this;
-
-		var onError = function (err) {
-			collection.trigger('error', collection, err);
-		};
-
-		var onLoad = function (res, status, xhr) {
-			collection.set(collection.parse(res));
-			collection.trigger('load');
-		};
-
-		app.vk.wall.get({
-			owner_id: -this.group.id,
-			offset: this.offset,
-			count: this.count
-		}, handleError(onLoad, onError));
 	},
 
 	sync: function (method, model, options) {
@@ -78,7 +60,7 @@ module.exports = Backbone.Collection.extend({
 
 		app.vk.wall.get({
 			owner_id: -this.group.id,
-			offset: this.offset,
+			offset: this.length,
 			count: this.count
 		}, handleError(onLoad, onError));
 	}

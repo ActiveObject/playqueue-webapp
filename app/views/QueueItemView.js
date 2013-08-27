@@ -2,7 +2,9 @@ module.exports = Backbone.Layout.extend({
 	el: false,
 	template: 'queue-item',
 	serialize: function () {
-		return this.model.toJSON();
+		return _.extend(this.model.toJSON(), {
+			isPlayed: this.model.audio && this.model.audio.playState === 1
+		});
 	},
 
 	initialize: function () {

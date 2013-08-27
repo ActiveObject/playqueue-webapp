@@ -29,6 +29,7 @@ module.exports = Backbone.Layout.extend({
 			.map(function (audio) {
 				var track = this.wall.tracks.get(audio.aid);
 				audio.queued = track && track.get('queued');
+				audio.qorder = track && track.get('qorder');
 				return audio;
 			}, this)
 			.value();
@@ -45,7 +46,7 @@ module.exports = Backbone.Layout.extend({
 	},
 
 	initialize: function () {
-		this.wall = this.model.wall || this.model.collection;
+		this.wall = this.model.collection;
 		this.wall.tracks.on('change:queued', function (model) {
 			if (!model.get('queued')) {
 				this.$el.find('[data-audio-id=' + model.id + ']').removeClass('queued');
@@ -84,7 +85,7 @@ module.exports = Backbone.Layout.extend({
 	},
 
 	afterRender: function () {
-		var scroll = new iScroll(this.el, {
+		this.scroller = new iScroll(this.el, {
 			vScroll: true,
 			hScroll: false,
 			hideScrollbar: true,
@@ -92,5 +93,9 @@ module.exports = Backbone.Layout.extend({
 			hScrollbar: false,
 			wheelAction: 'none'
 		});
+
+		this.$el.find('.post-images img:first').one('load', function () {
+			this.scroller.refresh();
+		}.bind(this));
 	}
 });

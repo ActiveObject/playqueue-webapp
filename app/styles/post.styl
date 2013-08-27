@@ -1,6 +1,8 @@
 @import 'nib'
 @import '_config'
 
+action-bar-height = 40px
+
 .post
   position: absolute
   width: 550px
@@ -119,7 +121,7 @@
 .post .audio-actions
   position: relative
   width: 100%
-  height: 40px
+  height: action-bar-height
   background-color: rgba(0,0,0,0.1)
 
 .post .audio-actions .actions div
@@ -130,3 +132,9 @@
 .post .audio-actions .actions div:hover
   background-color: accent-color
   color: white
+
+.post .audio-count
+  color: #999
+  line-height: action-bar-height
+  font-size: 1.2em
+  padding: 0 1em

@@ -12,6 +12,7 @@
 		{{/each}}
 		</div>
 		<div class="audio-actions">
+			<div class="audio-count">{{ audios.length }} {{pluralize audios.length 'track' 'tracks'}}</div>
 			<div class="actions">
 				<div class="like" data-icon="&#xe002;">{{ likes.count }}</div>
 				<div class="play-all" data-icon="&#xe008"></div>

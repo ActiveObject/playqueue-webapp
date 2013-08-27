@@ -17,11 +17,19 @@ var GroupView = Backbone.Layout.extend({
 		this.wallView = new WallView({ collection: this.model.wall });
 		this.setView('#wall-layout', this.wallView);
 
+		var shortkeyHandler = function (event) {
+			if (jwerty.is('arrow-left', event)) this.wallView.scrollToPrev();
+			if (jwerty.is('arrow-right', event)) this.wallView.scrollToNext();
+			if (jwerty.is('arrow-up', event)) this.wallView.scrollToFirst();
+		}.bind(this);
+
 		this.on('activate', function () {
-			this.model.wall.fetch();
+			$(document.body).on('keydown', shortkeyHandler);
+			this.wallView.renderItems();
 		}, this);
 
 		this.on('deactivate', function () {
+			$(document.body).off('keydown', shortkeyHandler);
 			this.remove();
 		}, this);
 	},

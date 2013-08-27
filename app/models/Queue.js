@@ -83,6 +83,9 @@ var Queue = Backbone.Model.extend({
 
 	load: function (track) {
 		var audio = track.createAudio();
+		if (this.firstStart) {
+			this.firstStart = false;
+		}
 
 		if (this.track) {
 			this.track.pause(function (prevAudio) {
@@ -156,7 +159,6 @@ var Queue = Backbone.Model.extend({
 			this.tracks.clean();
 			this.tracks.reset(orderify(app.user.library.models, 0));
 			this.load(this.tracks.first());
-			this.firstStart = false;
 		} else {
 			this.track.togglePause();
 		}

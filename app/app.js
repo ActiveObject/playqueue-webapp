@@ -32,6 +32,8 @@ exports.init = function (options) {
 		}
 	});
 
+	require('helpers/ViewHelper');
+
 	var HomeView   = require('views/HomeView');
 	var QueueView  = require('views/QueueView');
 	var GroupView  = require('views/GroupView');
