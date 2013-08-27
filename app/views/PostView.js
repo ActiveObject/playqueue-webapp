@@ -84,7 +84,7 @@ module.exports = Backbone.Layout.extend({
 	},
 
 	afterRender: function () {
-		var scroll = new iScroll(this.el, {
+		this.scroller = new iScroll(this.el, {
 			vScroll: true,
 			hScroll: false,
 			hideScrollbar: true,
@@ -92,5 +92,9 @@ module.exports = Backbone.Layout.extend({
 			hScrollbar: false,
 			wheelAction: 'none'
 		});
+
+		this.$el.find('.post-images img:first').one('load', function () {
+			this.scroller.refresh();
+		}.bind(this));
 	}
 });
