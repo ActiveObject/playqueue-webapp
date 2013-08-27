@@ -31,7 +31,7 @@ var LazyLoad = function (el, offset, fn) {
 		resume: function () {
 			paused = false;
 		}
-	}
+	};
 };
 
 module.exports = Backbone.Layout.extend({
@@ -41,9 +41,6 @@ module.exports = Backbone.Layout.extend({
 	batchSize: 10,
 	initialize: function () {
 		this.collection.on('add', this.add, this);
-		jwerty.key('arrow-left', this.scrollToPrev, this);
-		jwerty.key('arrow-up', this.scrollToFirst, this);
-		jwerty.key('arrow-right', this.scrollToNext, this);
 	},
 
 	add: function (post) {
