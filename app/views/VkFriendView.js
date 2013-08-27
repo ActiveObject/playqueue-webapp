@@ -1,7 +1,7 @@
 var app = require('app');
-var ListItem   = require('views/ListItem');
+var GridItem = require('views/GridItem');
 
-module.exports = ListItem.extend({
+module.exports = GridItem.extend({
 	template: 'vkfriend',
 	events: {
 		'click': 'navigate'

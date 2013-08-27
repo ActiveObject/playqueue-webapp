@@ -1,39 +1,45 @@
-module.exports = Backbone.Layout.extend({
+module.exports = Backbone.View.extend({
 	initialize: function () {
+		this.views = [];
+
 		this.$el.find('.content-overlay').on('click', function () {
 			history.back();
 		});
 	},
 
-	activate: function (layout) {
-		switch (layout) {
-			case 'queue':
-				this.blind();
-				this.$el.children('#queue').addClass('active');
-				break;
-			case 'tracklist':
-				this.blind();
-				this.$el.children('#tracklist').addClass('active');
-				break;
-			default:
-				this.unblind();
-				this.$el.children('#tracklist').removeClass('active');
-				this.$el.children('#queue').removeClass('active');
-				this.$el.children('.item').removeClass('active');
-				this.$el.children("#" + layout).addClass('active');
+	activate: function (view, append) {
+		if (!view.hasRendered) {
+			view.render();
+			if (append) {
+				this.$el.append(view.el);
+			}
 		}
 
-		this.trigger('activate', layout);
+		this.views.forEach(function (nestedView) {
+			if (nestedView.$el.is('.active')) {
+				nestedView.trigger('deactivate');
+				nestedView.$el.removeClass('active');
+			}
+		});
+
+		view.$el.addClass('active');
+		view.trigger('activate');
+		this.trigger('activate', view);
 		return this;
 	},
 
-	blind: function () {
-		this.$el.children('.content-overlay').addClass('active');
-		this.$el.find('.item.active').addClass('blind');
+	add: function (view) {
+		this.views.push(view);
+		return this;
 	},
 
-	unblind: function () {
-		this.$el.children('.content-overlay').removeClass('active');
-		this.$el.find('.item.active').removeClass('blind');
-	}
+	remove: function (view) {
+		return this;
+	},
+
+	// render: function () {
+	// 	this.views.forEach(function (view) {
+	// 		if (view.)
+	// 	})
+	// }
 });

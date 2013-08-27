@@ -1,9 +1,4 @@
-var common = require('lib/common'),
-    pipe   = common.pipe,
-    invoke = common.invoke;
-
 var app = require('app');
-
 var TrackView = require('views/TracklistItemView');
 var ListView  = require('views/ListView');
 
@@ -25,21 +20,37 @@ var List = ListView.extend({
 
 var Layout = Backbone.Layout.extend({
 	template: 'tracklist',
+	el: false,
 	events: {
-		'click .queue-all': 'queueAll'
+		'click .queue-all': 'queueAll',
+		'click .shuffle': 'shuffle'
 	},
 
 	initialize: function () {
-		this.list = new List({
-			collection: this.collection
+		this.list = new List({ collection: this.collection });
+		this.insertView(this.list);
+
+		this.on('activate', function () {
+			$('.content-overlay').addClass('active');
+			this.$el.parent().addClass('active');
 		});
-		this.setView('.tracklist-list', this.list);
+
+		this.on('deactivate', function () {
+			$('.content-overlay').removeClass('active');
+			this.$el.parent().removeClass('active');
+			this.remove();
+		});
 	},
 
 	queueAll: function () {
-		this.collection.forEach(function (track) {
+		async.eachSeries(this.collection.models, function (track, callback) {
 			app.queue.add(track);
+			callback(null);
 		});
+	},
+
+	shuffle: function () {
+		app.queue.add(this.collection.shuffle());
 	}
 });
 

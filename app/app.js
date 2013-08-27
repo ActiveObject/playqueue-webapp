@@ -15,8 +15,8 @@ window.iScroll = require('lib/iscroll').iScroll;
 exports.init = function (options) {
 	console.log('[app:starting]');
 
-	Backbone.LayoutManager.configure({
-		fetch: function (path) {
+	Backbone.Layout.configure({
+		fetchTemplate: function (path) {
 			return require('templates/' + path);
 		}
 	});
@@ -24,7 +24,9 @@ exports.init = function (options) {
 	soundManager.setup({
 		url: '/lib/',
 		flashVersion: 9,
-		preferFlash: true,
+		preferFlash: false,
+		useHTML5Audio: true,
+		waitForWindowLoad: false,
 		onready: function() {
 			console.log('Sound manager ready');
 		}
@@ -88,16 +90,19 @@ exports.init = function (options) {
 		model: this.queue
 	});
 
-	this.layouts = {};
-	this.layouts.main = new MainLayout({
-		el: '#main-layout',
+	this.mainLayout = new MainLayout({ el: '#main-layout '})
+		.add(this.view.albums)
+		.add(this.view.friends)
+		.add(this.view.groups);
+	// this.layouts.main = new MainLayout({
+	// 	el: '#main-layout',
 
-		views: {
-			'#albums': this.view.albums,
-			'#groups': this.view.groups,
-			'#friends': this.view.friends
-		}
-	});
+	// 	views: {
+	// 		'#albums': this.view.albums,
+	// 		'#groups': this.view.groups,
+	// 		'#friends': this.view.friends
+	// 	}
+	// });
 
 	this.panels = {};
 	this.panels.player = new PlayerPanel({ el: '#player' });
@@ -109,7 +114,6 @@ exports.init = function (options) {
 
 	this.panels.navigation.show();
 	this.panels.player.show();
-	this.layouts.main.render();
 	this.view.queue.render();
 
 	var app = this;

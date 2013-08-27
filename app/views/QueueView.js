@@ -80,7 +80,6 @@ var swap = function (collection, el1, el2) {
 };
 
 var List = ListView.extend({
-	template: 'queue',
 	events: {
 		'mouseover .drag-place': 'disableScroll',
 		'mouseout .drag-place': 'enableScroll',
@@ -109,8 +108,6 @@ var List = ListView.extend({
 	},
 
 	initialize: function () {
-		ListView.prototype.initialize.apply(this, arguments);
-
 		this.$el.on('dragstart', '.audio-item', function () {
 			$(this).addClass('drag');
 		});
@@ -151,13 +148,16 @@ var List = ListView.extend({
 });
 
 module.exports = Backbone.Layout.extend({
+	el: '#queue',
 	events: {
-		'click .audio-state': 'play'
+		'click .audio-state': 'play',
+		'click .shuffle': 'shuffle',
+		'click .clear': 'clear'
 	},
 
 	initialize: function () {
 		this.list = new List({ collection: this.model.tracks });
-		this.insertView('#queue-list', this.list);
+		this.insertView(this.list);
 		this.model.on('audio:change', this.list.setCurrentTrack, this.list);
 	},
 
@@ -169,9 +169,17 @@ module.exports = Backbone.Layout.extend({
 		audioEl.parent('.queue-item').addClass('current');
 	},
 
+	shuffle: function () {
+		this.model.shuffle();
+	},
+
+	clear: function () {
+		this.model.reset();
+	},
+
 	show: function () {
 		this.$el.addClass('active');
-		$(document.body).one('click', ':not(.queue)', this.hide.bind(this));
+		$(document.body).one('click', ':not(.queue, .queue *)', this.hide.bind(this));
 		return this;
 	},
 

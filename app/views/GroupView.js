@@ -5,19 +5,28 @@ var WallView = require('views/WallView');
 Handlebars.registerPartial('audio', audio);
 
 var GroupView = Backbone.Layout.extend({
-	className: 'group-layout',
 	template: 'group-layout',
+	el: false,
 	events: {
 		'click [data-action=prev]': 'prevPost',
 		'click [data-action=next]': 'nextPost',
 		'click [data-action=first]': 'firstPost'
 	},
+
 	initialize: function () {
 		this.wallView = new WallView({ collection: this.model.wall });
 		this.setView('#wall-layout', this.wallView);
+
+		this.on('activate', function () {
+			this.model.wall.fetch();
+		}, this);
+
+		this.on('deactivate', function () {
+			this.remove();
+		}, this);
 	},
 
-	data: function () {
+	serialize: function () {
 		return {
 			name: this.model.get('name'),
 			photo: this.model.get('photo_big')

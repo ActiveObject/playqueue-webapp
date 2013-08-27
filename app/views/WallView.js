@@ -35,7 +35,8 @@ var LazyLoad = function (el, offset, fn) {
 };
 
 module.exports = Backbone.Layout.extend({
-	className: 'wall',
+	el: false,
+	template: 'wall-layout',
 	initialize: function () {
 		this.collection.on('add', this.add, this);
 		this.collection.on('reset', this.reset, this);
@@ -52,27 +53,28 @@ module.exports = Backbone.Layout.extend({
 
 	add: function (post) {
 		var view = new PostView({ model: post });
-		this.insertView(view);
 		view.render();
+		this.listEl.append(view.$el);
 
-		var contW = this.$el.width(),
+		var contW = this.listEl.width(),
 			elMarginL = parseInt(view.$el.css('margin-right'), 10),
 			elMarginR = parseInt(view.$el.css('margin-right'), 10);
 
 		view.$el.css({ left: contW + 'px' });
-		this.$el.width(this.$el.width() + view.$el.width() + elMarginR + elMarginL);
+		this.listEl.width(this.listEl.width() + view.$el.width() + elMarginR + elMarginL);
 		this.scroller.refresh();
 	},
 
 	afterRender: function () {
+		this.listEl = this.$el.find('ul');
 		var next   = this.collection.next.bind(this.collection);
-		var loader = new LazyLoad(this.$el, 2000, next);
+		var loader = new LazyLoad(this.listEl, 2000, next);
 
 		this.collection.on('load', function () {
 			loader.resume();
 		});
 
-		this.scroller = new iScroll('wall-layout', {
+		this.scroller = new iScroll(this.el, {
 			vScroll: false,
 			hScroll: true,
 			hideScrollbar: true,
@@ -86,6 +88,11 @@ module.exports = Backbone.Layout.extend({
 			wheelHorizontal: true,
 			wheelScale: 1/2
 		});
+
+		async.eachSeries(this.collection.models, function (post, callback) {
+			this.add(post);
+			callback(null);
+		}.bind(this))
 	},
 
 	scrollToPrev: function () {

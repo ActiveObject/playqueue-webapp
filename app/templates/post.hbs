@@ -1,26 +1,28 @@
-<div>
-	<header>
-		<img src={{ icon }} alt="{{ title }}">
-		<div><span class="post-header-title">{{{ title }}}</span></div>
-		<div><span class="post-header-date">{{ date }}</span></div>
-		<div class="post-header-text"><span>{{{ text }}}</span></div>
-	</header>
-	<div class="post-images">
-	{{#each photos}}
-		<img src="{{ src_big }}" alt="{{ text }}">
-	{{/each}}
-	</div>
-	<div class="audio-actions">
-		<div class="actions">
-			<div class="like" data-icon="&#xe002;">{{ likes.count }}</div>
-			<div class="play-all" data-icon="&#xe008"></div>
+<li class="post">
+	<div>
+		<header>
+			<img src={{ icon }} alt="{{ title }}">
+			<div><span class="post-header-title">{{{ title }}}</span></div>
+			<div><span class="post-header-date">{{ date }}</span></div>
+			<div class="post-header-text"><span>{{{ text }}}</span></div>
+		</header>
+		<div class="post-images">
+		{{#each photos}}
+			<img src="{{ src_big }}" alt="{{ text }}">
+		{{/each}}
 		</div>
+		<div class="audio-actions">
+			<div class="actions">
+				<div class="like" data-icon="&#xe002;">{{ likes.count }}</div>
+				<div class="play-all" data-icon="&#xe008"></div>
+			</div>
+		</div>
+		{{#if audios.length}}
+		<div class="audio-items">
+		{{#each audios}}
+			{{> audio}}
+		{{/each}}
+		</div>
+		{{/if}}
 	</div>
-	{{#if audios.length}}
-	<div class="audio-items">
-	{{#each audios}}
-		{{> audio}}
-	{{/each}}
-	</div>
-	{{/if}}
-</div>
+</li>

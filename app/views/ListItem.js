@@ -1,6 +1,9 @@
-module.exports = Backbone.Layout.extend({
+var ListItem = Backbone.View.extend({
+	manage: true,
 	tagName: 'li',
-	data: function () {
+	serialize: function () {
 		return this.model.toJSON();
 	}
 });
+
+module.exports = ListItem;
