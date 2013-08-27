@@ -88,6 +88,11 @@ module.exports = Backbone.Layout.extend({
 			wheelHorizontal: true,
 			wheelScale: 1/2
 		});
+
+		async.eachSeries(this.collection.models, function (post, callback) {
+			this.add(post);
+			callback(null);
+		}.bind(this))
 	},
 
 	scrollToPrev: function () {
