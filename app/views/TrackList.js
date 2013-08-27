@@ -43,7 +43,10 @@ var Layout = Backbone.Layout.extend({
 	},
 
 	queueAll: function () {
-		app.queue.add(this.collection.models);
+		async.eachSeries(this.collection.models, function (track, callback) {
+			app.queue.add(track);
+			callback(null);
+		});
 	},
 
 	shuffle: function () {
