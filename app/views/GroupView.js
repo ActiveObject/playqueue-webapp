@@ -25,6 +25,7 @@ var GroupView = Backbone.Layout.extend({
 
 		this.on('activate', function () {
 			$(document.body).on('keydown', shortkeyHandler);
+			this.wallView.renderItems();
 		}, this);
 
 		this.on('deactivate', function () {

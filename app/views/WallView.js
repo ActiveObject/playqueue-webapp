@@ -44,16 +44,12 @@ module.exports = Backbone.Layout.extend({
 	},
 
 	add: function (post) {
+		var contW = this.listEl.width();
 		var view = new PostView({ model: post });
 		view.render();
 		this.listEl.append(view.$el);
-
-		var contW = this.listEl.width(),
-			elMarginL = parseInt(view.$el.css('margin-right'), 10),
-			elMarginR = parseInt(view.$el.css('margin-right'), 10);
-
 		view.$el.css({ left: contW + 'px' });
-		this.listEl.width(this.listEl.width() + view.$el.width() + elMarginR + elMarginL);
+		this.listEl.width(contW + view.$el.outerWidth());
 		view.scroller.refresh();
 		this.scroller.refresh();
 		this.rendered += 1;
@@ -81,8 +77,6 @@ module.exports = Backbone.Layout.extend({
 			wheelHorizontal: true,
 			wheelScale: 1/2
 		});
-
-		this.renderItems();
 	},
 
 	renderItems: function () {
