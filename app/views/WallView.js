@@ -54,21 +54,21 @@ module.exports = Backbone.Layout.extend({
 	add: function (post) {
 		var view = new PostView({ model: post });
 		view.render();
-		var listEl = this.$el.find('ul');
-		listEl.append(view.$el);
+		this.listEl.append(view.$el);
 
-		var contW = listEl.width(),
+		var contW = this.listEl.width(),
 			elMarginL = parseInt(view.$el.css('margin-right'), 10),
 			elMarginR = parseInt(view.$el.css('margin-right'), 10);
 
 		view.$el.css({ left: contW + 'px' });
-		listEl.width(listEl.width() + view.$el.width() + elMarginR + elMarginL);
+		this.listEl.width(this.listEl.width() + view.$el.width() + elMarginR + elMarginL);
 		this.scroller.refresh();
 	},
 
 	afterRender: function () {
+		this.listEl = this.$el.find('ul');
 		var next   = this.collection.next.bind(this.collection);
-		var loader = new LazyLoad(this.$el, 2000, next);
+		var loader = new LazyLoad(this.listEl, 2000, next);
 
 		this.collection.on('load', function () {
 			loader.resume();
