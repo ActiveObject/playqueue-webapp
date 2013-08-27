@@ -150,7 +150,9 @@ var List = ListView.extend({
 module.exports = Backbone.Layout.extend({
 	el: '#queue',
 	events: {
-		'click .audio-state': 'play'
+		'click .audio-state': 'play',
+		'click .shuffle': 'shuffle',
+		'click .clear': 'clear'
 	},
 
 	initialize: function () {
@@ -165,6 +167,14 @@ module.exports = Backbone.Layout.extend({
 		var track = this.model.find(id);
 		this.model.load(track);
 		audioEl.parent('.queue-item').addClass('current');
+	},
+
+	shuffle: function () {
+		this.model.shuffle();
+	},
+
+	clear: function () {
+		this.model.reset();
 	},
 
 	show: function () {

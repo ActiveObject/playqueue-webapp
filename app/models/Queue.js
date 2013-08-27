@@ -56,6 +56,7 @@ var Queue = Backbone.Model.extend({
 
 	initialize: function () {
 		this.tracks = new Tracks();
+		this.firstStart = true;
 		this.tracks.on('add', function (model, collection) {
 			if (!model.has('qorder')) {
 				model.set('qorder', collection.size());
@@ -151,14 +152,14 @@ var Queue = Backbone.Model.extend({
 	},
 
 	togglePlay: function () {
-		if (this.tracks.isEmpty()) {
+		if (this.firstStart) {
 			this.tracks.clean();
 			this.tracks.reset(orderify(app.user.library.models), 0);
 			this.load(this.tracks.first());
+			this.firstStart = false;
 		} else {
 			this.track.togglePause();
 		}
-
 		return this;
 	},
 

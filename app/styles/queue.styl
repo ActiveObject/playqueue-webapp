@@ -200,6 +200,21 @@ audio-control-size = 50px
 #queue-list
   height: 100%
 
+.queue .actions
+  position: relative
+  width: 100%
+  height: 40px
+  background-color: rgba(0,0,0,0.1)
+
+.queue .actions .audio-actions div
+  visibility: visible
+  background-color: #555
+  color: white
+
+.queue .actions .audio-actions div:hover
+  background-color: accent-color
+  color: white
+
 @media screen and (max-width: 600px)
   .queue.active
     width: 100%
