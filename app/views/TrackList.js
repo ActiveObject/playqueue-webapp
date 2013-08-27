@@ -38,6 +38,7 @@ var Layout = Backbone.Layout.extend({
 		this.on('deactivate', function () {
 			$('.content-overlay').removeClass('active');
 			this.$el.parent().removeClass('active');
+			this.remove();
 		});
 	},
 

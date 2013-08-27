@@ -20,6 +20,10 @@ var GroupView = Backbone.Layout.extend({
 		this.on('activate', function () {
 			this.model.wall.fetch();
 		}, this);
+
+		this.on('deactivate', function () {
+			this.remove();
+		}, this);
 	},
 
 	serialize: function () {
