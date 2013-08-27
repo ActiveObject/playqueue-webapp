@@ -4,7 +4,7 @@
 
 	<div><span class="title">{{{ title }}}</span></div>
 	<div><span class="artist">{{{ performer }}}</span></div>
-	<div class="qorder"></div>
+	<div class="qorder">{{#if queued}} {{ qorder }} {{/if}}</div>
 	<div class="actions">
 		<div class="add-to-queue" data-icon="&#xe008"></div>
 	</div>

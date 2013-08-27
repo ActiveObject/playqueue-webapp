@@ -29,6 +29,7 @@ module.exports = Backbone.Layout.extend({
 			.map(function (audio) {
 				var track = this.wall.tracks.get(audio.aid);
 				audio.queued = track && track.get('queued');
+				audio.qorder = track && track.get('qorder');
 				return audio;
 			}, this)
 			.value();
