@@ -45,7 +45,7 @@ module.exports = Backbone.Layout.extend({
 	},
 
 	initialize: function () {
-		this.wall = this.model.wall || this.model.collection;
+		this.wall = this.model.collection;
 		this.wall.tracks.on('change:queued', function (model) {
 			if (!model.get('queued')) {
 				this.$el.find('[data-audio-id=' + model.id + ']').removeClass('queued');

@@ -17,10 +17,6 @@ var GroupView = Backbone.Layout.extend({
 		this.wallView = new WallView({ collection: this.model.wall });
 		this.setView('#wall-layout', this.wallView);
 
-		this.on('activate', function () {
-			this.model.wall.fetch();
-		}, this);
-
 		this.on('deactivate', function () {
 			this.remove();
 		}, this);

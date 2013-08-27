@@ -6,7 +6,7 @@ module.exports = Backbone.Model.extend({
 	idAttribute: 'gid',
 
 	initialize: function () {
-		this.wall = new Wall(this, 10);
+		this.wall = new Wall([], { group: this, count: 10 });
 		this.library = new AlbumCollection();
 	}
 });
