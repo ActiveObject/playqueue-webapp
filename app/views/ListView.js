@@ -60,7 +60,7 @@ module.exports = Backbone.Layout.extend({
 		this.el.addEventListener('click', preventClick(this.scroller), true);
 		this.collection.on('reset', this.reset, this);
 		this.collection.on('add', this.add, this);
-		this.collection.slice(0,30).forEach(this.add, this);
+		this.add(this.collection.slice(0, 30));
 	},
 
 	reset: function () {
@@ -69,9 +69,13 @@ module.exports = Backbone.Layout.extend({
 	},
 
 	add: function (model) {
-		var view = this.createItem(model);
-		this.listEl.append(view.el);
-		view.render();
+		var models = [].concat(model);
+		models.map(function (model) {
+			var view = this.createItem(model);
+			this.listEl.append(view.el);
+			view.render();
+		}, this);
+
 		this.scroller.refresh();
 	},
 
