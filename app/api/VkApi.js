@@ -166,8 +166,10 @@ VkApi.prototype.process = function () {
 						captcha_key: text
 					});
 
-					var req = new Request(req.url, api.nextRequestTime(), params, req.callback);
-					api.unshift(req).resetTime().resume().process();
+					api.unshift(new Request(req.url, api.nextRequestTime(), params, req.callback))
+							.resetTime()
+							.resume()
+							.process();
 				});
 			}
 
