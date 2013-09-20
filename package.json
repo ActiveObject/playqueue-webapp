@@ -15,7 +15,7 @@
   "scripts": {
     "start": "forewoman start",
     "test": "mocha test/*",
-    "postinstall": "brunch build --optimize"
+    "postinstall": "brunch build --production"
   },
   "dependencies": {
     "brunch": ">= 1.5 < 1.8",
