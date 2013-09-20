@@ -1,5 +1,6 @@
 // export iScroll to global namespace
 window.iScroll = require('lib/iscroll').iScroll;
+var captchaTmpl = require('templates/captcha-prompt');
 
 exports.init = function (options) {
 	console.log('[app:starting]');
@@ -50,15 +51,26 @@ exports.init = function (options) {
 
 	this.router = new Router();
 
-	this.api = new RestApi({
-		entryPoint: options.entryPoint,
-		auth: options.auth
-	});
+	// this.api = new RestApi({
+	// 	entryPoint: options.entryPoint,
+	// 	auth: options.auth
+	// });
 
 	this.vk = new VkApi({
 		auth: options.auth,
 		rateLimit: 2
 	});
+
+	this.vk.onCaptcha = function (imgUrl, callback) {
+		var str = captchaTmpl({ src: imgUrl });
+		var el = document.createElement('DIV');
+		el.innerHTML = str;
+		document.body.appendChild(el);
+		el.getElementsByTagName('BUTTON')[0].onclick = function () {
+			document.body.removeChild(el);
+			callback(el.getElementsByTagName('INPUT')[0].value);
+		};
+	};
 
 	this.user = new User(options.auth.user_id);
 	this.queue = new Queue();
@@ -85,15 +97,6 @@ exports.init = function (options) {
 		.add(this.view.albums)
 		.add(this.view.friends)
 		.add(this.view.groups);
-	// this.layouts.main = new MainLayout({
-	// 	el: '#main-layout',
-
-	// 	views: {
-	// 		'#albums': this.view.albums,
-	// 		'#groups': this.view.groups,
-	// 		'#friends': this.view.friends
-	// 	}
-	// });
 
 	this.panels = {};
 	this.panels.player = new PlayerPanel({ el: '#player' });

@@ -33,6 +33,7 @@ var Layout = Backbone.Layout.extend({
 		this.on('activate', function () {
 			$('.content-overlay').addClass('active');
 			this.$el.parent().addClass('active');
+			this.list.scroller.refresh();
 		});
 
 		this.on('deactivate', function () {

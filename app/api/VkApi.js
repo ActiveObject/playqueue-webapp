@@ -38,13 +38,18 @@ var setupHelpers = function (apiObj) {
 	}, apiObj);
 };
 
-var request = function (url, options, callback) {
-	if (!callback) {
-		callback = options;
-		options = {};
-	}
+var Request = function (url, time, params, callback) {
+	this.url = url;
+	this.params = params;
+	this.callback = callback;
+	this.time = time;
+	this.attempt = 0;
+};
 
-	$.getJSON(url, options, function (res, status, xhr) {
+Request.prototype.send = function (callback) {
+	callback = callback || function () {};
+
+	$.getJSON(this.url, this.params, function (res, status, xhr) {
 		if (res.error) {
 			return callback(res.error);
 		}
@@ -64,63 +69,125 @@ var VkApi  = function (options) {
 
 	this.token = options.auth.token;
 	this.user  = options.auth.user;
-
 	this.entryPoint = 'https://api.vk.com/method/';
-	this.lastRequestTime = Date.now();
 	this.rateLimit = options.rateLimit || 3;
 	this.requestLimit = options.requestLimit || 3;
+
+	this._lastRequestTime = 0;
+	this._queue = [];
 
 	setupHelpers(this);
 };
 
-VkApi.prototype.request = function (method, options, attempt, callback) {
-	if (!callback) {
-		callback = attempt;
-		attempt = 1;
-	}
+VkApi.TOO_MANY_REQUESTS = 6;
+VkApi.CAPTCHA_NEEDED = 14;
 
-	if (attempt > this.requestLimit) {
-		return callback(new Error('Exceeded request limit'));
-	}
-
+VkApi.prototype.request = function (method, options, done) {
 	var url = this.entryPoint + method + '?callback=?';
-	options = _.extend(options, {
+	var params = _.extend(options, {
 		access_token: this.token
 	});
+	this.enqueue(new Request(url, this.nextRequestTime(), params, done)).process();
+};
 
+VkApi.prototype.lastRequestTime = function () {
+	return this._lastRequestTime;
+};
+
+VkApi.prototype.nextRequestTime = function () {
+	var reqInterval = Math.floor(1000 / this.rateLimit);
+	var now = Date.now();
+	if (now - this.lastRequestTime() < 0) return this.lastRequestTime() + reqInterval;
+	else if (now - this.lastRequestTime() < reqInterval) return now + reqInterval;
+	else return now;
+};
+
+VkApi.prototype.enqueue = function (req) {
+	req.attempt += 1;
+	this._queue.push(req);
+	return this;
+};
+
+VkApi.prototype.unshift = function (req) {
+	req.attempt += 1;
+	this._queue.unshift(req);
+	return this;
+};
+
+VkApi.prototype.dequeue = function () {
+	var req = this._queue.shift();
+	this._lastRequestTime = req.time;
+	return req;
+};
+
+VkApi.prototype.pause = function () {
+	this._paused = true;
+	return this;
+};
+
+VkApi.prototype.resume = function () {
+	this._paused = false;
+	return this;
+};
+
+VkApi.prototype.isPaused = function () {
+	return this._paused;
+};
+
+VkApi.prototype.resetTime = function () {
 	var now = Date.now();
 	var reqInterval = Math.floor(1000 / this.rateLimit);
+	this._queue.forEach(function (req, i) {
+		req.time = now + reqInterval * i;
+	});
+	return this;
+};
 
-	var interval = now - this.lastRequestTime;
+VkApi.prototype.process = function () {
+	if (this.isPaused()) return;
 
-	if (interval > reqInterval) {
-		var delay = 0;
-	} else if (interval > 0) {
-		var delay = reqInterval;
-	} else {
-		var delay = this.lastRequestTime + reqInterval - now;
-	}
-
-	console.log('[vk.api] request api with delay ' + delay + 'ms');
-
-	this.lastRequestTime = now + delay;
-
+	var req = this.dequeue();
 	var api = this;
-	setTimeout(function () {
-		request(url, options, function (err, body, status, xhr) {
-			if (err) {
-				// too many request - repeat request
-				if (err.error_code === 6) {
-					console.warn('[vk.api] %s, rateLimit = %d', err.error_msg, api.rateLimit);
-					return api.request(method, options, attempt + 1, callback);
-				}
-
-				return callback(err);
+	var onResponse = function (err, body, status, xhr) {
+		if (api.isPaused()) return api.enqueue(req);
+		if (err) {
+			// too many request - repeat request
+			if (err.error_code === VkApi.TOO_MANY_REQUESTS) {
+				console.warn('[vk.api] %s, rateLimit = %d', err.error_msg, api.rateLimit);
+				return api.enqueue(req).process();
 			}
 
-			callback(null, body, status, xhr);
-		});
+			if (err.error_code === VkApi.CAPTCHA_NEEDED) {
+				console.warn('[vk.api] %s', err.error_msg);
+				api.pause();
+				return api.onCaptcha(err.captcha_img, function (text) {
+					var params = _.extend(req.params, {
+						captcha_sid: err.captcha_sid,
+						captcha_key: text
+					});
+
+					api.unshift(new Request(req.url, api.nextRequestTime(), params, req.callback))
+							.resetTime()
+							.resume()
+							.process();
+				});
+			}
+
+			return req.callback(err);
+		}
+
+		req.callback(null, body, status, xhr);
+	};
+
+	var now = Date.now();
+	var delay = req.time < now ? 0 : req.time - now;
+	console.log('delay request %d ms', delay);
+
+	setTimeout(function () {
+		req.send(onResponse);
 	}, delay);
+
+	if (this._queue.length > 0) this.process();
 };
 
 module.exports = VkApi;
