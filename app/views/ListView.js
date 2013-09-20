@@ -27,6 +27,8 @@ var lazyRender = function (view, collection, options) {
 			.slice(interval[0], interval[1])
 			.forEach(view.add, view);
 
+		view.scroller.refresh();
+
 		last = interval[1];
 	};
 };
@@ -75,8 +77,6 @@ module.exports = Backbone.Layout.extend({
 			this.listEl.append(view.el);
 			view.render();
 		}, this);
-
-		this.scroller.refresh();
 	},
 
 	createItem: function (model) {
