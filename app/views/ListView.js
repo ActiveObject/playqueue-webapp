@@ -23,6 +23,9 @@ var lazyRender = function (view, collection, options) {
 		var size = collection.size();
 		var interval = [last, last < size ? last + next : size];
 
+		// if all items have rendered then just skip
+		if (interval[0] == interval[1]) return;
+
 		collection.models
 			.slice(interval[0], interval[1])
 			.forEach(view.add, view);
