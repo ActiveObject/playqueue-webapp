@@ -70,12 +70,9 @@ module.exports = Backbone.Layout.extend({
 
 	add: function (model) {
 		var view = this.createItem(model);
-
-		requestAnimFrame(function () {
-			this.listEl.append(view.el);
-			view.render();
-			this.scroller.refresh();
-		}.bind(this), view.el);
+		this.listEl.append(view.el);
+		view.render();
+		this.scroller.refresh();
 	},
 
 	createItem: function (model) {

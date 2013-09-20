@@ -21,12 +21,10 @@ module.exports = Backbone.Layout.extend({
 		var items = this.items.slice(1);
 		var els = this.listEl.children();
 		els.each(function (i, el) {
-			requestAnimFrame(function () {
-				$(el).css({
-					top: items[i][0],
-					left: items[i][1]
-				});
-			})
+			$(el).css({
+				top: items[i][0],
+				left: items[i][1]
+			});
 		});
 		var last = _.last(items);
 		this.listEl.width(last[1] + last[2]);
