@@ -1,7 +1,7 @@
 {
   "name": "playqueue-app",
   "author": "Vasyl Priymachuk <activeobject.ac@gmail.com>",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "Audioplayer for vk.com: browser app",
   "private": true,
   "repository": {
@@ -15,7 +15,7 @@
   "scripts": {
     "start": "forewoman start",
     "test": "mocha test/*",
-    "postinstall": "brunch build --optimize"
+    "postinstall": "brunch build --production"
   },
   "dependencies": {
     "brunch": ">= 1.5 < 1.8",
@@ -28,11 +28,11 @@
     "clean-css-brunch": ">= 1.0 < 1.8",
     "jsenv-brunch": ">= 1.0 < 1.8",
     "auto-reload-brunch": "git://github.com/ActiveObject/auto-reload-brunch.git",
-
     "node-static": "~0.6.7",
     "chai": "~1.2.0",
     "sinon": "~1.4.2",
     "sinon-chai": "~2.1.2",
-    "mocha": "~1.7.4"
+    "mocha": "~1.7.4",
+    "coffee-script": "~1.6.3"
   }
 }

@@ -1,5 +1,6 @@
 exports.config =
-  # See docs at http://brunch.readthedocs.org/en/latest/config.html.
+  paths:
+    public: './public'
 
   files:
     javascripts:
@@ -29,7 +30,7 @@ exports.config =
 
   minify: no
   server:
-    path: 'server.coffee'
+    path: 'server.js'
     port: 5003
     base: '/'
     run: no

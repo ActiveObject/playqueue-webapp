@@ -34,10 +34,14 @@ audio-control-size = 50px
     display: block
 
   .wrapper
-    height: 100%
+    position: absolute
+    width: 100%
+    top: 40px
+    bottom: 0
 
   .qorder
     width: 100%
+    display: none
 
     position: absolute
     left: 0
@@ -104,9 +108,9 @@ audio-control-size = 50px
   height: 100%
   padding: 0 5px
   cursor: pointer
-  display: none
 
 .qorder-separator-line
+  display: none
   position: absolute
   top: 0
   width: 4px
@@ -192,7 +196,7 @@ audio-control-size = 50px
     background-color: #FFF !important
 
 .queue .dropzone
-  background-color: white
+  background-color: #333
 
 .dropzone > *
   visibility: hidden
