@@ -2,26 +2,53 @@
 window.iScroll = require('lib/iscroll').iScroll;
 var captchaTmpl = require('templates/captcha-prompt');
 
+soundManager.setup({
+	url: '/lib/',
+	flashVersion: 9,
+	preferFlash: false,
+	useHTML5Audio: true,
+	waitForWindowLoad: false
+});
+
+Backbone.Layout.configure({
+	fetchTemplate: function (path) {
+		return require('templates/' + path);
+	}
+});
+
+/**
+ * Wait for resolving all events and then call done
+ * @param Array<string> events List of Backbone main instance events
+ * @param function done Function that will have been called after resolving all events
+ */
+var when = function (events, done) {
+	var state = events.map(function (event) {
+		return { resolved: false, event: event };
+	});
+
+	var isResolvedState = function (state) {
+		return state.every(function (item) {
+			return item.resolved;
+		});
+	};
+
+	var changeState = function (event) {
+		state.forEach(function (item) {
+			if (item.event == event) {
+				item.resolved = true;
+			}
+		});
+
+		if (isResolvedState(state)) {
+			Backbone.off('all', changeState);
+			done();
+		}
+	};
+
+	Backbone.on('all', changeState);
+};
+
 exports.init = function (options) {
-	console.log('[app:starting]');
-
-	Backbone.Layout.configure({
-		fetchTemplate: function (path) {
-			return require('templates/' + path);
-		}
-	});
-
-	soundManager.setup({
-		url: '/lib/',
-		flashVersion: 9,
-		preferFlash: false,
-		useHTML5Audio: true,
-		waitForWindowLoad: false,
-		onready: function() {
-			console.log('Sound manager ready');
-		}
-	});
-
 	require('helpers/ViewHelper');
 
 	var HomeView   = require('views/HomeView');
@@ -51,11 +78,6 @@ exports.init = function (options) {
 
 	this.router = new Router();
 
-	// this.api = new RestApi({
-	// 	entryPoint: options.entryPoint,
-	// 	auth: options.auth
-	// });
-
 	this.vk = new VkApi({
 		auth: options.auth,
 		rateLimit: 2
@@ -64,6 +86,8 @@ exports.init = function (options) {
 	this.vk.onCaptcha = function (imgUrl, callback) {
 		var str = captchaTmpl({ src: imgUrl });
 		var el = document.createElement('DIV');
+		el.style.zIndex = 999999;
+		el.style.position = 'absolute';
 		el.innerHTML = str;
 		document.body.appendChild(el);
 		el.getElementsByTagName('BUTTON')[0].onclick = function () {
@@ -104,8 +128,6 @@ exports.init = function (options) {
 		el: 'body > header'
 	});
 
-	this.user.fetch();
-
 	this.panels.navigation.show();
 	this.panels.player.show();
 	this.view.queue.render();
@@ -121,7 +143,20 @@ exports.init = function (options) {
 		}
 	});
 
-	// run this on load
-	$('#splash').remove();
-	document.body.classList.remove('preload');
+	when(['app:soundmanager:ready', 'app:user:fetch'], function () {
+		$('#splash').fadeOut(function () {
+			$(this).remove();
+			document.body.classList.remove('preload');
+		});
+	});
+
+	soundManager.onready(function () {
+		Backbone.trigger('app:soundmanager:ready');
+	});
+
+	this.user.fetch(function (err, user) {
+		if (err) throw err;
+
+		Backbone.trigger('app:user:fetch', user);
+	});
 };
