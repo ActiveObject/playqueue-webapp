@@ -35,11 +35,5 @@ module.exports = Backbone.View.extend({
 
 	remove: function (view) {
 		return this;
-	},
-
-	// render: function () {
-	// 	this.views.forEach(function (view) {
-	// 		if (view.)
-	// 	})
-	// }
+	}
 });

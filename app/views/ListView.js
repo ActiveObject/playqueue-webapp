@@ -23,9 +23,14 @@ var lazyRender = function (view, collection, options) {
 		var size = collection.size();
 		var interval = [last, last < size ? last + next : size];
 
+		// if all items have rendered then just skip
+		if (interval[0] == interval[1]) return;
+
 		collection.models
 			.slice(interval[0], interval[1])
 			.forEach(view.add, view);
+
+		view.scroller.refresh();
 
 		last = interval[1];
 	};
@@ -60,7 +65,7 @@ module.exports = Backbone.Layout.extend({
 		this.el.addEventListener('click', preventClick(this.scroller), true);
 		this.collection.on('reset', this.reset, this);
 		this.collection.on('add', this.add, this);
-		this.collection.slice(0,30).forEach(this.add, this);
+		this.add(this.collection.slice(0, 30));
 	},
 
 	reset: function () {
@@ -69,13 +74,12 @@ module.exports = Backbone.Layout.extend({
 	},
 
 	add: function (model) {
-		var view = this.createItem(model);
-
-		requestAnimFrame(function () {
+		var models = [].concat(model);
+		models.map(function (model) {
+			var view = this.createItem(model);
 			this.listEl.append(view.el);
 			view.render();
-			this.scroller.refresh();
-		}.bind(this), view.el);
+		}, this);
 	},
 
 	createItem: function (model) {
