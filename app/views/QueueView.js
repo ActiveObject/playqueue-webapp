@@ -209,7 +209,7 @@ module.exports = Backbone.Layout.extend({
 			.addClass('icon-appbarcontrolplay');
 	},
 
-	changeTrack: function (newTrack) {
+	changeTrack: function (audio, newTrack) {
 		this.$el.find('.queue-item').removeClass('current');
 		this.$el.find('[data-audio-id=' + newTrack.id + ']').parent('.queue-item')
 			.addClass('current');

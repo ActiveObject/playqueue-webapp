@@ -51,9 +51,24 @@ var Tracks = Backbone.Collection.extend({
 	}
 });
 
+var doubleClick = function (fn, delay) {
+	var clicks = 0;
+	return function () {
+		var args = Array.prototype.slice.call(arguments);
+		var ctx = this;
+		if (clicks === 0) {
+			setTimeout(function () {
+				fn.apply(ctx, args.concat(clicks));
+				clicks = 0;
+				inProgress = false;
+			}, delay);
+		}
+		clicks += 1;
+	};
+};
+
 var Queue = Backbone.Model.extend({
 	repeat: false,
-	prevActionDelay: 5000,
 
 	initialize: function () {
 		this.tracks = new Tracks();
@@ -70,7 +85,6 @@ var Queue = Backbone.Model.extend({
 	},
 
 	add: function (tracks) {
-		if (this.audio && this.audio.paused) this.reset();
 		tracks = _.isArray(tracks) ? orderify(tracks, this.tracks.size()) : tracks;
 		if (this.tracks.isEmpty()) {
 			this.tracks.add(tracks);
@@ -91,7 +105,7 @@ var Queue = Backbone.Model.extend({
 			return this.track.togglePause();
 		}
 
-		this.trigger('audio:beforechange', track, this.track, this);
+		this.trigger('audio:beforechange', track.audio, track, this);
 
 		if (this.track) {
 			this.track.pause(function (prevAudio) {
@@ -123,26 +137,23 @@ var Queue = Backbone.Model.extend({
 		return this;
 	},
 
-	prev: function () {
-		if (this.track.audio.position < this.prevActionDelay) {
+	prev: fluent(doubleClick(function (clicks) {
+		if (clicks > 1) {
 			if (this.tracks.isFirst(this.track)) {
 				this.track.pause();
 			} else {
 				this.load(this.tracks.before(this.track));
 			}
 		} else {
-			this.track.audio.setPosition(0);
+			this.track.toStart();
 		}
+	}, 300)),
 
-		return this;
-	},
-
-	reset: function () {
+	reset: fluent(function () {
 		this.tracks.trigger('beforereset');
 		this.tracks.clean();
 		this.tracks.reset();
-		return this;
-	},
+	}),
 
 	find  : function (id) { return this.tracks.get(id); },
 	pause : function ()   { return this.track.pause();  },
