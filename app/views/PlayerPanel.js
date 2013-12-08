@@ -62,8 +62,8 @@ module.exports = SimpleLayout.extend({
 		var trackEl   = this.$el.find('#played-track');
 		var seekEl    = this.$el.find('.seek');
 
-		app.queue.on('track:play', initSeeking(seekEl));
-		app.queue.on('track:play', render(trackEl));
+		app.queue.on('track:play track.resume', initSeeking(seekEl));
+		app.queue.on('audio:beforechange', render(trackEl));
 		app.queue.on('track:timeupdate', updateProgress(progressLineEl));
 		app.queue.on('track:timeupdate', updateDuration(durationEl));
 		app.queue.on('track:loadupdate', updateBuffered(loadingLineEl));

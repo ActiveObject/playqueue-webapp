@@ -3,7 +3,7 @@
 
 margin = 0
 queue-panel-width = 450px
-audio-control-size = 50px
+audio-control-size = 40px
 
 .queue
   position: absolute
@@ -18,9 +18,15 @@ audio-control-size = 50px
 
   .title
     font-size: 1.2em
+    overflow: hidden
+    white-space: nowrap
+    text-overflow: ellipsis
 
   .artist
     padding-top: 0.2em
+    overflow: hidden
+    white-space: nowrap
+    text-overflow: ellipsis
 
   .source
     visibility: hidden
@@ -52,7 +58,6 @@ audio-control-size = 50px
   list-style: none
 
 .audio-state
-  opacity: 0
   position: absolute
   top: 0
   right: 0
@@ -61,28 +66,21 @@ audio-control-size = 50px
   top: 50%
   margin-top: - (@height / 2)
   text-align: center
-  color: #DDD
   transition: opacity 0.1s linear
   cursor: pointer
-  margin-right: 5px
+  margin-right: 15px
+  color: #DDD
 
-.audio-state:after
+.audio-state:before
   position: absolute
-  top: 0
   left: 0
-  width: audio-control-size
-  height: audio-control-size
-  line-height: audio-control-size
-  font-size: 3em
-  content: "\e00c"
-  font-family: 'icomoon'
-  speak: none
-  font-style: normal
-  font-weight: normal
-  -webkit-font-smoothing: antialiased
-
-.audio-state:hover
-  color: #555
+  top: 0
+  content: ''
+  height: 100%
+  width: 100%
+  background-color: white
+  transform: rotate(0deg)
+  transition: transform 0.3s
 
 .audio-state > div
   position: absolute
@@ -93,7 +91,7 @@ audio-control-size = 50px
   font-size: 3em
 
 .audio-state > div:before
-  line-height: audio-control-size
+  line-height: audio-control-size + 3px
 
 .qorder-separator-wrapper
   position: absolute
@@ -137,8 +135,10 @@ audio-control-size = 50px
     background-color: #555 !important
 
   .audio-state
-    opacity: 1
-    color: #333
+    color: white
+
+  .audio-state:before
+    background-color: #333
 
   .qorder
     color: #555 !important
@@ -148,20 +148,34 @@ audio-control-size = 50px
     background-color: #555
 
 .queue-item.current
-  background-color: accent-color
-  color: white
-  border-left: 5px solid rgba(0,0,0, .3)
+  background-color: white
 
   .audio-state
     color: white
-    opacity: 1
+
+  .audio-state:before
+    background-color: accent-color
+    transform: rotate(90deg)
+
+.queue-item:after
+  position: absolute
+  content: ''
+  left: 0
+  top: 0
+  width: 0
+  height: 100%
+  background-color: accent-color
+  transition: width 0.2s ease-out
+
+.queue-item.current:after
+  width: 5px
 
 .queue-item.active
   background-color: accent-color
 
 .audio-item
   width: 100%
-  padding: 1.7em (audio-control-size * 1.3) 1.7em 3em
+  padding: 1.7em (audio-control-size * 1.8) 1.7em 3em
   transition: right 0.2s ease-in
   transform: translateY(0%)
 
@@ -188,8 +202,17 @@ audio-control-size = 50px
   .square
     background-color: #FFF !important
 
+  .audio-state
+    color: white
+
+  .audio-state:before
+    background-color: accent-color
+
 .queue .dropzone
   background-color: #EEF1F3
+
+.queue .dropzone:after
+  display: none
 
 .dropzone > *
   visibility: hidden

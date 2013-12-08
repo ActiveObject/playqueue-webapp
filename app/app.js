@@ -7,7 +7,8 @@ soundManager.setup({
 	flashVersion: 9,
 	preferFlash: false,
 	useHTML5Audio: true,
-	waitForWindowLoad: false
+	waitForWindowLoad: false,
+	debugMode: false
 });
 
 Backbone.Layout.configure({

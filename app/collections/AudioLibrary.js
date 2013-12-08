@@ -2,6 +2,7 @@ var app = require('app');
 var AudioTrack = require('models/AudioTrack');
 var handleError = require('lib/common').handleError;
 var Album = require('models/Album');
+var Fuse = require('lib/fuse');
 
 var AudioLibrary = Backbone.Collection.extend({
 	model: AudioTrack,
@@ -12,6 +13,16 @@ var AudioLibrary = Backbone.Collection.extend({
 			album_id: 'library',
 			tracks: this
 		});
+
+		this.on('sync', function (collection, models) {
+			collection._fuse = new Fuse(models, {
+				keys: ['title', 'artist']
+			});
+		});
+	},
+
+	search: function (str) {
+		return this._fuse ? this._fuse.search(str) : [];
 	},
 
 	sync: function (method, model, options) {

@@ -1,8 +1,10 @@
 var app = require('app');
+var fluent = require('lib/common').fluent;
 
 module.exports = Backbone.Model.extend({
 	idAttribute: 'aid',
 	volumeTransitionDuration: 500,
+	hangingDelay: 1000,
 
 	createAudio: function () {
 		var track = this;
@@ -13,19 +15,23 @@ module.exports = Backbone.Model.extend({
 			volume: 0,
 			onplay: function () {
 				track.changeVolume(0, 100);
+				track._trackHangingState(audio);
 				app.queue.trigger('track:play', audio, track);
 			},
 			onpause: function () {
+				track._untrackHangingState(audio);
 				app.queue.trigger('track:pause', audio, track);
 			},
 			onresume: function () {
+				track._trackHangingState(audio);
 				track.changeVolume(0, 100);
 				app.queue.trigger('track:resume', audio, track);
 			},
 			onfinish: function () {
-				app.queue.trigger('track:finish', audio, track);
+				track.finish();
 			},
 			whileplaying: function () {
+				track.trigger('timeupdate', audio);
 				app.queue.trigger('track:timeupdate', audio, track);
 			},
 			whileloading: function () {
@@ -36,17 +42,20 @@ module.exports = Backbone.Model.extend({
 			}
 		});
 
-		this.audio = audio;
-		return audio;
+		return this._audio = audio;
 	},
 
-	changeVolume: function (from, to, callback) {
+	audio: function () {
+		return this._audio ? this._audio : this.createAudio();
+	},
+
+	changeVolume: fluent(function (from, to, callback) {
 		callback = callback || function () {};
 		var interval = 20;
 		var steps = this.volumeTransitionDuration / interval;
 		var transitionStep = (to - from) / steps;
 
-		if (this.audio) {
+		if (this.audio()) {
 			var timer = function (audio, volume, step) {
 				if (step === 0) {
 					return callback(audio);
@@ -56,46 +65,62 @@ module.exports = Backbone.Model.extend({
 				setTimeout(next, interval);
 			};
 
-			timer(this.audio, from + transitionStep, steps);
+			timer(this.audio(), from + transitionStep, steps);
 		}
+	}),
 
-		return this;
-	},
-
-	play: function () {
-		if (typeof this.audio !== "undefined" && this.audio !== null) {
-			this.audio.play();
+	play: fluent(function () {
+		if (this.audio().playStatus === 1) {
+			this.audio().resume();
+		} else {
+			this.audio().play();
 		}
+	}),
 
-		return this;
-	},
-
-	pause: function (callback) {
+	pause: fluent(function (callback) {
 		callback = callback || function () {};
-		if (typeof this.audio !== "undefined" && this.audio !== null) {
-			app.queue.trigger('track:beforepause', this.audio, this);
-			this.changeVolume(100, 0, function (audio) {
-				audio.pause();
-				callback(audio);
-			});
-		}
+		app.queue.trigger('track:beforepause', this.audio(), this);
+		this.changeVolume(100, 0, function (audio) {
+			audio.pause();
+			callback(audio);
+		});
+	}),
 
-		return this;
+	togglePause: fluent(function () {
+		if (this.audio().paused) {
+			this.play();
+		} else {
+			this.pause();
+		}
+	}),
+
+	toStart: fluent(function () {
+		this.audio().setPosition(0);
+	}),
+
+	finish: function () {
+		this._untrackHangingState();
+		app.queue.trigger('track:finish', this.audio(), this);
 	},
 
-	togglePause: function () {
-		if (typeof this.audio !== "undefined" && this.audio !== null) {
-			if (this.audio.paused) {
-				if (this.audio.playStatus === 1) {
-					this.audio.resume();
-				} else {
-					this.audio.play();
+	_trackHangingState: function (audio) {
+		var track = this;
+		var check = function (pos, bytesLoaded, max, attemp) {
+			track._hangingTimeout = setTimeout(function () {
+				if (attemp === max) return track.finish();
+				if (!audio.position) return check(audio.position, audio.bytesLoaded, max, 0);
+				if (+audio.position === +pos && audio.bytesLoaded === bytesLoaded) {
+					return check(audio.position, audio.bytesLoaded, max, attemp + 1);
 				}
-			} else {
-				this.pause();
-			}
-		}
+				return check(audio.position, audio.bytesLoaded, max, 0);
+			}, track.hangingDelay);
+		};
 
-		return this;
+		this._untrackHangingState();
+		check(audio.position, audio.bytesLoaded, 5, 0);
+	},
+
+	_untrackHangingState: function () {
+		this._hangingTimeout && clearTimeout(this._hangingTimeout);
 	}
 });
