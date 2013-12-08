@@ -137,11 +137,6 @@ var List = ListView.extend({
 		}, this);
 	},
 
-	setCurrentTrack: function (track) {
-		this.$el.find('.queue-item').removeClass('current');
-		this.$el.find('[data-audio-id=' + track.id + ']').parent('.queue-item').addClass('current');
-	},
-
 	createItem: function (model) {
 		return new QueueItemView({ model: model });
 	}
