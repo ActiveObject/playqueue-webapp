@@ -63,7 +63,13 @@ module.exports = Backbone.Model.extend({
 	},
 
 	play: function () {
-		if (typeof this.audio !== "undefined" && this.audio !== null) {
+		if (typeof this.audio === 'undefined' || this.audio === null) {
+			this.createAudio();
+		}
+
+		if (this.audio.playStatus === 1) {
+			this.audio.resume();
+		} else {
 			this.audio.play();
 		}
 
@@ -72,28 +78,20 @@ module.exports = Backbone.Model.extend({
 
 	pause: function (callback) {
 		callback = callback || function () {};
-		if (typeof this.audio !== "undefined" && this.audio !== null) {
-			app.queue.trigger('track:beforepause', this.audio, this);
-			this.changeVolume(100, 0, function (audio) {
-				audio.pause();
-				callback(audio);
-			});
-		}
+		app.queue.trigger('track:beforepause', this.audio, this);
+		this.changeVolume(100, 0, function (audio) {
+			audio.pause();
+			callback(audio);
+		});
 
 		return this;
 	},
 
 	togglePause: function () {
-		if (typeof this.audio !== "undefined" && this.audio !== null) {
-			if (this.audio.paused) {
-				if (this.audio.playStatus === 1) {
-					this.audio.resume();
-				} else {
-					this.audio.play();
-				}
-			} else {
-				this.pause();
-			}
+		if (this.audio.paused) {
+			this.play();
+		} else {
+			this.pause();
 		}
 
 		return this;

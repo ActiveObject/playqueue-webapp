@@ -158,7 +158,10 @@ module.exports = Backbone.Layout.extend({
 	initialize: function () {
 		this.list = new List({ collection: this.model.tracks });
 		this.insertView(this.list);
-		this.model.on('audio:change', this.list.setCurrentTrack, this.list);
+
+		this.model.on('audio:beforechange', this.changeTrack, this);
+		this.model.on('track:beforepause', this.setPaused, this);
+		this.model.on('track:play track:resume', this.setPlayed, this);
 	},
 
 	play: function (event) {
@@ -166,7 +169,6 @@ module.exports = Backbone.Layout.extend({
 		var id = audioEl.data('audio-id');
 		var track = this.model.find(id);
 		this.model.load(track);
-		audioEl.parent('.queue-item').addClass('current');
 	},
 
 	shuffle: function () {
@@ -191,5 +193,25 @@ module.exports = Backbone.Layout.extend({
 
 	toggle: function () {
 		return this.$el.hasClass('active') ? this.hide() : this.show();
+	},
+
+	setPlayed: function (audio, track) {
+		var audioEl = this.$el.find('.audio-item[data-audio-id="' + track.id + '"]');
+		audioEl.find('.audio-state div')
+			.removeClass('icon-appbarcontrolplay')
+			.addClass('icon-appbarcontrolpause');
+	},
+
+	setPaused: function (audio, track) {
+		var audioEl = this.$el.find('.audio-item[data-audio-id="' + track.id + '"]');
+		audioEl.find('.audio-state div')
+			.removeClass('icon-appbarcontrolpause')
+			.addClass('icon-appbarcontrolplay');
+	},
+
+	changeTrack: function (newTrack) {
+		this.$el.find('.queue-item').removeClass('current');
+		this.$el.find('[data-audio-id=' + newTrack.id + ']').parent('.queue-item')
+			.addClass('current');
 	}
 });

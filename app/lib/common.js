@@ -67,3 +67,10 @@ exports.not = function (predicate, ctx) {
 		return !predicate.apply(ctx, arguments);
 	};
 };
+
+exports.fluent = function (fn) {
+	return function () {
+		fn.apply(this, arguments);
+		return this;
+	};
+};

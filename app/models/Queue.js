@@ -1,5 +1,6 @@
 var AudioTrack = require('models/AudioTrack');
 var app = require('app');
+var fluent = require('lib/common').fluent;
 
 var orderify = function (collection, offset) {
 	return collection.map(function (track, i) {
@@ -81,11 +82,16 @@ var Queue = Backbone.Model.extend({
 		return this;
 	},
 
-	load: function (track) {
-		var audio = track.createAudio();
+	load: fluent(function (track) {
 		if (this.firstStart) {
 			this.firstStart = false;
 		}
+
+		if (this.track && this.track.id === track.id) {
+			return this.track.togglePause();
+		}
+
+		this.trigger('audio:beforechange', track, this.track, this);
 
 		if (this.track) {
 			this.track.pause(function (prevAudio) {
@@ -99,8 +105,7 @@ var Queue = Backbone.Model.extend({
 		}
 
 		this.track = track;
-		return this;
-	},
+	}),
 
 	next: function () {
 		if (this.tracks.isLast(this.track)) {
